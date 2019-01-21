@@ -2,3 +2,26 @@
 $vin-blue: #5bb7db;
 $vin-green: #60b044;
 $vin-red: #ff0000;
+
+div.user-photo {
+  margin: 30px auto;
+  text-align: center
+}
+
+.ant-layout-header {
+  padding: 0px 25px !important;
+}
+
+div.header-container {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+div.header-container > * {
+  display: inline-block;
+}
+
+.ant-card-bordered {
+  display: inline-block;
+}
