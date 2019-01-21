@@ -1,17 +1,9 @@
 import React from "react";
-import { Collapse, Card, Avatar, Icon, Col, Row } from "antd";
+import { Collapse, Col, Row } from "antd";
 import MermCard from "../components/MermCard/MermCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const { Meta } = Card;
-
 const Panel = Collapse.Panel;
-
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
 
 const customPanelStyle = {
   borderRadius: 4,
