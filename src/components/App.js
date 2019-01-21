@@ -3,19 +3,21 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 
-import { Layout, Menu, Icon, Avatar } from 'antd';
+import { Layout, Menu, Icon, Avatar } from "antd";
 const SubMenu = Menu.SubMenu;
 
-const {
-  Content, Footer, Sider,
-} = Layout;
-
+const { Content, Footer, Sider } = Layout;
 
 import { hot } from "react-hot-loader";
-import CustomHeader from "./header"
+import CustomHeader from "./header";
 import Dashboard from "../containers/dashboard";
 import Favourites from "../containers/favourites";
 import Recent from "../containers/recent";
@@ -27,17 +29,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    let openMenu = '';
-    let pathname = props.pathname
+    let openMenu = "";
+    let pathname = props.pathname;
 
     if (props.pathname.length === 1) {
-      pathname = '/dashboard';
+      pathname = "/dashboard";
     }
 
-    if (pathname === '/merm-reports' || pathname === '/user-reports') {
-      openMenu = 'analytics';
+    if (pathname === "/merm-reports" || pathname === "/user-reports") {
+      openMenu = "analytics";
     }
-
 
     this.state = {
       collapsed: false,
@@ -46,31 +47,31 @@ class App extends React.Component {
     };
   }
 
-  onCollapse = (collapsed) => {
+  onCollapse = collapsed => {
     this.setState({ collapsed });
   };
 
   render() {
     return (
       <Router>
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ minHeight: "100vh" }}>
           <Sider
-             collapsible
-             collapsed={this.state.collapsed}
-             onCollapse={this.onCollapse}
+            collapsible
+            collapsed={this.state.collapsed}
+            onCollapse={this.onCollapse}
           >
-            {
-              this.state.collapsed ? (
-                <div className="user-photo">
-                  <Avatar size={36} icon="user" />
-                </div>
-              ) : (
-                <div className="user-photo">
-                  <Avatar size={84} icon="user" />
-                  <h2 style={{color: 'white', marginTop: '10px'}}>Spencer Hivert</h2>
-                </div>
-              )
-            }
+            {this.state.collapsed ? (
+              <div className="user-photo">
+                <Avatar size={36} icon="user" />
+              </div>
+            ) : (
+              <div className="user-photo">
+                <Avatar size={84} icon="user" />
+                <h2 style={{ color: "white", marginTop: "10px" }}>
+                  Spencer Hivert
+                </h2>
+              </div>
+            )}
 
             <Menu
               theme="dark"
@@ -107,7 +108,13 @@ class App extends React.Component {
               </Menu.Item>
 
               <SubMenu
-                key="analytics" title={<span><Icon type="bar-chart" /><span>Analytics</span></span>}
+                key="analytics"
+                title={
+                  <span>
+                    <Icon type="bar-chart" />
+                    <span>Analytics</span>
+                  </span>
+                }
               >
                 <Menu.Item key="/merm-reports">
                   <NavLink to="/merm-reports">
@@ -130,24 +137,24 @@ class App extends React.Component {
             </Menu>
           </Sider>
           <Layout>
-            <CustomHeader/>
-            <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-              <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
-              <Switch>
-                <Redirect exact from='/' to='/dashboard'/>
-                <Route path="/dashboard" component={Dashboard} />
-                <Route path="/recent" component={Recent} />
-                <Route path="/shared" component={Shared} />
-                <Route path="/favourites" component={Favourites} />
-                <Route path="/settings" component={Settings} />
-                <Route component={NotFoundPage} />
-              </Switch>
+            <CustomHeader />
+            <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+              <div
+                style={{ padding: 24, background: "#fff", textAlign: "center" }}
+              >
+                <Switch>
+                  <Redirect exact from="/" to="/dashboard" />
+                  <Route path="/dashboard" component={Dashboard} />
+                  <Route path="/recent" component={Recent} />
+                  <Route path="/shared" component={Shared} />
+                  <Route path="/favourites" component={Favourites} />
+                  <Route path="/settings" component={Settings} />
+                  <Route component={NotFoundPage} />
+                </Switch>
               </div>
             </Content>
 
-            <Footer style={{ textAlign: 'center' }}>
-              merm.io ©2019
-            </Footer>
+            <Footer style={{ textAlign: "center" }}>merm.io ©2019</Footer>
           </Layout>
         </Layout>
       </Router>
@@ -163,6 +170,5 @@ App.propTypes = {
 const mapStateToProps = state => ({
   pathname: state.router.location.pathname
 });
-
 
 export default connect(mapStateToProps)(hot(module)(App));
