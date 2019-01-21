@@ -4,7 +4,7 @@ import configureMockStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { create } from "react-test-renderer";
 import ConnectedFuelSavingsPage, { FuelSavingsPage } from "./FuelSavingsPage";
-import FuelSavingsForm from "../FuelSavingsForm";
+import FuelSavingsForm from "../old/FuelSavingsForm";
 import initialState from "../../reducers/initialState";
 
 describe("<FuelSavingsPage />", () => {
