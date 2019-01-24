@@ -13,7 +13,7 @@ const MermCard = ({
   tags
 }) => {
   const mermMetaData = (
-    <>
+    <div style={{ padding: '8px 0 8px 0' }}>
       <div>
         <strong>Last Accessed:</strong> {lastAccessed}
       </div>
@@ -26,7 +26,7 @@ const MermCard = ({
       <div>
         <strong>Shared by:</strong> {sharer}
       </div>
-    </>
+    </div>
   );
   return (
     <Card
@@ -43,10 +43,10 @@ const MermCard = ({
       >
         {tags != null
           ? tags.map(tag => (
-              <Tag key={tag} closable>
-                {tag}
-              </Tag>
-            ))
+            <Tag key={tag} closable>
+              {tag}
+            </Tag>
+          ))
           : ""}
       </Card>
     </Card>
