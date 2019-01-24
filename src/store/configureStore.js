@@ -3,13 +3,17 @@ import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import rootReducer from '../reducers';
+import { connectRouter, routerMiddleware } from "connected-react-router";
+import rootReducer from "../reducers";
+import { loadState, saveState } from "../localStorage";
+
 
 export const history = createHistory();
 const connectRouterHistory = connectRouter(history);
 
-function configureStoreProd(initialState) {
+const persistedState = loadState();
+
+function configureStoreProd() {
   const reactRouterMiddleware = routerMiddleware(history);
   const middlewares = [
     // Add other middleware on this line...
@@ -17,17 +21,25 @@ function configureStoreProd(initialState) {
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/reduxjs/redux-thunk#injecting-a-custom-argument
     thunk,
-    reactRouterMiddleware,
+    reactRouterMiddleware
   ];
 
-  return createStore(
-    connectRouterHistory(rootReducer), 
-    initialState, 
+  const store = createStore(
+    connectRouterHistory(rootReducer),
+    persistedState,
     compose(applyMiddleware(...middlewares))
   );
+
+  store.subscribe(() => {
+    saveState({
+      userObject: store.getState().userObject
+    });
+  });
+
+  return store;
 }
 
-function configureStoreDev(initialState) {
+function configureStoreDev() {
   const reactRouterMiddleware = routerMiddleware(history);
   const middlewares = [
     // Add other middleware on this line...
@@ -38,13 +50,13 @@ function configureStoreDev(initialState) {
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/reduxjs/redux-thunk#injecting-a-custom-argument
     thunk,
-    reactRouterMiddleware,
+    reactRouterMiddleware
   ];
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
   const store = createStore(
-    connectRouterHistory(rootReducer),  
-    initialState, 
+    connectRouterHistory(rootReducer),
+    persistedState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
 
@@ -55,6 +67,12 @@ function configureStoreDev(initialState) {
       store.replaceReducer(connectRouterHistory(nextRootReducer));
     });
   }
+
+  store.subscribe(() => {
+    saveState({
+      userObject: store.getState().userObject
+    });
+  });
 
   return store;
 }

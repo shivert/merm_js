@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Recent = () => {
   return (
     <div>
-      <h1>Recent</h1>
+      <h1>Recen</h1>
 
       <h2>Get Started</h2>
       <ol>

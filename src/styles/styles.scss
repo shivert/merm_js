@@ -25,3 +25,14 @@ div.header-container > * {
 .ant-card-bordered {
   display: inline-block;
 }
+
+.login-form {
+  max-width: 300px;
+  margin: 0 auto !important;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
+}

@@ -1,7 +1,7 @@
 import {
   SAVE_FUEL_SAVINGS,
   CALCULATE_FUEL_SAVINGS
-} from "../constants/actionTypes";
+} from "../constants/ActionTypes";
 import {
   necessaryDataIsProvidedToCalculateSavings,
   calculateSavings

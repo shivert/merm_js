@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes";
+import * as ActionTypes from "../constants/ActionTypes";
 import reducer from "./fuelSavingsReducer";
 import { getFormattedDateTime } from "../utils/dates";
 
