@@ -25,6 +25,10 @@ import Shared from "../containers/shared";
 import Settings from "../containers/settings";
 import NotFoundPage from "../containers/NotFoundPage";
 
+import { initLibrary } from "../utils/initFontAwesome";
+
+initLibrary();
+
 class App extends React.Component {
   constructor(props) {
     super(props);
