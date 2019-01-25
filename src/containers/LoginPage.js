@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { history } from "../store/configureStore";
 import * as actions from "../actions/authenticationActions";
 import LoginPageForm from "../components/LoginPageForm";
-import { Row } from "antd";
+import { Row, Form } from "antd";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -15,47 +15,28 @@ class LoginPage extends React.Component {
     }
   }
 
-  state = {
-    fields: {
-      username: {
-        value: ""
-      },
-      password: {
-        value: ""
-      }
-    }
-  };
-
-  handleFormChange = changedFields => {
-    this.setState(({ fields }) => ({
-      fields: { ...fields, ...changedFields }
-    }));
-  };
-
-  submitForm = () => {
-    this.props.actions.userLogIn(this.state.fields);
+  submitForm = fields => {
+    this.props.actions.userLogIn(fields);
   };
 
   render() {
-    const fields = this.state.fields;
+    const LoginForm = Form.create()(LoginPageForm);
+
     return (
       <div style={{ marginTop: "200px" }}>
         <Row style={{ textAlign: "center" }}>
           <h1>merm.io</h1>
         </Row>
         <Row>
-          <LoginPageForm
-            {...fields}
-            onChange={this.handleFormChange}
-            onSubmitClick={this.submitForm}
-          />
+          <LoginForm onSubmitClick={this.submitForm} />
         </Row>
       </div>
     );
   }
 }
 LoginPage.propTypes = {
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

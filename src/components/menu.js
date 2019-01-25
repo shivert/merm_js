@@ -19,8 +19,6 @@ const { Content, Footer, Sider } = Layout;
 import { hot } from "react-hot-loader";
 import CustomHeader from "./header";
 
-import LoginPage from "../containers/LoginPage";
-
 import Dashboard from "../containers/dashboard";
 import Favourites from "../containers/favourites";
 import Recent from "../containers/recent";
@@ -53,12 +51,6 @@ class App extends React.Component {
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
-
-  isLoggedIn = () => {
-    console.log("checking authentication");
-
-    return true
-  }
 
   render() {
     return (
@@ -152,34 +144,11 @@ class App extends React.Component {
                 style={{ padding: 24, background: "#fff", textAlign: "center" }}
               >
                 <Switch>
-                  <Redirect exact from="/" to="/dashboard" />
-                  <Route path="/login" component={LoginPage} />
-                  <Route
-                    path="/dashboard"
-                    render={() =>
-                      this.isLoggedIn() ? (
-                        <Redirect to="/login" />
-                      ) : (
-                        <Dashboard />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/recent"
-                    component={Recent}
-                  />
-                  <Route
-                    path="/shared"
-                    component={Shared}
-                  />
-                  <Route
-                    path="/favourites"
-                    component={Favourites}
-                  />
-                  <Route
-                    path="/settings"
-                    component={Settings}
-                  />
+                  <Route path="/dashboard" component={Dashboard} />
+                  <Route path="/recent" component={Recent} />
+                  <Route path="/shared" component={Shared} />
+                  <Route path="/favourites" component={Favourites} />
+                  <Route path="/settings" component={Settings} />
                   <Route component={NotFoundPage} />
                 </Switch>
               </div>

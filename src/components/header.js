@@ -18,7 +18,6 @@ class CustomHeader extends React.Component {
   };
 
   logOut = () => {
-    console.log("we here");
     this.props.actions.userLogOut();
   };
 

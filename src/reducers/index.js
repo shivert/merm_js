@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
-import fuelSavings from "./fuelSavingsReducer";
+import notification from "./notification";
 import userObject from "./userObject";
 import requestStatus from "./requestStatus";
 
 const rootReducer = combineReducers({
-  fuelSavings,
+  notification,
   userObject,
   requestStatus,
   router: connectRouter(history)

@@ -1,9 +1,6 @@
 import { GraphQLClient } from "graphql-request";
 
 export function userLogIn(fields) {
-  console.log("We made it");
-  console.log(fields);
-
   const endpoint = "http://localhost:3000/graphql";
 
   const client = new GraphQLClient(endpoint, {
@@ -23,8 +20,8 @@ export function userLogIn(fields) {
   `;
 
   const variables = {
-    email: fields.username.value,
-    password: fields.password.value
+    email: fields.email,
+    password: fields.password
   };
 
   return client.rawRequest(query, variables);

@@ -1,5 +1,9 @@
-export const SAVE_FUEL_SAVINGS = "SAVE_FUEL_SAVINGS";
-export const CALCULATE_FUEL_SAVINGS = "CALCULATE_FUEL_SAVINGS";
+/*
+ * Notification Actions
+ */
+
+export const SHOW_NOTIFICATION = "SHOW_NOTIFICATION";
+export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
 
 /*
  * User Actions

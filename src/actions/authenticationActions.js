@@ -17,15 +17,21 @@ export function userLogIn(fields) {
         history.push("/dashboard");
       },
       error => {
-        console.log("we got bit error");
-        console.log(error);
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to Login",
+            description: "Either your username or password is incorrect!"
+          }
+        });
       }
     );
   };
 }
 
 export function userLogOut() {
-  console.log("we here");
   return dispatch => {
     dispatch({ type: ActionTypes.CLEAR_USER_OBJECT });
     history.push("/login");
