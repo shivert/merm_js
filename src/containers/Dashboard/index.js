@@ -1,6 +1,7 @@
 import React from "react";
 import { Collapse, Col, Row } from "antd";
-import MermCard from "../components/MermCard/MermCard";
+import MermCard from "../../components/MermCard/MermCard";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CustomCarousel from "../components/Carousel/CustomCarousel";
 
@@ -21,13 +22,16 @@ const Dashboard = () => {
         <Row gutter={16}>
           <Col span={6}>
             <MermCard
+              id={234}
               title="Sample Merm"
               lastAccessed="Jan 1, 1975"
               sharedTime="Jan 12, 2018"
               owner="Zachariah Pustowka"
               sharer="Veryvery long named Person"
               actions={[
-                <FontAwesomeIcon icon="cog" key="settings" />,
+                <Link to={`/merm/${234}`}>
+                  <FontAwesomeIcon icon="cog" key="settings" />
+                </Link>,
                 <FontAwesomeIcon icon="edit" key="edit" />,
                 <FontAwesomeIcon icon="comments" key="comments" />
               ]}

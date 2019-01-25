@@ -3,7 +3,7 @@ import { notification } from "antd";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actions from "../actions/authenticationActions";
+import * as actions from "../../actions/authenticationActions";
 import PropTypes from "prop-types";
 
 class CustomNotification extends React.Component {

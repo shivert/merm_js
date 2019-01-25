@@ -13,7 +13,7 @@ const MermCard = ({
   tags
 }) => {
   const mermMetaData = (
-    <div style={{ padding: '8px 0 8px 0' }}>
+    <div style={{ padding: "0px 0px 4px" }}>
       <div>
         <strong>Last Accessed:</strong> {lastAccessed}
       </div>
@@ -30,6 +30,7 @@ const MermCard = ({
   );
   return (
     <Card
+      hoverable
       style={{ width: "100%", textAlign: "left" }}
       bodyStyle={{ padding: "16px" }}
       cover={cover}

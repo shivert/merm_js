@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Layout, Badge, Icon, Input, Popover } from "antd";
 const Search = Input.Search;
 
-import NewResourceModal from "./NewResourceModal";
+import NewResourceModal from "../NewResourceModal/index";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actions from "../actions/authenticationActions";
+import * as actions from "../../actions/authenticationActions";
 import PropTypes from "prop-types";
 
 const { Header } = Layout;
