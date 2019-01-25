@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Layout, Badge, Icon, Input, Popover } from "antd";
 const Search = Input.Search;
 
-import NewResourceModal from "../NewResourceModal/index";
+import NewResourceModal from "../NewResourceModal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions/authenticationActions";

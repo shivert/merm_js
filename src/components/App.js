@@ -3,10 +3,10 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { hot } from "react-hot-loader";
-import LoginPage from "../containers/LoginPage/index";
+import LoginPage from "../containers/LoginPage";
 import NotFoundPage from "../containers/NotFoundPage";
-import TopLevelContainer from "../containers/TopLevelContainer/index";
-import CustomNotification from "./CustomNotification/index";
+import TopLevelContainer from "../containers/TopLevelContainer";
+import CustomNotification from "./CustomNotification";
 
 import { initLibrary } from "../utils/initFontAwesome";
 
