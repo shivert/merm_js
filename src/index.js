@@ -7,6 +7,8 @@ import configureStore, { history } from "./store/configureStore";
 import Root from "./components/Root";
 import "./styles/styles.scss";
 import "antd/dist/antd.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 require("./favicon.ico"); // Tell webpack to load favicon.ico
 
 const store = configureStore();
