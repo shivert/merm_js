@@ -3,23 +3,22 @@ import { Button, Layout, Badge, Icon, Input, Popover } from "antd";
 const Search = Input.Search;
 
 import NewResourceModal from "./NewResourceModal";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as actions from "../actions/authenticationActions";
+import PropTypes from "prop-types";
 
 const { Header } = Layout;
 
-const text = <span>Notifications</span>;
-const content = (
-  <div>
-    <p>Content #1</p>
-    <p>Content #2</p>
-    <p>Content #3</p>
-    <p>Content #4</p>
-  </div>
-);
-
 class CustomHeader extends React.Component {
+  text = <span>Settings</span>;
   state = {
     loading: false,
     visible: false
+  };
+
+  logOut = () => {
+    this.props.actions.userLogOut();
   };
 
   showModal = () => {
@@ -66,8 +65,34 @@ class CustomHeader extends React.Component {
             >
               <Popover
                 placement="bottomRight"
-                title={text}
-                content={content}
+                title={this.text}
+                content={
+                  <div>
+                    <Button type="primary" onClick={this.logOut}>
+                      Logout
+                    </Button>
+                  </div>
+                }
+                trigger="click"
+              >
+                <Icon
+                  style={{ fontSize: "24px" }}
+                  type="setting"
+                  theme="filled"
+                />
+              </Popover>
+            </div>
+            <div style={{ margin: "-8px 10px 0px 10px", float: "right" }}>
+              <Popover
+                placement="bottomRight"
+                title={this.text}
+                content={
+                  <div>
+                    <Button type="primary" onClick={this.logOut}>
+                      Logout
+                    </Button>
+                  </div>
+                }
                 trigger="click"
               >
                 <Badge count={5}>
@@ -92,4 +117,23 @@ class CustomHeader extends React.Component {
   }
 }
 
-export default CustomHeader;
+CustomHeader.propTypes = {
+  actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    userObject: state.userObject
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CustomHeader);

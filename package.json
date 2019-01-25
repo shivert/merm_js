@@ -36,6 +36,7 @@
     "@fortawesome/react-fontawesome": "0.1.4",
     "antd": "3.12.4",
     "connected-react-router": "4.4.1",
+    "graphql-request": "1.8.2",
     "object-assign": "4.1.1",
     "react": "16.4.2",
     "react-dom": "16.4.2",
