@@ -6,7 +6,7 @@ import { hot } from "react-hot-loader";
 import LoginPage from "../containers/LoginPage";
 import NotFoundPage from "../containers/NotFoundPage";
 import TopLevelContainer from "../containers/TopLevelContainer";
-import CustomNotification from "../components/CustomNotification";
+import CustomNotification from "./CustomNotification";
 
 import { initLibrary } from "../utils/initFontAwesome";
 
@@ -19,7 +19,7 @@ class App extends React.Component {
         <Switch>
           <Redirect exact from="/" to="/dashboard" />
           <Route path="/login" component={LoginPage} />
-          <Route path="/dashboard" component={TopLevelContainer} />
+          <Route path="/" component={TopLevelContainer} />
           <Route component={NotFoundPage} />
         </Switch>
         <CustomNotification />

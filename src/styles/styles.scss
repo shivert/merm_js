@@ -8,6 +8,15 @@ div.user-photo {
   text-align: center;
 }
 
+.ant-tabs-nav {
+  width: 100%;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+  margin: 0 !important;
+  width: 33.33%;
+}
+
 .ant-layout-header {
   padding: 0px 25px !important;
 }
@@ -39,4 +48,18 @@ div.header-container > * {
 
 .slick-slide {
   margin: 0px 8px;
+}
+
+.detailed-merm-header {
+  display: inline-block;
+  width: 100%;
+}
+
+.detailed-merm-header > div > h1 {
+  padding-left: 15px;
+  margin-bottom: 0px;
+}
+
+.detailed-merm-header >  div > * {
+  display: inline-block;
 }

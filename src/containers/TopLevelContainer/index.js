@@ -17,18 +17,22 @@ const SubMenu = Menu.SubMenu;
 const { Content, Footer, Sider } = Layout;
 
 import { hot } from "react-hot-loader";
-import CustomHeader from "./header";
+import CustomHeader from "../../components/Header";
 
-import Dashboard from "../containers/dashboard";
-import Favourites from "../containers/favourites";
-import Recent from "../containers/recent";
-import Shared from "../containers/shared";
-import Settings from "../containers/settings";
-import NotFoundPage from "../containers/NotFoundPage";
+import DetailedMermView from "../DetailedMermView";
+import Dashboard from "../Dashboard";
+import Favourites from "../Favourites";
+import Recent from "../Recent";
+import Shared from "../Shared";
+import { history } from "../../store/configureStore";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    if (props.userObject.token === "") {
+      history.push("/login");
+    }
 
     let openMenu = "";
     let pathname = props.pathname;
@@ -51,7 +55,6 @@ class App extends React.Component {
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
-
   render() {
     return (
       <Router>
@@ -69,7 +72,9 @@ class App extends React.Component {
               <div className="user-photo">
                 <Avatar size={84} icon="user" />
                 <h2 style={{ color: "white", marginTop: "10px" }}>
-                  Spencer Hivert
+                  {`${this.props.userObject.firstName} ${
+                    this.props.userObject.lastName
+                  }`}
                 </h2>
               </div>
             )}
@@ -145,11 +150,10 @@ class App extends React.Component {
               >
                 <Switch>
                   <Route path="/dashboard" component={Dashboard} />
+                  <Route path="/merm/:mermId" component={DetailedMermView} />
                   <Route path="/recent" component={Recent} />
                   <Route path="/shared" component={Shared} />
                   <Route path="/favourites" component={Favourites} />
-                  <Route path="/settings" component={Settings} />
-                  <Route component={NotFoundPage} />
                 </Switch>
               </div>
             </Content>
@@ -163,12 +167,13 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  children: PropTypes.element,
-  pathname: PropTypes.string.isRequired
+  pathname: PropTypes.string.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  pathname: state.router.location.pathname
+  pathname: state.router.location.pathname,
+  userObject: state.userObject
 });
 
 export default connect(mapStateToProps)(hot(module)(App));

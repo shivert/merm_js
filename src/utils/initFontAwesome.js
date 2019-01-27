@@ -3,6 +3,7 @@ import {
   faCog,
   faEdit,
   faComments,
+  faHeart,
   faArrowAltCircleLeft,
   faArrowAltCircleRight
 } from "@fortawesome/free-solid-svg-icons";
@@ -10,10 +11,12 @@ import {
 function initLibrary() {
   // fontawesome library initialization
   // add icons as needed
+
   library.add(
     faCog,
     faEdit,
     faComments,
+    faHeart,
     faArrowAltCircleLeft,
     faArrowAltCircleRight
   );

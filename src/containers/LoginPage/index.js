@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { history } from "../store/configureStore";
-import * as actions from "../actions/authenticationActions";
-import LoginPageForm from "../components/LoginPageForm";
+import { history } from "../../store/configureStore";
+import * as actions from "../../actions/authenticationActions";
+import LoginPageForm from "../../components/LoginPageForm/";
 import { Row, Form } from "antd";
 
 class LoginPage extends React.Component {
