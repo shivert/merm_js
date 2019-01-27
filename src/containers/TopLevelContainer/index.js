@@ -15,10 +15,7 @@ import { Layout, Menu, Icon, Avatar } from "antd";
 const SubMenu = Menu.SubMenu;
 
 const { Content, Footer, Sider } = Layout;
-
-import { hot } from "react-hot-loader";
 import CustomHeader from "../../components/Header";
-
 import DetailedMermView from "../DetailedMermView";
 import Dashboard from "../Dashboard";
 import Favourites from "../Favourites";
@@ -26,7 +23,7 @@ import Recent from "../Recent";
 import Shared from "../Shared";
 import { history } from "../../store/configureStore";
 
-class App extends React.Component {
+class TopLevelContainer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -166,7 +163,7 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
+TopLevelContainer.propTypes = {
   pathname: PropTypes.string.isRequired,
   userObject: PropTypes.object.isRequired
 };
@@ -176,4 +173,4 @@ const mapStateToProps = state => ({
   userObject: state.userObject
 });
 
-export default connect(mapStateToProps)(hot(module)(App));
+export default connect(mapStateToProps)(TopLevelContainer);

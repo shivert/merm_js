@@ -63,3 +63,30 @@ div.header-container > * {
 .detailed-merm-header >  div > * {
   display: inline-block;
 }
+
+
+div.ant-card-body {
+  padding: 10px !important;
+}
+
+div.merm-card-outer {
+  width: 100%;
+  text-align: left;
+}
+
+div.merm-card-outer > div.ant-card-body {
+  padding: 16px;
+}
+
+div.merm-card-inner {
+  width: 100%;
+  border: none;
+}
+
+div.merm-card-inner > div.ant-card-body {
+  padding: 4px 0 !important
+}
+
+.ant-card-meta-detail > div:not(:last-child) {
+  margin-bottom: 0px !important;
+}

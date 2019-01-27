@@ -1,9 +1,7 @@
 import React from "react";
 import { Collapse, Col, Row } from "antd";
 import MermCard from "../../components/MermCard/MermCard";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CustomCarousel from "../components/Carousel/CustomCarousel";
+import CustomCarousel from "../../components/Carousel/CustomCarousel";
 
 const Panel = Collapse.Panel;
 
@@ -18,34 +16,6 @@ const customPanelStyle = {
 const Dashboard = () => {
   return (
     <Collapse bordered={false} defaultActiveKey={["1", "2"]}>
-      <Panel header="Popular" key="1" style={customPanelStyle}>
-        <Row gutter={16}>
-          <Col span={6}>
-            <MermCard
-              id={234}
-              title="Sample Merm"
-              lastAccessed="Jan 1, 1975"
-              sharedTime="Jan 12, 2018"
-              owner="Zachariah Pustowka"
-              sharer="Veryvery long named Person"
-              actions={[
-                <Link to={`/merm/${234}`}>
-                  <FontAwesomeIcon icon="cog" key="settings" />
-                </Link>,
-                <FontAwesomeIcon icon="edit" key="edit" />,
-                <FontAwesomeIcon icon="comments" key="comments" />
-              ]}
-              cover={
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                />
-              }
-              tags={["sample1", "sample2"]}
-            />
-          </Col>
-        </Row>
-      </Panel>
       <Panel header="Unread Resources" key="2" style={customPanelStyle}>
         <Row gutter={16}>
           <Col>
@@ -57,11 +27,6 @@ const Dashboard = () => {
                   sharedTime="Jan 12, 2018"
                   owner="Zachariah Pustowka"
                   sharer="Veryvery long named Person"
-                  actions={[
-                    <FontAwesomeIcon icon="cog" key="settings" />,
-                    <FontAwesomeIcon icon="edit" key="edit" />,
-                    <FontAwesomeIcon icon="comments" key="comments" />
-                  ]}
                   cover={
                     <img
                       alt="example"
@@ -77,11 +42,6 @@ const Dashboard = () => {
                   sharedTime="Jan 12, 2018"
                   owner="Zachariah Pustowka"
                   sharer="Veryvery long named Person"
-                  actions={[
-                    <FontAwesomeIcon icon="cog" key="settings" />,
-                    <FontAwesomeIcon icon="edit" key="edit" />,
-                    <FontAwesomeIcon icon="comments" key="comments" />
-                  ]}
                   cover={
                     <img
                       alt="example"
@@ -97,11 +57,6 @@ const Dashboard = () => {
                   sharedTime="Jan 12, 2018"
                   owner="Zachariah Pustowka"
                   sharer="Veryvery long named Person"
-                  actions={[
-                    <FontAwesomeIcon icon="cog" key="settings" />,
-                    <FontAwesomeIcon icon="edit" key="edit" />,
-                    <FontAwesomeIcon icon="comments" key="comments" />
-                  ]}
                   cover={
                     <img
                       alt="example"
@@ -117,11 +72,20 @@ const Dashboard = () => {
                   sharedTime="Jan 12, 2018"
                   owner="Zachariah Pustowka"
                   sharer="Veryvery long named Person"
-                  actions={[
-                    <FontAwesomeIcon icon="cog" key="settings" />,
-                    <FontAwesomeIcon icon="edit" key="edit" />,
-                    <FontAwesomeIcon icon="comments" key="comments" />
-                  ]}
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    />
+                  }
+                  tags={["sample1", "sample2"]}
+                />
+                <MermCard
+                  title="Fifth"
+                  lastAccessed="Jan 1, 1975"
+                  sharedTime="Jan 12, 2018"
+                  owner="Zachariah Pustowka"
+                  sharer="Veryvery long named Person"
                   cover={
                     <img
                       alt="example"
@@ -132,6 +96,27 @@ const Dashboard = () => {
                 />
               </CustomCarousel>
             </Row>
+          </Col>
+        </Row>
+      </Panel>
+      <Panel header="Popular" key="1" style={customPanelStyle}>
+        <Row gutter={16}>
+          <Col span={6}>
+            <MermCard
+              id={234}
+              title="Sample Merm"
+              lastAccessed="Jan 1, 1975"
+              sharedTime="Jan 12, 2018"
+              owner="Zachariah Pustowka"
+              sharer="Veryvery long named Person"
+              cover={
+                <img
+                  alt="example"
+                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                />
+              }
+              tags={["sample1", "sample2", "sample1"]}
+            />
           </Col>
         </Row>
       </Panel>
