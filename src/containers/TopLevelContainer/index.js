@@ -141,9 +141,9 @@ class TopLevelContainer extends React.Component {
           </Sider>
           <Layout>
             <CustomHeader />
-            <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+            <Content style={{ margin: "10px 24px 0", overflow: "initial" }}>
               <div
-                style={{ padding: 24, background: "#fff", textAlign: "center" }}
+                style={{ padding: "24px", background: "#fff", textAlign: "center" }}
               >
                 <Switch>
                   <Route path="/dashboard" component={Dashboard} />
