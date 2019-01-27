@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const arrowSize = 40;
 const arrowSizePixel = `${arrowSize}px`;
 const arrowToCarouselMargin = 5;
-const slidesToScroll = 3;
-const slidesToShow = 3;
+const slidesToScroll = 4;
+const slidesToShow = 4;
 const animationSpeed = 500;
 
 const Arrow = props => {

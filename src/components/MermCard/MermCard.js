@@ -1,5 +1,7 @@
 import React from "react";
 import { Card, Tag } from "antd";
+import { Link } from "react-router-dom";
+
 const { Meta } = Card;
 
 const MermCard = ({
@@ -18,39 +20,31 @@ const MermCard = ({
         <strong>Last Accessed:</strong> {lastAccessed}
       </div>
       <div>
-        <strong>Shared:</strong> {sharedTime}
-      </div>
-      <div>
         <strong>Owner:</strong> {owner}
-      </div>
-      <div>
-        <strong>Shared by:</strong> {sharer}
       </div>
     </div>
   );
   return (
-    <Card
-      hoverable
-      style={{ width: "100%", textAlign: "left" }}
-      bodyStyle={{ padding: "16px" }}
-      cover={cover}
-      actions={actions}
-    >
-      <Meta title={title} description={mermMetaData} />
+    <Link to={`/merm/${234}`}>
       <Card
-        size="small"
-        style={{ width: "100%", border: "none" }}
-        bodyStyle={{ padding: "8px 0 8px 0" }}
+        hoverable
+        className="merm-card-outer"
+        bodyStyle={{ padding: "16px" }}
+        cover={cover}
+        actions={actions}
       >
-        {tags != null
-          ? tags.map(tag => (
-            <Tag key={tag} closable>
-              {tag}
-            </Tag>
-          ))
-          : ""}
+        <Meta title={title} description={mermMetaData} />
+        <Card className="merm-card-inner" size="small">
+          {tags != null
+            ? tags.map(tag => (
+                <Tag key={tag}>
+                  {tag}
+                </Tag>
+              ))
+            : ""}
+        </Card>
       </Card>
-    </Card>
+    </Link>
   );
 };
 
