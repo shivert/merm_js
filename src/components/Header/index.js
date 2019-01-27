@@ -42,7 +42,7 @@ class CustomHeader extends React.Component {
     const { visible, loading } = this.state;
 
     return (
-      <Header style={{ background: "#fff" }}>
+      <Header style={{ background: "#f0f2f5" }}>
         <div className="header-container">
           <div style={{ float: "left" }}>
             <Button type="primary" icon="plus-circle" onClick={this.showModal}>
