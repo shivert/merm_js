@@ -5,7 +5,7 @@ $vin-red: #ff0000;
 
 div.user-photo {
   margin: 30px auto;
-  text-align: center
+  text-align: center;
 }
 
 .ant-layout-header {
@@ -35,4 +35,8 @@ div.header-container > * {
 }
 .login-form-button {
   width: 100%;
+}
+
+.slick-slide {
+  margin: 0px 8px;
 }
