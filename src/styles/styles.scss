@@ -90,3 +90,13 @@ div.merm-card-inner > div.ant-card-body {
 .ant-form-item-control {
   text-align: center;
 }
+.ant-divider-horizontal.ant-divider-with-text-left:before {
+  width: 0% !important;
+}
+
+
+.merm-overview-container {
+  padding-left: 25px;
+  text-align: left;
+
+}

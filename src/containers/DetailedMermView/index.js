@@ -26,7 +26,7 @@ class DetailedMermView extends React.Component {
         <div className="detailed-merm-header">
           <div style={{float: 'left', marginLeft: "15px"}}>
             <Button type="primary" shape="circle" icon="medium" size="large" />
-            <h1>Enter Merm Name Here</h1>
+            <h1>{this.props.detailedMerm.mermName}</h1>
             <Icon type="heart" style={{ fontSize: "20px", padding: "15px" }} />
           </div>
 
@@ -53,12 +53,12 @@ class DetailedMermView extends React.Component {
 
 DetailedMermView.propTypes = {
   actions: PropTypes.object.isRequired,
-  userObject: PropTypes.object.isRequired
+  detailedMerm: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    userObject: state.userObject
+    detailedMerm: state.detailedMerm
   };
 }
 
