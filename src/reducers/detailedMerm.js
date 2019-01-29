@@ -28,12 +28,12 @@ export function getInitialState() {
     sharedWith: [
       {
         userId: 12,
-        name: "",
+        name: "Zach Pustowka",
         avatar: ""
       },
       {
         userId: 13,
-        name: "Zach P",
+        name: "Colin Vander Glas",
         avatar: ""
       }
     ],

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/authenticationActions";
-import { Row, Col, Divider, Tag } from "antd";
+import { Row, Col, Divider, Tag, Avatar} from "antd";
 class Overview extends React.Component {
   constructor(props) {
     super(props);
@@ -60,16 +60,21 @@ class Overview extends React.Component {
             <Divider orientation="left">Sharing</Divider>
             <div className="merm-overview-container">
               <p>
-                <b>Owner:</b> {this.props.detailedMerm.owner.name}
+                <b>Owner: </b> <Avatar icon="user" />
+                {" " + this.props.detailedMerm.owner.name}
               </p>
               <p>
                 <b>Shared With:</b>
-                {this.props.detailedMerm.sharedWith.length != 0
+              </p>
+              <div className="shared-with">
+                {this.props.detailedMerm.sharedWith.length !== 0
                   ? this.props.detailedMerm.sharedWith.map(person => (
-                    <p>{person.name}</p>
+                      <p key={person.name}>
+                       <Avatar icon="user"/> {person.name}
+                      </p>
                     ))
                   : ""}
-              </p>
+              </div>
             </div>
             <Divider orientation="left">Dates</Divider>
             <div className="merm-overview-container">
