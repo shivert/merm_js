@@ -1,10 +1,12 @@
 import React from "react";
-import { Card, Tag } from "antd";
+import { Card, Tag, Icon, Tooltip } from "antd";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 
 const { Meta } = Card;
 
 const MermCard = ({
+  id,
   lastAccessed,
   sharedTime,
   owner,
@@ -17,15 +19,20 @@ const MermCard = ({
   const mermMetaData = (
     <div style={{ padding: "0px 0px 4px" }}>
       <div>
-        <strong>Last Accessed:</strong> {lastAccessed}
+        <strong>Last Accessed:</strong> <Moment fromNow>{lastAccessed}</Moment>
       </div>
       <div>
         <strong>Owner:</strong> {owner}
       </div>
     </div>
   );
+
+  const tagsToShow = 2;
+
+  const tagsVisible = tags.slice(0, tagsToShow);
+  const tagsHidden = tags.slice(tagsToShow);
   return (
-    <Link to={`/merm/${234}`}>
+    <Link to={`/merm/${id}`}>
       <Card
         hoverable
         className="merm-card-outer"
@@ -35,13 +42,19 @@ const MermCard = ({
       >
         <Meta title={title} description={mermMetaData} />
         <Card className="merm-card-inner" size="small">
-          {tags != null
-            ? tags.map(tag => (
-                <Tag key={tag}>
-                  {tag}
-                </Tag>
-              ))
+          {tagsVisible != null
+            ? tagsVisible.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
             : ""}
+          <Tooltip
+            placement="bottom"
+            title={
+              tagsHidden != null
+                ? tagsHidden.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
+                : ""
+            }
+          >
+            <Icon type="ellipsis" />
+          </Tooltip>
         </Card>
       </Card>
     </Link>

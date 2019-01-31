@@ -48,7 +48,7 @@ export function userCreate(fields) {
   `;
 
   const variables = {
-    "registrationDetails": {
+    registrationDetails: {
       firstName: fields.firstName,
       lastName: fields.lastName,
       email: fields.email,
@@ -57,4 +57,35 @@ export function userCreate(fields) {
   };
 
   return client.rawRequest(query, variables);
+}
+
+export function getMerms(authToken) {
+  const endpoint = "http://localhost:3000/graphql";
+
+  const client = new GraphQLClient(endpoint, {
+    mode: "cors"
+  });
+
+  client.setHeader("Content-Type", "application/json");
+  client.setHeader("Authorization", `Bearer ${authToken}`);
+
+  const query = `
+  query {
+    allMerms {
+      id
+      name
+      lastAccessed
+      owner {
+        firstName
+        lastName
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+ `;
+
+  return client.rawRequest(query);
 }
