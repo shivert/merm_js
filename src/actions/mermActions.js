@@ -1,6 +1,5 @@
 import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
-import { history } from "../store/configureStore";
 
 export function getMerms(authToken) {
   return dispatch => {

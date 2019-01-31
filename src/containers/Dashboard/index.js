@@ -34,7 +34,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <Collapse bordered={false} defaultActiveKey={["1"]}>
-        <Panel header="Suggested" key="2" style={customPanelStyle}>
+        <Panel header="Suggested" key="1" style={customPanelStyle}>
           <Row gutter={16}>
             <Col>
               <Row>
