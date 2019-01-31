@@ -28,3 +28,66 @@ export function getMerms(authToken) {
     );
   };
 }
+
+export function clearMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_MERM_LIST });
+  };
+}
+
+
+export function getMerm(mermId, authToken) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.GET_REQUEST_INITIATED });
+
+    API.getMerm(mermId, authToken).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.GET_REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch Merms",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function favoriteMerm(mermId, favorite, authToken) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.GET_REQUEST_INITIATED });
+
+    API.favoriteMerm(mermId, favorite, authToken).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_EDIT_DETAILED_MERM,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.GET_REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch Merms",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}

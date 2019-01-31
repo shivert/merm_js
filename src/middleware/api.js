@@ -71,7 +71,65 @@ export function getMerms(authToken) {
 
   const query = `
   query {
-    allMerms {
+    dashboardMerms {
+      suggested {
+        id
+        name
+        lastAccessed
+        owner {
+          firstName
+          lastName
+        }
+        tags {
+          id
+          name
+        }
+      }
+      favorites {
+        id
+        name
+        lastAccessed
+        owner {
+          firstName
+          lastName
+        }
+        tags {
+          id
+          name
+        }
+      }
+      unread {
+        id
+        name
+        lastAccessed
+        owner {
+          firstName
+          lastName
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }`;
+
+  return client.rawRequest(query);
+}
+
+export function getFavoriteMerms(authToken) {
+  const endpoint = "http://localhost:3000/graphql";
+
+  const client = new GraphQLClient(endpoint, {
+    mode: "cors"
+  });
+
+  client.setHeader("Content-Type", "application/json");
+  client.setHeader("Authorization", `Bearer ${authToken}`);
+
+  const query = `
+  query {
+    favoriteMerms {
       id
       name
       lastAccessed
@@ -88,4 +146,97 @@ export function getMerms(authToken) {
  `;
 
   return client.rawRequest(query);
+}
+
+export function getMerm(mermId, authToken) {
+  const endpoint = "http://localhost:3000/graphql";
+
+  const client = new GraphQLClient(endpoint, {
+    mode: "cors"
+  });
+
+  client.setHeader("Content-Type", "application/json");
+  client.setHeader("Authorization", `Bearer ${authToken}`);
+
+  const query = `
+  query {
+    merm(id: ${mermId}) {
+      id
+      name
+      source
+      favorite
+      resourceName
+      resourceUrl
+      description
+      capturedText
+      lastAccessed
+      createdAt
+      updatedAt
+      sharedWith {
+        id  
+        name
+      }
+      owner {
+        id  
+        name
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+ `;
+
+  return client.rawRequest(query);
+}
+
+export function favoriteMerm(mermId, favorite, authToken) {
+  const endpoint = "http://localhost:3000/graphql";
+
+  const client = new GraphQLClient(endpoint, {
+    mode: "cors"
+  });
+
+  client.setHeader("Content-Type", "application/json");
+  client.setHeader("Authorization", `Bearer ${authToken}`);
+
+  const query = `
+    mutation editMerm($id: ID!, $merm: EditMermInputType!) {
+      editMerm(id: $id, merm: $merm) {
+        id
+        name
+        source
+        favorite
+        resourceName
+        resourceUrl
+        description
+        capturedText
+        lastAccessed
+        createdAt
+        updatedAt
+        sharedWith {
+          id  
+          name
+        }
+        owner {
+          id  
+          name
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    id: mermId,
+    merm: {
+      favorite: favorite
+    }
+  };
+
+  return client.rawRequest(query, variables);
 }

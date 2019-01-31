@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Tabs, Icon } from "antd";
 import { bindActionCreators } from "redux";
-import * as actions from "../../actions/authenticationActions";
+import * as actions from "../../actions/mermActions";
 
 import Overview from "./Overview";
 import Comments from "./Comments";
@@ -17,22 +17,54 @@ class DetailedMermView extends React.Component {
   }
 
   componentDidMount() {
-    // Call API to fetch information here
+    const authToken = this.props.userObject.token;
+    const mermId = this.props.match.params.mermId;
+    this.props.actions.getMerm(mermId, authToken);
   }
 
+  favoriteMerm = () => {
+    const flipFav = !this.props.detailedMerm.merm.favorite;
+    this.props.actions.favoriteMerm(
+      this.props.detailedMerm.merm.id,
+      flipFav,
+      this.props.userObject.token
+    );
+  };
+
   render() {
+    const { name, resourceUrl, favorite } = this.props.detailedMerm.merm;
+
     return (
       <div>
         <div className="detailed-merm-header">
-          <div style={{float: 'left', marginLeft: "15px"}}>
+          <div style={{ float: "left", marginLeft: "15px" }}>
             <Button type="primary" shape="circle" icon="medium" size="large" />
-            <h1>{this.props.detailedMerm.mermName}</h1>
-            <Icon type="heart" style={{ fontSize: "20px", padding: "15px" }} />
+            <h1>{name}</h1>
+            <Button
+              className="favorite-button"
+              shape="circle"
+              size="large"
+              onClick={this.favoriteMerm}
+            >
+              {favorite ? (
+                <Icon
+                  type="heart"
+                  theme="filled"
+                  style={{ fontSize: "20px" }}
+                />
+              ) : (
+                <Icon type="heart" style={{ fontSize: "20px" }} />
+              )}
+            </Button>
           </div>
 
-          <div style={{float: 'right'}}>
-            <Button style={{marginRight: '20px'}} size="large" type="primary">Edit</Button>
-            <Button type="primary" shape="circle" icon="link" size="large" />
+          <div style={{ float: "right" }}>
+            <Button style={{ marginRight: "20px" }} size="large" type="primary">
+              Edit
+            </Button>
+            <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
+              <Button type="primary" shape="circle" icon="link" size="large" />
+            </a>
           </div>
         </div>
         <Tabs tabPosition="top" defaultActiveKey="1" onChange={this.callback}>
@@ -53,12 +85,15 @@ class DetailedMermView extends React.Component {
 
 DetailedMermView.propTypes = {
   actions: PropTypes.object.isRequired,
-  detailedMerm: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  detailedMerm: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm
+    detailedMerm: state.detailedMerm,
+    userObject: state.userObject
   };
 }
 
