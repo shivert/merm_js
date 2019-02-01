@@ -91,6 +91,14 @@ div.merm-card-inner > div.ant-card-body {
   text-align: center;
 }
 
+.ant-list {
+  text-align: left;
+}
+
+.ant-divider {
+  margin-bottom: -12px !important;
+}
+
 .ant-divider-horizontal.ant-divider-with-text-left:before {
   width: 0% !important;
 }
@@ -99,6 +107,7 @@ div.merm-card-inner > div.ant-card-body {
   padding-left: 25px;
   text-align: left;
 }
+
 .shared-with {
   padding-left: 25px;
 }
