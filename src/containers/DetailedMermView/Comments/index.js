@@ -23,11 +23,7 @@ const Editor = ({ onChange, onSubmit, value }) => (
       <TextArea rows={4} onChange={onChange} value={value} />
     </Form.Item>
     <Form.Item>
-      <Button
-        htmlType="submit"
-        onClick={onSubmit}
-        type="primary"
-      >
+      <Button htmlType="submit" onClick={onSubmit} type="primary">
         Add Comment
       </Button>
     </Form.Item>
@@ -84,14 +80,11 @@ class Comments extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.actions.addMermComment(
-      {
-        content: this.state.value,
-        merm_id: this.props.detailedMerm.id,
-        author_id: this.props.userObject.id
-      },
-      this.props.userObject.token
-    );
+    this.props.actions.addMermComment({
+      content: this.state.value,
+      merm_id: this.props.detailedMerm.id,
+      author_id: this.props.userObject.id
+    });
 
     this.setState({
       value: ""
@@ -146,8 +139,7 @@ Comments.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm,
-    userObject: state.userObject
+    detailedMerm: state.detailedMerm
   };
 }
 

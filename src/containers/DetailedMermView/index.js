@@ -17,17 +17,15 @@ class DetailedMermView extends React.Component {
   }
 
   componentDidMount() {
-    const authToken = this.props.userObject.token;
     const mermId = this.props.match.params.mermId;
-    this.props.actions.getMerm(mermId, authToken);
+    this.props.actions.getMerm(mermId);
   }
 
   favoriteMerm = () => {
     const flipFav = !this.props.detailedMerm.favorite;
     this.props.actions.favoriteMerm(
       this.props.detailedMerm.id,
-      flipFav,
-      this.props.userObject.token
+      flipFav
     );
   };
 
@@ -86,14 +84,12 @@ class DetailedMermView extends React.Component {
 DetailedMermView.propTypes = {
   actions: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  detailedMerm: PropTypes.object.isRequired,
-  userObject: PropTypes.object.isRequired
+  detailedMerm: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm,
-    userObject: state.userObject
+    detailedMerm: state.detailedMerm
   };
 }
 

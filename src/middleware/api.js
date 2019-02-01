@@ -1,14 +1,27 @@
 import { GraphQLClient } from "graphql-request";
 
+const endpoint = "http://localhost:3000/graphql";
+const client = new GraphQLClient(endpoint, {
+  mode: "cors",
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
+export const tokenSelector = state => state.userObject.token;
+
+export const setAuthHeader = token => {
+  authClient.setHeader("Authorization", `Bearer ${token}`);
+};
+
+const authClient = new GraphQLClient(endpoint, {
+  mode: "cors",
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
 export function userLogIn(fields) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-
   const query = `
     mutation signIn($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
@@ -29,14 +42,6 @@ export function userLogIn(fields) {
 }
 
 export function userCreate(fields) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-
   const query = `
     mutation signUp($registrationDetails: UserInputType!) {
       signUp(registrationDetails: $registrationDetails) {
@@ -61,16 +66,7 @@ export function userCreate(fields) {
   return client.rawRequest(query, variables);
 }
 
-export function getMerms(authToken) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-  client.setHeader("Authorization", `Bearer ${authToken}`);
-
+export function getMerms() {
   const query = `
   query {
     dashboardMerms {
@@ -116,50 +112,10 @@ export function getMerms(authToken) {
     }
   }`;
 
-  return client.rawRequest(query);
+  return authClient.rawRequest(query);
 }
 
-export function getFavoriteMerms(authToken) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-  client.setHeader("Authorization", `Bearer ${authToken}`);
-
-  const query = `
-  query {
-    favoriteMerms {
-      id
-      name
-      lastAccessed
-      owner {
-        firstName
-        lastName
-      }
-      tags {
-        id
-        name
-      }
-    }
-  }
- `;
-
-  return client.rawRequest(query);
-}
-
-export function getMerm(mermId, authToken) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-  client.setHeader("Authorization", `Bearer ${authToken}`);
-
+export function getMerm(mermId) {
   const query = `
   query {
     merm(id: ${mermId}) {
@@ -199,19 +155,10 @@ export function getMerm(mermId, authToken) {
   }
  `;
 
-  return client.rawRequest(query);
+  return authClient.rawRequest(query);
 }
 
-export function favoriteMerm(mermId, favorite, authToken) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-  client.setHeader("Authorization", `Bearer ${authToken}`);
-
+export function favoriteMerm(mermId, favorite) {
   const query = `
     mutation editMerm($id: ID!, $merm: EditMermInputType!) {
       editMerm(id: $id, merm: $merm) {
@@ -248,19 +195,10 @@ export function favoriteMerm(mermId, favorite, authToken) {
     }
   };
 
-  return client.rawRequest(query, variables);
+  return authClient.rawRequest(query, variables);
 }
 
-export function addMermComment(comment, authToken) {
-  const endpoint = "http://localhost:3000/graphql";
-
-  const client = new GraphQLClient(endpoint, {
-    mode: "cors"
-  });
-
-  client.setHeader("Content-Type", "application/json");
-  client.setHeader("Authorization", `Bearer ${authToken}`);
-
+export function addMermComment(comment) {
   const query = `
     mutation addComment($commentDetails: CommentInputType!) {
       addComment(commentDetails: $commentDetails) {
@@ -278,5 +216,5 @@ export function addMermComment(comment, authToken) {
     commentDetails: comment
   };
 
-  return client.rawRequest(query, variables);
+  return authClient.rawRequest(query, variables);
 }

@@ -2,6 +2,8 @@ import {createStore, compose, applyMiddleware} from 'redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
+import { tokenSelector, setAuthHeader } from './../middleware/api'
+
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import rootReducer from "../reducers";
@@ -34,6 +36,8 @@ function configureStoreProd() {
     saveState({
       userObject: store.getState().userObject
     });
+    const token = tokenSelector(store.getState());
+    setAuthHeader(token);
   });
 
   return store;
@@ -72,6 +76,8 @@ function configureStoreDev() {
     saveState({
       userObject: store.getState().userObject
     });
+    const token = tokenSelector(store.getState());
+    setAuthHeader(token);
   });
 
   return store;

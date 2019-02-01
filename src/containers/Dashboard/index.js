@@ -31,7 +31,7 @@ class Dashboard extends React.Component {
   }
 
   getMerms() {
-    this.props.actions.getMerms(this.props.userObject.token);
+    this.props.actions.getMerms();
   }
 
   render() {
@@ -112,14 +112,12 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   actions: PropTypes.object.isRequired,
-  userObject: PropTypes.object.isRequired,
   merms: PropTypes.object.isRequired,
   requestStatus: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    userObject: state.userObject,
     merms: state.merms,
     requestStatus: state.requestStatus
   };
