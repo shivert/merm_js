@@ -182,7 +182,17 @@ export default class CustomCarousel extends React.PureComponent {
       slidesToScroll,
       slidesToShow
     } = this.state;
-    console.log(slidesToShow, slidesToScroll);
+
+    const { shouldUseDynamicArrows } = this.props;
+
+    const isPrevArrowHidden = shouldUseDynamicArrows
+      ? !shouldShowPrevArrow
+      : slidesToShow >= this.props.children.length;
+
+    const isNextArrowHidden = shouldUseDynamicArrows
+      ? !shouldShowNextArrow
+      : slidesToShow >= this.props.children.length;
+
     const settings = {
       infinite: false,
       speed: animationSpeed,
@@ -190,14 +200,14 @@ export default class CustomCarousel extends React.PureComponent {
       slidesToScroll,
       prevArrow: (
         <Arrow
-          isHidden={!shouldShowPrevArrow}
+          isHidden={isPrevArrowHidden}
           type="prev"
           setPrevArrowDisplayState={this.setPrevArrowDisplayState}
         />
       ),
       nextArrow: (
         <Arrow
-          isHidden={!shouldShowNextArrow}
+          isHidden={isNextArrowHidden}
           type="next"
           setNextArrowDisplayState={this.setNextArrowDisplayState}
         />
@@ -209,8 +219,8 @@ export default class CustomCarousel extends React.PureComponent {
     return (
       <div
         style={{
-          paddingLeft: shouldShowPrevArrow ? sidePaddingValue : "0px",
-          paddingRight: shouldShowNextArrow ? sidePaddingValue : "0px"
+          paddingLeft: !isPrevArrowHidden ? sidePaddingValue : "0px",
+          paddingRight: !isNextArrowHidden ? sidePaddingValue : "0px"
         }}
         ref={r => {
           this.carouselElement = r;
