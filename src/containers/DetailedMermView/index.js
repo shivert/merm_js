@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { Button, Tabs, Icon } from "antd";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
+import { Route } from "react-router-dom";
+import { history } from "../../store/configureStore";
 
 import Overview from "./Overview";
 import Comments from "./Comments";
@@ -23,14 +25,16 @@ class DetailedMermView extends React.Component {
 
   favoriteMerm = () => {
     const flipFav = !this.props.detailedMerm.favorite;
-    this.props.actions.favoriteMerm(
-      this.props.detailedMerm.id,
-      flipFav
-    );
+    this.props.actions.favoriteMerm(this.props.detailedMerm.id, flipFav);
+  };
+
+  handleTabChange = key => {
+    history.push(`${this.props.match.url}/${key}`);
   };
 
   render() {
     const { name, resourceUrl, favorite } = this.props.detailedMerm;
+    const activeTab = this.props.pathname.split("/").slice(-1)[0];
 
     return (
       <div>
@@ -65,14 +69,18 @@ class DetailedMermView extends React.Component {
             </a>
           </div>
         </div>
-        <Tabs tabPosition="top" defaultActiveKey="1" onChange={this.callback}>
-          <TabPane tab="Overview" key="1">
+        <Tabs
+          tabPosition="top"
+          defaultActiveKey={activeTab}
+          onChange={this.handleTabChange}
+        >
+          <TabPane tab="Overview" key="">
             <Overview />
           </TabPane>
-          <TabPane tab="Comments" key="2">
+          <TabPane tab="Comments" key="comments">
             <Comments />
           </TabPane>
-          <TabPane tab="Statistics" key="3">
+          <TabPane tab="Statistics" key="statistics">
             <Statistics />
           </TabPane>
         </Tabs>
@@ -84,12 +92,14 @@ class DetailedMermView extends React.Component {
 DetailedMermView.propTypes = {
   actions: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired,
   detailedMerm: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm
+    detailedMerm: state.detailedMerm,
+    pathname: state.router.location.pathname
   };
 }
 
