@@ -2,76 +2,48 @@ import * as ActionTypes from "../constants/ActionTypes";
 
 export function getInitialState() {
   return {
-    mermName: "Data Quality - Article",
+    mermName: "",
     mermId: 0,
-    source:"Chrome Extension",
+    source: "",
+    favorite: false,
     category: null,
-    resourceUrl: "https://abc.com",
-    resourceTitle: "Data Quality Best Practices",
-    description: "Great article about data quality stuff",
-    capturedText: "Blah Blah Blah Blah",
-    tags: [
-      {
-        tagId: 123,
-        name: "project 232"
-      },
-      {
-        TagId: 124,
-        name: "data quality"
-      }
-    ],
-    owner: {
-      userId: 1,
-      name: "Spencer Hivert",
-      avatar: ""
-    },
-    sharedWith: [
-      {
-        userId: 12,
-        name: "Zach Pustowka",
-        avatar: ""
-      },
-      {
-        userId: 13,
-        name: "Colin Vander Glas",
-        avatar: ""
-      }
-    ],
-    lastViewed: "29/Jul/13 9:01 PM",
-    created: "29/Jul/13 9:02 PM",
-    updated: "29/Jul/13 9:03 PM",
-    related: {
-      mermId: 190,
-      name: "Data quality best tools"
-    }
+    resourceUrl: "",
+    resourceName: "",
+    description: "",
+    capturedText: "",
+    tags: [],
+    owner: {},
+    sharedWith: [],
+    lastAccessed: "",
+    createdAt: "",
+    updatedAt: "",
+    related: {},
+    comments: []
   };
 }
 
-const mapLogInResponse = value => ({
-  id: 0,
-  firstName: value["signIn"]["firstName"],
-  lastName: value["signIn"]["lastName"],
-  email: "",
-  token: value["signIn"]["authenticationToken"]
-});
+const mapFetchResponse = data => data.merm;
 
-const mapCreateUserResponse = value => ({
-  id: 0,
-  firstName: value["signUp"]["firstName"],
-  lastName: value["signUp"]["lastName"],
-  email: value["signUp"]["email"],
-  token: value["signUp"]["authenticationToken"]
-});
+const mapEditResponse = data => data.editMerm;
+
+const mapCommentResponse = (state, data) => {
+  const updatedComments = {
+    comments: state.comments.concat(data["addComment"])
+  };
+  return { ...state, ...updatedComments };
+};
 
 const initialState = getInitialState();
 
 export default function detailedMerm(state = initialState, action) {
   switch (action.type) {
-    case ActionTypes.UPDATE_USER_OBJECT_CREATE:
-      return mapCreateUserResponse(action.value);
-    case ActionTypes.UPDATE_USER_OBJECT_LOGIN:
-      return mapLogInResponse(action.value);
-    case ActionTypes.CLEAR_USER_OBJECT:
+    case ActionTypes.UPDATE_DETAILED_MERM:
+      return mapFetchResponse(action.value);
+    case ActionTypes.UPDATE_EDIT_DETAILED_MERM:
+      return mapEditResponse(action.value);
+    case ActionTypes.UPDATE_DETAILED_MERM_COMMENTS:
+      return mapCommentResponse(state, action.value);
+    case ActionTypes.CLEAR_DETAILED_MERM:
       return getInitialState();
     default:
       break;

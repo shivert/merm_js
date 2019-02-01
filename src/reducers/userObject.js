@@ -11,7 +11,7 @@ export function getInitialState() {
 }
 
 const mapLogInResponse = value => ({
-  id: 0,
+  id: value["signIn"]["id"],
   firstName: value["signIn"]["firstName"],
   lastName: value["signIn"]["lastName"],
   email: "",

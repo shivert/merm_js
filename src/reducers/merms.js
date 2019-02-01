@@ -2,7 +2,11 @@ import * as ActionTypes from "../constants/ActionTypes";
 
 export function getInitialState() {
   return {
-    allMerms: []
+    dashboardMerms: {
+      suggested: [],
+      favorites: [],
+      unread: []
+    }
   };
 }
 

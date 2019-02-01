@@ -1,8 +1,7 @@
 import React from "react";
-import { Collapse, Col, Row } from "antd";
+import { Collapse, Col, Row, Icon } from "antd";
 import MermCard from "../../components/MermCard/MermCard";
 import CustomCarousel from "../../components/Carousel/CustomCarousel";
-import { history } from "../../store/configureStore";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import * as actions from "../../actions/mermActions";
@@ -27,19 +26,32 @@ class Dashboard extends React.Component {
     this.getMerms();
   }
 
+  componentWillUnmount() {
+    this.props.actions.clearMerms();
+  }
+
   getMerms() {
-    this.props.actions.getMerms(this.props.userObject.token);
+    this.props.actions.getMerms();
   }
 
   render() {
-    return (
-      <Collapse bordered={false} defaultActiveKey={["1"]}>
+    const { loading } = this.props.requestStatus;
+    return loading === true ? (
+      <Icon
+        type="loading"
+        style={{
+          fontSize: "100px",
+          marginTop: "125px"
+        }}
+      />
+    ) : (
+      <Collapse bordered={false} defaultActiveKey={["1", "2"]}>
         <Panel header="Suggested" key="1" style={customPanelStyle}>
           <Row gutter={16}>
             <Col>
               <Row>
                 <CustomCarousel>
-                  {this.props.merms.allMerms.map(merm => (
+                  {this.props.merms.dashboardMerms.suggested.map(merm => (
                     <MermCard
                       id={merm.id}
                       key={merm.id}
@@ -62,9 +74,35 @@ class Dashboard extends React.Component {
             </Col>
           </Row>
         </Panel>
-        <Panel header="Unread Resources" key="2" style={customPanelStyle}>
+        <Panel header="Favorites" key="2" style={customPanelStyle}>
+          <Row gutter={16}>
+            <Col>
+              <Row>
+                <CustomCarousel>
+                  {this.props.merms.dashboardMerms.favorites.map(merm => (
+                    <MermCard
+                      id={merm.id}
+                      key={merm.id}
+                      title={merm.name}
+                      lastAccessed={merm.lastAccessed}
+                      sharedTime="Jan 12, 2018"
+                      owner={`${merm.owner.firstName} ${merm.owner.lastName}`}
+                      sharer="Veryvery long named Person"
+                      cover={
+                        <img
+                          alt="example"
+                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                        />
+                      }
+                      tags={merm.tags}
+                    />
+                  ))}
+                </CustomCarousel>
+              </Row>
+            </Col>
+          </Row>
         </Panel>
-        <Panel header="Favourites" key="3" style={customPanelStyle}>
+        <Panel header="Unread Resources" key="3" style={customPanelStyle}>
           <Row gutter={16} />
         </Panel>
       </Collapse>
@@ -74,14 +112,14 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   actions: PropTypes.object.isRequired,
-  userObject: PropTypes.object.isRequired,
-  merms: PropTypes.object.isRequired
+  merms: PropTypes.object.isRequired,
+  requestStatus: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    userObject: state.userObject,
-    merms: state.merms
+    merms: state.merms,
+    requestStatus: state.requestStatus
   };
 }
 

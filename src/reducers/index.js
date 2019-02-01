@@ -6,7 +6,6 @@ import merms from "./merms";
 import requestStatus from "./requestStatus";
 import detailedMerm from "./detailedMerm";
 
-
 const rootReducer = combineReducers({
   notification,
   userObject,

@@ -4,7 +4,7 @@ import { history } from "../store/configureStore";
 
 export function userLogIn(fields) {
   return dispatch => {
-    dispatch({ type: ActionTypes.GET_REQUEST_INITIATED });
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
 
     API.userLogIn(fields).then(
       response => {
@@ -12,7 +12,7 @@ export function userLogIn(fields) {
           type: ActionTypes.UPDATE_USER_OBJECT_LOGIN,
           value: response.data
         });
-        dispatch({ type: ActionTypes.GET_REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
         history.push("/dashboard");
       },
@@ -40,7 +40,7 @@ export function userLogOut() {
 
 export function userCreate(fields) {
   return dispatch => {
-    dispatch({ type: ActionTypes.GET_REQUEST_INITIATED });
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
 
     API.userCreate(fields).then(
       response => {
@@ -48,7 +48,7 @@ export function userCreate(fields) {
           type: ActionTypes.UPDATE_USER_OBJECT_CREATE,
           value: response.data
         });
-        dispatch({ type: ActionTypes.GET_REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
         history.push("/dashboard");
       },

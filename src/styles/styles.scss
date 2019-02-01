@@ -91,6 +91,10 @@ div.merm-card-inner > div.ant-card-body {
   text-align: center;
 }
 
+.ant-list {
+  text-align: left;
+}
+
 .ant-divider-horizontal.ant-divider-with-text-left:before {
   width: 0% !important;
 }
@@ -99,6 +103,28 @@ div.merm-card-inner > div.ant-card-body {
   padding-left: 25px;
   text-align: left;
 }
+
 .shared-with {
   padding-left: 25px;
+}
+
+.ant-avatar.ant-avatar-icon {
+ margin: 0 10px;
+}
+
+button.favorite-button {
+  border: 0px;
+  box-shadow: none;
+}
+
+.comment-container {
+  padding: 0 75px !important;
+}
+
+.ant-divider-horizontal.comment-divider {
+  margin: 0 0;
+}
+
+.comment-editor * div.ant-form-item-control {
+  text-align: right;
 }
