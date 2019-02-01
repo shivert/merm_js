@@ -31,16 +31,10 @@ const Editor = ({ onChange, onSubmit, value }) => (
 );
 
 class Comments extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: [],
-      comments: [],
-      submitting: false,
-      value: ""
-    };
-  }
+  state = {
+    data: [],
+    value: ""
+  };
 
   componentDidMount() {
     this.getData();
@@ -139,7 +133,8 @@ Comments.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm
+    detailedMerm: state.detailedMerm,
+    userObject: state.userObject
   };
 }
 
