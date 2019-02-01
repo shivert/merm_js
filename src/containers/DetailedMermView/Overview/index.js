@@ -24,7 +24,7 @@ class Overview extends React.Component {
       createdAt,
       updatedAt,
       sharedWith
-    } = this.props.detailedMerm.merm;
+    } = this.props.detailedMerm;
 
     return (
       <div>

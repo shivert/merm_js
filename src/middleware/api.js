@@ -12,6 +12,7 @@ export function userLogIn(fields) {
   const query = `
     mutation signIn($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
+        id
         authenticationToken
         firstName
         lastName
@@ -39,6 +40,7 @@ export function userCreate(fields) {
   const query = `
     mutation signUp($registrationDetails: UserInputType!) {
       signUp(registrationDetails: $registrationDetails) {
+        id
         firstName
         lastName
         email
@@ -184,6 +186,15 @@ export function getMerm(mermId, authToken) {
         id
         name
       }
+      comments {
+        content
+        author {
+          id
+          name
+        }
+        createdAt
+        updatedAt
+      }
     }
   }
  `;
@@ -228,14 +239,43 @@ export function favoriteMerm(mermId, favorite, authToken) {
           name
         }
       }
-    }
-  `;
+    }`;
 
   const variables = {
     id: mermId,
     merm: {
       favorite: favorite
     }
+  };
+
+  return client.rawRequest(query, variables);
+}
+
+export function addMermComment(comment, authToken) {
+  const endpoint = "http://localhost:3000/graphql";
+
+  const client = new GraphQLClient(endpoint, {
+    mode: "cors"
+  });
+
+  client.setHeader("Content-Type", "application/json");
+  client.setHeader("Authorization", `Bearer ${authToken}`);
+
+  const query = `
+    mutation addComment($commentDetails: CommentInputType!) {
+      addComment(commentDetails: $commentDetails) {
+        content
+        author {
+          id
+          name
+        }
+        createdAt
+        updatedAt
+      }
+    }`;
+
+  const variables = {
+    commentDetails: comment
   };
 
   return client.rawRequest(query, variables);

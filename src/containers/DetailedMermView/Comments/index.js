@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Moment from "react-moment";
 import { bindActionCreators } from "redux";
-import * as actions from "../../../actions/authenticationActions";
+import * as actions from "../../../actions/mermActions";
 import {
   Comment,
   Avatar,
@@ -13,20 +14,10 @@ import {
   Tooltip,
   Divider
 } from "antd";
-import moment from "moment";
 
 const TextArea = Input.TextArea;
 
-const CommentList = ({ comments }) => (
-  <List
-    dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
-    itemLayout="horizontal"
-    renderItem={props => <Comment {...props} />}
-  />
-);
-
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
+const Editor = ({ onChange, onSubmit, value }) => (
   <div>
     <Form.Item>
       <TextArea rows={4} onChange={onChange} value={value} />
@@ -34,7 +25,6 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     <Form.Item>
       <Button
         htmlType="submit"
-        loading={submitting}
         onClick={onSubmit}
         type="primary"
       >
@@ -60,28 +50,31 @@ class Comments extends React.Component {
     this.getData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.detailedMerm.comments.length !==
+      this.props.detailedMerm.comments.length
+    ) {
+      this.getData();
+    }
+  }
+
   getData() {
-    const data = this.props.detailedMermComments.comments.map(comment => ({
+    const data = this.props.detailedMerm.comments.map(comment => ({
       actions: [],
-      author: comment.authorName,
+      author: comment.author.name,
       avatar:
         "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
       content: (
         <div>
-          <p>{comment.message}</p>
-          <Divider />
+          <p>{comment.content}</p>
+          <Divider className="comment-divider" />
         </div>
       ),
       datetime: (
-        <Tooltip
-          title={moment()
-            .subtract(1, "days")
-            .format("YYYY-MM-DD HH:mm:ss")}
-        >
+        <Tooltip title={<Moment format="lll">{comment.createdAt}</Moment>}>
           <span>
-            {moment()
-              .subtract(1, "days")
-              .fromNow()}
+            <Moment fromNow>{comment.createdAt}</Moment>
           </span>
         </Tooltip>
       )
@@ -91,45 +84,17 @@ class Comments extends React.Component {
   }
 
   handleSubmit = () => {
-    this.setState({
-      submitting: true
-    });
-
-    const newComments = this.state.data.concat([
+    this.props.actions.addMermComment(
       {
-        actions: [],
-        author: "Me",
-        avatar:
-          "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-        content: (
-          <div>
-            <p>{this.state.value}</p>
-            <Divider />
-          </div>
-        ),
-        datetime: (
-          <Tooltip
-            title={moment()
-              .subtract(1, "days")
-              .format("YYYY-MM-DD HH:mm:ss")}
-          >
-            <span>
-              {moment()
-                .subtract(1, "days")
-                .fromNow()}
-            </span>
-          </Tooltip>
-        )
-      }
-    ]);
+        content: this.state.value,
+        merm_id: this.props.detailedMerm.id,
+        author_id: this.props.userObject.id
+      },
+      this.props.userObject.token
+    );
 
-    this.setState({ data: newComments });
-
-    setTimeout(() => {
-      this.setState({
-        submitting: false,
-        value: ""
-      });
+    this.setState({
+      value: ""
     });
   };
 
@@ -140,12 +105,12 @@ class Comments extends React.Component {
   };
 
   render() {
-    const { comments, submitting, value } = this.state;
+    const { value } = this.state;
     return (
-      <div>
+      <div className="comment-container">
         <List
           className="comment-list"
-          header={`${this.state.data.length} replies`}
+          header={`${this.state.data.length} comments`}
           itemLayout="horizontal"
           dataSource={this.state.data}
           renderItem={item => (
@@ -158,16 +123,12 @@ class Comments extends React.Component {
             />
           )}
         />
-
-        {comments.length > 0 && (
-          <CommentList comments={this.props.detailedMermComments.comments} />
-        )}
         <Comment
+          className="comment-editor"
           content={
             <Editor
               onChange={this.handleChange}
               onSubmit={this.handleSubmit}
-              submitting={submitting}
               value={value}
             />
           }
@@ -179,12 +140,14 @@ class Comments extends React.Component {
 
 Comments.propTypes = {
   actions: PropTypes.object.isRequired,
-  detailedMermComments: PropTypes.object.isRequired
+  detailedMerm: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    detailedMermComments: state.detailedMermComments
+    detailedMerm: state.detailedMerm,
+    userObject: state.userObject
   };
 }
 

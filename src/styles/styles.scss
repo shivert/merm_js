@@ -95,10 +95,6 @@ div.merm-card-inner > div.ant-card-body {
   text-align: left;
 }
 
-.ant-divider {
-  margin-bottom: -12px !important;
-}
-
 .ant-divider-horizontal.ant-divider-with-text-left:before {
   width: 0% !important;
 }
@@ -121,11 +117,14 @@ button.favorite-button {
   box-shadow: none;
 }
 
-.ant-list {
-  text-align: left;
+.comment-container {
+  padding: 0 75px !important;
 }
 
-.ant-divider {
-  margin-bottom: -12px !important;
+.ant-divider-horizontal.comment-divider {
+  margin: 0 0;
 }
 
+.comment-editor * div.ant-form-item-control {
+  text-align: right;
+}

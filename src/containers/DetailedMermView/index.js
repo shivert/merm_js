@@ -23,16 +23,16 @@ class DetailedMermView extends React.Component {
   }
 
   favoriteMerm = () => {
-    const flipFav = !this.props.detailedMerm.merm.favorite;
+    const flipFav = !this.props.detailedMerm.favorite;
     this.props.actions.favoriteMerm(
-      this.props.detailedMerm.merm.id,
+      this.props.detailedMerm.id,
       flipFav,
       this.props.userObject.token
     );
   };
 
   render() {
-    const { name, resourceUrl, favorite } = this.props.detailedMerm.merm;
+    const { name, resourceUrl, favorite } = this.props.detailedMerm;
 
     return (
       <div>

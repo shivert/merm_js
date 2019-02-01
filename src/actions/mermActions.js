@@ -91,3 +91,31 @@ export function favoriteMerm(mermId, favorite, authToken) {
     );
   };
 }
+
+export function addMermComment(comment, authToken) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.GET_REQUEST_INITIATED });
+
+    API.addMermComment(comment, authToken).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_COMMENTS,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.GET_REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to add Merm Comment",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
