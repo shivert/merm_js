@@ -10,15 +10,15 @@ export default function requestStatus(state = initialState, action) {
   const newState = { ...state };
   switch (action.type) {
     case ActionTypes.REQUEST_INITIATED:
-      newState.get = RequestStatusCodes.INITIATED;
+      newState.post = RequestStatusCodes.INITIATED;
       newState.loading = true;
       break;
     case ActionTypes.REQUEST_SUCCESS:
-      newState.get = RequestStatusCodes.SUCCESS;
+      newState.post = RequestStatusCodes.SUCCESS;
       newState.loading = false;
       break;
     case ActionTypes.REQUEST_FAILURE:
-      newState.get = RequestStatusCodes.FAILURE;
+      newState.post = RequestStatusCodes.FAILURE;
       newState.loading = false;
       break;
     case ActionTypes.RESET_REQUEST_STATUS:
