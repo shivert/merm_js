@@ -118,3 +118,58 @@ export function addMermComment(comment) {
     );
   };
 }
+
+export function removeTag(tagId) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.removeTag(tagId).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_REMOVE_TAG,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to delete Tag",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+export function addTag(tag) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.addTag(tag).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_TAGS,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to Add Tag",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}

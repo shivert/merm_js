@@ -218,3 +218,30 @@ export function addMermComment(comment) {
 
   return authClient.rawRequest(query, variables);
 }
+export function removeTag(tagId) {
+  const query = `
+  mutation deleteTag($id: ID!) {
+    deleteTag(id: $id) {
+      id
+      name
+    }
+  }`;
+  const variables = {
+    id: tagId
+  };
+  return authClient.rawRequest(query, variables);
+}
+
+export function addTag(tag) {
+  const query = `
+   mutation addTag($tagDetails: TagInputType!) {
+      addTag(tagDetails: $tagDetails) {
+        id
+        name
+      }
+    }`;
+  const variables = {
+    tagDetails: tag
+  };
+  return authClient.rawRequest(query, variables);
+}
