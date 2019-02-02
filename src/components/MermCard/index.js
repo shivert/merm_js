@@ -32,7 +32,7 @@ const MermCard = ({
   const tagsVisible = tags.slice(0, tagsToShow);
   const tagsHidden = tags.slice(tagsToShow);
   return (
-    <Link to={`/merm/${id}`}>
+    <Link to={`/merm/${id}/overview`}>
       <Card
         hoverable
         className="merm-card-outer"

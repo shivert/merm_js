@@ -218,3 +218,24 @@ export function addMermComment(comment) {
 
   return authClient.rawRequest(query, variables);
 }
+
+export function searchMerms(queryString) {
+  const query = `
+    query {
+      searchMerm(queryString: "${queryString}") {
+         id
+        name
+        lastAccessed
+        owner {
+          firstName
+          lastName
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }`;
+
+  return authClient.rawRequest(query);
+}

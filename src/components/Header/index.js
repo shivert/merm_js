@@ -5,26 +5,49 @@ const Search = Input.Search;
 import NewResourceModal from "../NewResourceModal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actions from "../../actions/authenticationActions";
-import PropTypes from "prop-types";
+import * as authActions from "../../actions/authenticationActions";
+import * as mermActions from "../../actions/mermActions";
+import { history } from "./../../store/configureStore";
+import * as queryString from "query-string";
 
+import PropTypes from "prop-types";
 const { Header } = Layout;
 
 class CustomHeader extends React.Component {
-  text = <span>Settings</span>;
   state = {
     loading: false,
-    visible: false
+    visible: false,
+    queryString: ""
   };
 
   logOut = () => {
-    this.props.actions.userLogOut();
+    this.props.authActions.userLogOut();
   };
 
   showModal = () => {
     this.setState({
       visible: true
     });
+  };
+
+  componentDidMount() {
+    const queryParams = queryString.parse(this.props.location.search);
+
+    if (queryParams["q"] != null) {
+      this.setState({
+        queryString: queryParams["q"]
+      });
+    }
+  }
+
+  handleChange = e => {
+    this.setState({
+      queryString: e.target.value
+    });
+  };
+
+  search = queryString => {
+    history.push(`/search?q=${queryString}`);
   };
 
   handleOk = () => {
@@ -55,8 +78,10 @@ class CustomHeader extends React.Component {
           >
             <div style={{ float: "left" }}>
               <Search
+                value={this.state.queryString}
                 placeholder="Search..."
-                onSearch={value => console.log(value)}
+                onChange={this.handleChange}
+                onSearch={this.search}
                 enterButton
               />
             </div>
@@ -65,14 +90,8 @@ class CustomHeader extends React.Component {
             >
               <Popover
                 placement="bottomRight"
-                title={this.text}
-                content={
-                  <div>
-                    <Button type="primary" onClick={this.logOut}>
-                      Logout
-                    </Button>
-                  </div>
-                }
+                title={<span>Settings</span>}
+                content={<div>Insert Notifications Here</div>}
                 trigger="click"
               >
                 <Icon
@@ -118,18 +137,22 @@ class CustomHeader extends React.Component {
 }
 
 CustomHeader.propTypes = {
-  actions: PropTypes.object.isRequired
+  authActions: PropTypes.object.isRequired,
+  mermActions: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    userObject: state.userObject
+    location: state.router.location,
+    history: state.history
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    authActions: bindActionCreators(authActions, dispatch),
+    mermActions: bindActionCreators(mermActions, dispatch)
   };
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Collapse, Col, Row, Icon } from "antd";
-import MermCard from "../../components/MermCard/MermCard";
+import MermCard from "../../components/MermCard/index";
 import CustomCarousel from "../../components/Carousel/CustomCarousel";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -23,15 +23,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.getMerms();
+    this.props.actions.getMerms();
   }
 
   componentWillUnmount() {
     this.props.actions.clearMerms();
-  }
-
-  getMerms() {
-    this.props.actions.getMerms();
   }
 
   render() {
