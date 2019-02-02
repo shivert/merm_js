@@ -20,7 +20,9 @@ export function getMerms() {
           dispatch({ type: ActionTypes.CLEAR_USER_OBJECT });
           history.push("/login");
           dispatch({
-            type: ActionTypes.SHOW_NOTIFICATION,
+            type: A
+
+              ctionTypes.SHOW_NOTIFICATION,
             value: {
               show: true,
               type: "Error",
@@ -166,5 +168,61 @@ export function searchMerms(queryString) {
 export function clearSearchResults() {
   return dispatch => {
     dispatch({ type: ActionTypes.CLEAR_SEARCH_RESULTS_LIST });
+  };
+}
+
+export function removeTag(tagId) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.removeTag(tagId).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_REMOVE_TAG,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to delete Tag",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function addTag(tag) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.addTag(tag).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_TAGS,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to Add Tag",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
   };
 }
