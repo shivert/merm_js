@@ -106,21 +106,19 @@ export default class CustomCarousel extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener("resize", this.updateSlidesPerScreen);
+    this.updateSlidesPerScreen();
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateSlidesPerScreen);
   }
 
-  componentDidUpdate() {
-    this.updateSlidesPerScreen();
-  }
-
   updateSlidesPerScreen = () => {
+    this.forceUpdate();
+
     const singleItem = this.childrenRefs[0];
-    // use 1 to avoid divide by 0
     const singleItemWidth =
-      singleItem != null ? measureNodeWidth(singleItem) : 1;
+      singleItem != null ? measureNodeWidth(singleItem) : 0;
     // for carousel, need to use client width to get accurate measurement due to the use of transform
     const carouselWidth =
       this.carouselElement != null
@@ -131,7 +129,7 @@ export default class CustomCarousel extends React.PureComponent {
     // this is set in a CSS file..
     const slidesPerScreen = Math.floor(carouselWidth / (singleItemWidth + 16));
 
-    if (slidesPerScreen >= 0) {
+    if (slidesPerScreen >= 0 && slidesPerScreen < 30) {
       // the following is hacky - for the initial render, because the left arrow is hidden,
       // we MIGHT have to subtract one to account for
       // the fact that once scrolled the arrow will appear, taking up space...
@@ -139,10 +137,13 @@ export default class CustomCarousel extends React.PureComponent {
       // This could break if mermcard changes significantly or if arrow sizes change significantly
       this.setState(state => {
         const slidesToScroll =
-          state.slidesToScroll === 0 ? slidesPerScreen - 1 : slidesPerScreen;
+          state.slidesToScroll === 0 && this.props.shouldUseDynamicArrows
+            ? slidesPerScreen - 1
+            : slidesPerScreen;
         return {
           ...state,
-          slidesToShow: slidesPerScreen,
+          slidesToShow:
+            slidesPerScreen > 0 && slidesPerScreen < 30 ? slidesPerScreen : 1,
           slidesToScroll
         };
       });
@@ -196,8 +197,9 @@ export default class CustomCarousel extends React.PureComponent {
     const settings = {
       infinite: false,
       speed: animationSpeed,
-      slidesToShow,
-      slidesToScroll,
+      // prevent invalid values from being used
+      slidesToShow: slidesToShow > 0 ? slidesToShow : 1,
+      slidesToScroll: slidesToScroll > 0 ? slidesToScroll : 1,
       prevArrow: (
         <Arrow
           isHidden={isPrevArrowHidden}
