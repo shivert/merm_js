@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
 import notification from "./notification";
 import userObject from "./userObject";
+import userCategory from "./userCategory";
 import merms from "./merms";
 import searchResults from "./searchResults";
 import requestStatus from "./requestStatus";
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   requestStatus,
   detailedMerm,
   searchResults,
+  userCategory,
   merms,
   router: connectRouter(history)
 });

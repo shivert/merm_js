@@ -14,6 +14,13 @@ export const UPDATE_USER_OBJECT_LOGIN = "UPDATE_USER_OBJECT_LOGIN";
 export const CLEAR_USER_OBJECT = "CLEAR_USER_OBJECT";
 
 /*
+ * User Category Actions
+ */
+
+export const UPDATE_USER_CATEGORY_LIST = "UPDATE_USER_CATEGORY_LIST"
+export const CLEAR_USER_CATEGORY_LIST = "CLEAR_USER_CATEGORY_LIST"
+
+/*
  * Merm Actions
  */
 
