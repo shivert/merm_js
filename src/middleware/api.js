@@ -173,6 +173,15 @@ export function favoriteMerm(mermId, favorite) {
         lastAccessed
         createdAt
         updatedAt
+        comments {
+          content
+          author {
+            id
+            name
+          }
+          createdAt
+          updatedAt
+        }
         sharedWith {
           id  
           name

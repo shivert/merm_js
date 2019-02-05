@@ -20,9 +20,11 @@ class CustomNotification extends React.Component {
     if (props.notification.show) {
       notification["error"]({
         message: props.notification.message,
-        duration: 3,
+        duration: 7,
         description: props.notification.description
       });
+    } else {
+      notification.destroy();
     }
   };
 
