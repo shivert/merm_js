@@ -147,7 +147,6 @@ button.favorite-button {
   padding: 20px;
 }
 
-
 .steps-content {
   margin-top: 16px;
   border: 1px dashed #e9e9e9;
@@ -197,4 +196,14 @@ div.search-results-container .merm-card-outer {
 .slick-track {
   margin-left: inherit !important;
   margin-right: inherit !important;
+}
+
+.overview-form{
+  width: 600px !important;
+  display: inline-block !important;
+}
+
+.overview-form-select {
+  width: 100px;
+  display: inline-block !important;
 }

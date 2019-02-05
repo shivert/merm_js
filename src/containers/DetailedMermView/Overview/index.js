@@ -4,36 +4,13 @@ import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/mermActions";
-import { Row, Col, Divider, Tag, Avatar, Input, Icon } from "antd";
-
+import { Row, Col, Divider, Tag, Avatar } from "antd";
 class Overview extends React.Component {
-  state = {
-    inputVisible: false,
-    inputValue: ""
-  };
-  removeTag = tagId => {
-    this.props.actions.removeTag(tagId);
-  };
-  showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
-  };
-  saveInputRef = input => (this.input = input);
-  handleInputChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-  handleInputConfirm = () => {
-    this.setState({
-      inputVisible: false,
-      inputValue: ""
-    });
-    this.props.actions.addTag({
-      name: this.state.inputValue,
-      merm_id: this.props.detailedMerm.id
-    });
-  };
+  constructor(props) {
+    super(props);
+  }
 
   render() {
-    const { inputVisible, inputValue } = this.state;
     const {
       source,
       category,
@@ -46,9 +23,7 @@ class Overview extends React.Component {
       lastAccessed,
       createdAt,
       updatedAt,
-      sharedWith,
-      id,
-      name
+      sharedWith
     } = this.props.detailedMerm;
 
     return (
@@ -62,13 +37,10 @@ class Overview extends React.Component {
               </p>
               <p>
                 <b>Category: </b>
-                {category == null ? "None" : category}
+                {category === null ? "None" : category}
               </p>
               <p>
-                <b>Resource URL:</b>{" "}
-                <a href={resourceUrl} target="_blank">
-                  {resourceUrl}
-                </a>
+                <b>Resource URL:</b> <a href={resourceUrl} target="_blank">{resourceUrl}</a>
               </p>
               <p>
                 <b>Resource Title:</b> {resourceName}
@@ -84,41 +56,9 @@ class Overview extends React.Component {
             </div>
             <Divider orientation="left">Tags</Divider>
             <div className="merm-overview-container">
-              {owner.id === this.props.userObject.id
-                ? tags.length !== 0
-                  ? tags.map(tag => (
-                      <Tag
-                        closable
-                        onClose={() => this.removeTag(tag.id)}
-                        key={tag.id}
-                      >
-                        {tag.name}
-                      </Tag>
-                    ))
-                  : ""
-                : tags.length !== 0
-                ? tags.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
+              {tags.length != 0
+                ? tags.map(tag => <Tag key={tag.name}>{tag.name}</Tag>)
                 : ""}
-              {inputVisible && owner.id === this.props.userObject.id && (
-                <Input
-                  ref={this.saveInputRef}
-                  type="text"
-                  size="small"
-                  style={{ width: 78 }}
-                  value={inputValue}
-                  onChange={this.handleInputChange}
-                  onBlur={this.handleInputConfirm}
-                  onPressEnter={this.handleInputConfirm}
-                />
-              )}
-              {!inputVisible && owner.id === this.props.userObject.id && (
-                <Tag
-                  onClick={this.showInput}
-                  style={{ background: "#fff", borderStyle: "dashed" }}
-                >
-                  <Icon type="plus" /> New Tag
-                </Tag>
-              )}
             </div>
           </Col>
           <Col span={9}>
@@ -172,14 +112,12 @@ class Overview extends React.Component {
 
 Overview.propTypes = {
   actions: PropTypes.object.isRequired,
-  detailedMerm: PropTypes.object.isRequired,
-  userObject: PropTypes.object.isRequired
+  detailedMerm: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    detailedMerm: state.detailedMerm,
-    userObject: state.userObject
+    detailedMerm: state.detailedMerm
   };
 }
 
