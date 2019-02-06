@@ -15,7 +15,7 @@ class NewCategoryModal extends React.Component {
     return (
       <Modal
         visible={visible}
-        title="Add New Category"
+        title="Manage Categories"
         onOk={this.props.handleOk}
         onCancel={this.props.handleCancel}
         width={"45vw"}

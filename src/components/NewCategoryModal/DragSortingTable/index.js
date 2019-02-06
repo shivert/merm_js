@@ -57,9 +57,12 @@ class BodyRow extends React.Component {
       }
     }
 
+    const trProps = Object.assign({}, restProps);
+    delete trProps.moveRow;
+
     return connectDragSource(
       connectDropTarget(
-        <tr {...restProps} className={className} style={style} />
+        <tr {...trProps} className={className} style={style} />
       )
     );
   }
@@ -145,15 +148,15 @@ class EditableCell extends React.Component {
   render() {
     const { editing } = this.state;
     const { editable, dataIndex, record, ...restProps } = this.props;
+
+    const tdProps = Object.assign({}, restProps);
+    delete tdProps.handleSave;
+
     return (
-      <td ref={node => (this.cell = node)} {...restProps}>
+      <td ref={node => (this.cell = node)} {...tdProps}>
         {editable ? (
           editing ? (
-            <Input
-              defaultValue={record[dataIndex]}
-              ref={node => (this.input = node)}
-              onPressEnter={this.save}
-            />
+            <Input defaultValue={record[dataIndex]} onPressEnter={this.save} />
           ) : (
             <div
               className="editable-cell-value-wrap"
