@@ -198,12 +198,19 @@ div.search-results-container .merm-card-outer {
   margin-right: inherit !important;
 }
 
-.overview-form{
-  width: 600px !important;
-  display: inline-block !important;
+div.overview-edit-container p {
+  display: inline-block;
+  padding-right: 8px;
+}
+div.overview-edit-container input {
+  display: inline-block;
+  width: 80%;
+}
+div.overview-edit-container .ant-select{
+  display: inline-block;
+  width: 50%;
 }
 
-.overview-form-select {
-  width: 100px;
-  display: inline-block !important;
+div.overview-edit-container {
+  width: 100%;
 }

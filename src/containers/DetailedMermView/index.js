@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Tabs, Icon } from "antd";
@@ -14,6 +14,10 @@ import Statistics from "./Statistics";
 const TabPane = Tabs.TabPane;
 
 class DetailedMermView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
   state = {
     editMode: false
   };
@@ -31,12 +35,17 @@ class DetailedMermView extends React.Component {
   handleTabChange = key => {
     history.push(`${this.props.match.url}/${key}`);
   };
+  updateMerm = () => {};
+
+  triggerChildFunction = () => {
+    debugger
+    this.child.current.onSubmit();
+  }
 
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
     const { name, resourceUrl, favorite} = this.props.detailedMerm;
     const isOwner = this.props.detailedMerm.owner.id === this.props.userObject.id;
-
     return (
       <div>
         <div className="detailed-merm-header">
@@ -72,7 +81,15 @@ class DetailedMermView extends React.Component {
               </div>
             ) : (
               <div style={{ float: "right" }}>
-                <Button style={{ marginRight: "20px" }} size="large" type="primary" onClick={() => this.setState({editMode: false})}>
+                <Button
+                  style={{ marginRight: "20px" }}
+                  size="large"
+                  type="primary"
+                  onClick={() => {
+                    this.setState({ editMode: false });
+                    this.triggerChildFunction();
+                  }}
+                >
                   Save
                 </Button>
                 <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
@@ -98,7 +115,11 @@ class DetailedMermView extends React.Component {
         >
           <TabPane tab="Overview" key="overview">
             {isOwner ? (
-              <OverviewOwner editMode={this.state.editMode} />
+              <OverviewOwner
+                ref={this.myRef}
+                editMode={this.state.editMode}
+                updateMerm={this.updateMerm}
+              />
             ) : (
               <Overview />
             )}
