@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Tabs, Icon } from "antd";
@@ -14,10 +14,6 @@ import Statistics from "./Statistics";
 const TabPane = Tabs.TabPane;
 
 class DetailedMermView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
   state = {
     editMode: false
   };
@@ -35,17 +31,12 @@ class DetailedMermView extends React.Component {
   handleTabChange = key => {
     history.push(`${this.props.match.url}/${key}`);
   };
-  updateMerm = () => {};
-
-  triggerChildFunction = () => {
-    debugger
-    this.child.current.onSubmit();
-  }
 
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
-    const { name, resourceUrl, favorite} = this.props.detailedMerm;
-    const isOwner = this.props.detailedMerm.owner.id === this.props.userObject.id;
+    const { name, resourceUrl, favorite } = this.props.detailedMerm;
+    const isOwner =
+      this.props.detailedMerm.owner.id === this.props.userObject.id;
     return (
       <div>
         <div className="detailed-merm-header">
@@ -72,11 +63,21 @@ class DetailedMermView extends React.Component {
           {isOwner ? (
             this.state.editMode === false ? (
               <div style={{ float: "right" }}>
-                <Button style={{ marginRight: "20px" }} size="large" type="primary" onClick={() => this.setState({editMode: true})}>
+                <Button
+                  style={{ marginRight: "20px" }}
+                  size="large"
+                  type="primary"
+                  onClick={() => this.setState({ editMode: true })}
+                >
                   Edit
                 </Button>
                 <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                  <Button type="primary" shape="circle" icon="link" size="large" />
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon="link"
+                    size="large"
+                  />
                 </a>
               </div>
             ) : (
@@ -87,23 +88,37 @@ class DetailedMermView extends React.Component {
                   type="primary"
                   onClick={() => {
                     this.setState({ editMode: false });
-                    this.triggerChildFunction();
+                    this.child.onSubmit();
                   }}
                 >
                   Save
                 </Button>
                 <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                  <Button type="primary" shape="circle" icon="link" size="large" />
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon="link"
+                    size="large"
+                  />
                 </a>
               </div>
             )
           ) : (
             <div style={{ float: "right" }}>
-              <Button style={{ marginRight: "20px" }} size="large" type="primary">
+              <Button
+                style={{ marginRight: "20px" }}
+                size="large"
+                type="primary"
+              >
                 Copy to My Merms
               </Button>
               <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                <Button type="primary" shape="circle" icon="link" size="large" />
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon="link"
+                  size="large"
+                />
               </a>
             </div>
           )}
@@ -116,7 +131,7 @@ class DetailedMermView extends React.Component {
           <TabPane tab="Overview" key="overview">
             {isOwner ? (
               <OverviewOwner
-                ref={this.myRef}
+                onRef={ref => (this.child = ref)}
                 editMode={this.state.editMode}
                 updateMerm={this.updateMerm}
               />

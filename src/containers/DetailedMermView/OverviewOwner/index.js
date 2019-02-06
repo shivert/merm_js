@@ -1,26 +1,47 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/mermActions";
-import { Row, Col, Divider, Tag, Avatar, Input, Icon, Select, Form } from "antd";
+import {
+  Row,
+  Col,
+  Divider,
+  Tag,
+  Avatar,
+  Input,
+  Icon,
+  Select,
+  Form
+} from "antd";
 
 class OverviewOwner extends React.Component {
   state = {
     inputVisible: false,
     inputValue: ""
   };
+
+  componentDidMount() {
+    this.props.onRef(this);
+  }
+
+  componentWillUnmount() {
+    this.props.onRef(undefined);
+  }
+
   removeTag = tagId => {
     this.props.actions.removeTag(tagId);
   };
   showInput = () => {
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
+
   saveInputRef = input => (this.input = input);
   handleInputChange = e => {
     this.setState({ inputValue: e.target.value });
   };
+
   handleInputConfirm = () => {
     this.setState({
       inputVisible: false,
@@ -33,8 +54,13 @@ class OverviewOwner extends React.Component {
   };
 
   onSubmit() {
-    debugger
-  };
+    const id = this.props.detailedMerm.id;
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.props.actions.editMerm(id, values);
+      }
+    });
+  }
 
   render() {
     const { inputVisible, inputValue } = this.state;
@@ -58,7 +84,16 @@ class OverviewOwner extends React.Component {
 
     const editMode = this.props.editMode;
 
-    return (
+    const { loading } = this.props.requestStatus;
+    return loading === true ? (
+      <Icon
+        type="loading"
+        style={{
+          fontSize: "100px",
+          marginTop: "125px"
+        }}
+      />
+    ) : (
       <div>
         <Form onSubmit={this.onSubmit}>
           <Row gutter={80}>
@@ -73,26 +108,28 @@ class OverviewOwner extends React.Component {
                     <p>
                       <b>Category:</b>
                     </p>
-                    <Form.Item>
-                      {getFieldDecorator('category', {
-                        initialValue: category == null ? "None" : category
-                      })(
-                        <Select
-                          dropdownRender={menu => (
-                            <div>
-                              {menu}
-                              <Divider style={{ margin: '4px 0' }} />
-                              <div style={{ padding: '8px', cursor: 'pointer' }}>
-                                <Icon type="plus" /> Add item
-                              </div>
-                            </div>
-                          )}
-                        >
-                          <Option value="abc">abc</Option>
-                          <Option value="def">def</Option>
-                        </Select>
-                      )}
-                    </Form.Item>
+                    {/*<Form.Item>*/}
+                      {/*{getFieldDecorator("category", {*/}
+                        {/*initialValue: category*/}
+                      {/*})(*/}
+                        {/*<Select*/}
+                          {/*dropdownRender={menu => (*/}
+                            {/*<div>*/}
+                              {/*{menu}*/}
+                              {/*<Divider style={{ margin: "4px 0" }} />*/}
+                              {/*<div*/}
+                                {/*style={{ padding: "8px", cursor: "pointer" }}*/}
+                              {/*>*/}
+                                {/*<Icon type="plus" /> Add item*/}
+                              {/*</div>*/}
+                            {/*</div>*/}
+                          {/*)}*/}
+                        {/*>*/}
+                          {/*<Option value="abc">abc</Option>*/}
+                          {/*<Option value="def">def</Option>*/}
+                        {/*</Select>*/}
+                      {/*)}*/}
+                    {/*</Form.Item>*/}
                   </div>
                 ) : (
                   <p>
@@ -106,7 +143,7 @@ class OverviewOwner extends React.Component {
                       <b>Resource URL:</b>
                     </p>
                     <Form.Item>
-                      {getFieldDecorator('resourceURL', {
+                      {getFieldDecorator("resourceUrl", {
                         rules: [
                           {
                             required: true,
@@ -115,7 +152,7 @@ class OverviewOwner extends React.Component {
                           }
                         ],
                         initialValue: resourceUrl
-                      })(<Input/>)}
+                      })(<Input />)}
                     </Form.Item>
                   </div>
                 ) : (
@@ -140,7 +177,7 @@ class OverviewOwner extends React.Component {
                           }
                         ],
                         initialValue: resourceName
-                      })(<Input/>)}
+                      })(<Input />)}
                     </Form.Item>
                   </div>
                 ) : (
@@ -161,7 +198,7 @@ class OverviewOwner extends React.Component {
                         }
                       ],
                       initialValue: description
-                    })(<TextArea rows={4}/>)}
+                    })(<TextArea rows={4} />)}
                   </Form.Item>
                 ) : (
                   <p>{description}</p>
@@ -201,7 +238,7 @@ class OverviewOwner extends React.Component {
                     onClick={this.showInput}
                     style={{ background: "#fff", borderStyle: "dashed" }}
                   >
-                    <Icon type="plus"/> New Tag
+                    <Icon type="plus" /> New Tag
                   </Tag>
                 )}
               </div>
@@ -210,7 +247,7 @@ class OverviewOwner extends React.Component {
               <Divider orientation="left">Sharing</Divider>
               <div className="merm-overview-container">
                 <p>
-                  <b>Owner: </b> <Avatar icon="user"/>
+                  <b>Owner: </b> <Avatar icon="user" />
                   {owner.name}
                 </p>
                 <p>
@@ -219,17 +256,18 @@ class OverviewOwner extends React.Component {
                 <div className="shared-with">
                   {sharedWith.length !== 0
                     ? sharedWith.map(person => (
-                      <p key={person.name}>
-                        <Avatar icon="user"/> {person.name}
-                      </p>
-                    ))
+                        <p key={person.name}>
+                          <Avatar icon="user" /> {person.name}
+                        </p>
+                      ))
                     : ""}
                 </div>
               </div>
               <Divider orientation="left">Dates</Divider>
               <div className="merm-overview-container">
                 <p>
-                  <b>Last Viewed:</b> <Moment format="lll">{lastAccessed}</Moment>
+                  <b>Last Viewed:</b>{" "}
+                  <Moment format="lll">{lastAccessed}</Moment>
                 </p>
                 <p>
                   <b>Created:</b> <Moment format="lll">{createdAt}</Moment>
@@ -267,7 +305,8 @@ OverviewOwner.propTypes = {
 function mapStateToProps(state) {
   return {
     detailedMerm: state.detailedMerm,
-    userObject: state.userObject
+    userObject: state.userObject,
+    requestStatus: state.requestStatus
   };
 }
 
@@ -279,5 +318,7 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Form.create({ name: 'edit_merm' })(OverviewOwner), { forwardRef: true });
+  mapDispatchToProps,
+  null,
+  { forwardRef: true }
+)(Form.create({ name: "edit_merm" })(OverviewOwner));
