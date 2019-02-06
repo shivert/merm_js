@@ -2,8 +2,8 @@ import * as ActionTypes from "../constants/ActionTypes";
 
 export function getInitialState() {
   return {
-    mermName: "",
-    mermId: 0,
+    name: "",
+    id: 0,
     source: "",
     favorite: false,
     category: null,
@@ -33,6 +33,20 @@ const mapCommentResponse = (state, data) => {
   return { ...state, ...updatedComments };
 };
 
+const mapTagResponse = (state, data) => {
+  const updatedTags = {
+    tags: state.tags.concat(data["addTag"])
+  };
+  return { ...state, ...updatedTags };
+};
+
+const mapRemoveTagResponse = (state, data) => {
+  const removeTags = {
+    tags: state.tags.filter(tag => tag.id !== data["deleteTag"]["id"])
+  };
+  return { ...state, ...removeTags };
+};
+
 const initialState = getInitialState();
 
 export default function detailedMerm(state = initialState, action) {
@@ -43,6 +57,10 @@ export default function detailedMerm(state = initialState, action) {
       return mapEditResponse(action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_COMMENTS:
       return mapCommentResponse(state, action.value);
+    case ActionTypes.UPDATE_DETAILED_MERM_TAGS:
+      return mapTagResponse(state, action.value);
+    case ActionTypes.UPDATE_DETAILED_MERM_REMOVE_TAG:
+      return mapRemoveTagResponse(state, action.value);
     case ActionTypes.CLEAR_DETAILED_MERM:
       return getInitialState();
     default:
