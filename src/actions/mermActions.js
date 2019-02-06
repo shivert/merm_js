@@ -26,7 +26,7 @@ export function getMerms() {
               type: "Error",
               message: "Not Signed It!",
               description:
-                "Looks like you're token has expired, please sign in again!"
+                "Looks like your token has expired, please sign in again!"
             }
           });
         } else {
