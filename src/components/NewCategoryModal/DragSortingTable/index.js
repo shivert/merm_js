@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Table, Icon, Input, Popconfirm, Form } from "antd";
+import { Button, Table, Icon, Input, Popconfirm } from "antd";
 const Search = Input.Search;
 import PropTypes from "prop-types";
 import { DragDropContext, DragSource, DropTarget } from "react-dnd";
@@ -32,7 +32,6 @@ class BodyRow extends React.Component {
       isOver,
       connectDragSource,
       connectDropTarget,
-      moveRow,
       dragRow,
       clientOffset,
       sourceClientOffset,
@@ -79,23 +78,15 @@ const rowTarget = {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
 
-    // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
       return;
     }
 
-    // Time to actually perform the action
     props.moveRow(dragIndex, hoverIndex);
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
     monitor.getItem().index = hoverIndex;
   }
 };
 
-// Merge this one with...
 const DragableBodyRow = DropTarget("row", rowTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
@@ -108,18 +99,6 @@ const DragableBodyRow = DropTarget("row", rowTarget, (connect, monitor) => ({
     initialClientOffset: monitor.getInitialClientOffset()
   }))(BodyRow)
 );
-
-const FormItem = Form.Item;
-const EditableContext = React.createContext();
-
-const EditableRow = ({ form, index, ...props }) => (
-  <EditableContext.Provider value={form}>
-    <DragableBodyRow {...props} />
-  </EditableContext.Provider>
-);
-
-// With this one
-const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
   state = {
@@ -154,62 +133,36 @@ class EditableCell extends React.Component {
     }
   };
 
-  save = () => {
+  save = e => {
     const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => {
-      if (error) {
-        return;
-      }
-      this.toggleEdit();
-      handleSave({ ...record, ...values });
-    });
+    this.toggleEdit();
+    const values = {
+      name: e.target.value
+    };
+    handleSave({ ...record, ...values });
   };
 
   render() {
     const { editing } = this.state;
-    const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleSave,
-      ...restProps
-    } = this.props;
+    const { editable, dataIndex, record, ...restProps } = this.props;
     return (
       <td ref={node => (this.cell = node)} {...restProps}>
         {editable ? (
-          <EditableContext.Consumer>
-            {form => {
-              this.form = form;
-              return editing ? (
-                <FormItem style={{ margin: 0 }}>
-                  {form.getFieldDecorator(dataIndex, {
-                    rules: [
-                      {
-                        required: true,
-                        message: `${title} is required.`
-                      }
-                    ],
-                    initialValue: record[dataIndex]
-                  })(
-                    <Input
-                      ref={node => (this.input = node)}
-                      onPressEnter={this.save}
-                    />
-                  )}
-                </FormItem>
-              ) : (
-                <div
-                  className="editable-cell-value-wrap"
-                  style={{ paddingRight: 24 }}
-                  onClick={this.toggleEdit}
-                >
-                  {restProps.children}
-                </div>
-              );
-            }}
-          </EditableContext.Consumer>
+          editing ? (
+            <Input
+              defaultValue={record[dataIndex]}
+              ref={node => (this.input = node)}
+              onPressEnter={this.save}
+            />
+          ) : (
+            <div
+              className="editable-cell-value-wrap"
+              style={{ paddingRight: 24 }}
+              onClick={this.toggleEdit}
+            >
+              {restProps.children}
+            </div>
+          )
         ) : (
           restProps.children
         )}
@@ -262,7 +215,7 @@ class DragSortingTable extends React.Component {
 
   components = {
     body: {
-      row: EditableFormRow,
+      row: DragableBodyRow,
       cell: EditableCell
     }
   };
@@ -278,8 +231,6 @@ class DragSortingTable extends React.Component {
     const dataNew = {
       $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]]
     };
-
-    console.log(dataNew);
 
     this.setState(
       update(this.state, {
@@ -310,8 +261,6 @@ class DragSortingTable extends React.Component {
   };
 
   render() {
-    console.log(this.state.data);
-
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;

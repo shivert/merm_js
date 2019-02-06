@@ -17,6 +17,11 @@ export function getInitialState() {
         key: "3",
         name: "Colin VanderGlas3",
         order: 3
+      },
+      {
+        key: "4",
+        name: "Colin VanderGlas4",
+        order: 4
       }
     ]
   };

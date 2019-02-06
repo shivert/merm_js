@@ -98,7 +98,7 @@ class Dashboard extends React.Component {
                           sharedTime="Jan 12, 2018"
                           owner={`${merm.owner.firstName} ${
                             merm.owner.lastName
-                          }`}
+                            }`}
                           sharer="Veryvery long named Person"
                           cover={
                             <img
@@ -126,7 +126,7 @@ class Dashboard extends React.Component {
                           sharedTime="Jan 12, 2018"
                           owner={`${merm.owner.firstName} ${
                             merm.owner.lastName
-                          }`}
+                            }`}
                           sharer="Veryvery long named Person"
                           cover={
                             <img
