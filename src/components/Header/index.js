@@ -91,7 +91,13 @@ class CustomHeader extends React.Component {
               <Popover
                 placement="bottomRight"
                 title={<span>Settings</span>}
-                content={<div>Insert Notifications Here</div>}
+                content={
+                  <div>
+                    <Button type="primary" onClick={this.logOut}>
+                      Logout
+                    </Button>
+                  </div>
+                }
                 trigger="click"
               >
                 <Icon
@@ -105,13 +111,7 @@ class CustomHeader extends React.Component {
               <Popover
                 placement="bottomRight"
                 title={this.text}
-                content={
-                  <div>
-                    <Button type="primary" onClick={this.logOut}>
-                      Logout
-                    </Button>
-                  </div>
-                }
+                content={<div>Insert Notifications Here</div>}
                 trigger="click"
               >
                 <Badge count={5}>

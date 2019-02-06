@@ -185,6 +185,15 @@ export function favoriteMerm(mermId, favorite) {
           id
           name
         }
+        comments {
+          content
+          author {
+            id
+            name
+          }
+          createdAt
+          updatedAt
+        }
       }
     }`;
 

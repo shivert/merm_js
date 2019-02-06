@@ -86,7 +86,7 @@ class TopLevelContainer extends React.Component {
           <Menu
             theme="dark"
             mode="inline"
-            openKeys={[openMenu]}
+            defaultOpenKeys={[openMenu]}
             selectedKeys={[pathname]}
           >
             <Menu.Item key="/dashboard">
