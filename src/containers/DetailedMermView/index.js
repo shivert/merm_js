@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Button, Tabs, Icon } from "antd";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
-import { Route } from "react-router-dom";
 import { history } from "../../store/configureStore";
 
 import Overview from "./Overview";
@@ -74,7 +73,7 @@ class DetailedMermView extends React.Component {
           defaultActiveKey={activeTab}
           onChange={this.handleTabChange}
         >
-          <TabPane tab="Overview" key="">
+          <TabPane tab="Overview" key="overview">
             <Overview />
           </TabPane>
           <TabPane tab="Comments" key="comments">

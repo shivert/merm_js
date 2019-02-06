@@ -194,6 +194,15 @@ export function favoriteMerm(mermId, favorite) {
           id
           name
         }
+        comments {
+          content
+          author {
+            id
+            name
+          }
+          createdAt
+          updatedAt
+        }
       }
     }`;
 
@@ -225,5 +234,54 @@ export function addMermComment(comment) {
     commentDetails: comment
   };
 
+  return authClient.rawRequest(query, variables);
+}
+
+export function searchMerms(queryString) {
+  const query = `
+    query {
+      searchMerm(queryString: "${queryString}") {
+         id
+        name
+        lastAccessed
+        owner {
+          firstName
+          lastName
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function removeTag(tagId) {
+  const query = `
+  mutation deleteTag($id: ID!) {
+    deleteTag(id: $id) {
+      id
+      name
+    }
+  }`;
+  const variables = {
+    id: tagId
+  };
+  return authClient.rawRequest(query, variables);
+}
+
+export function addTag(tag) {
+  const query = `
+   mutation addTag($tagDetails: TagInputType!) {
+      addTag(tagDetails: $tagDetails) {
+        id
+        name
+      }
+    }`;
+  const variables = {
+    tagDetails: tag
+  };
   return authClient.rawRequest(query, variables);
 }
