@@ -62,7 +62,6 @@ class OverviewOwner extends React.Component {
     });
   }
   updateTitle = (e) => {
-    debugger;
     this.props.updateTitle(e.target.value);
   }
 

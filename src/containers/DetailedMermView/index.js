@@ -16,7 +16,7 @@ const TabPane = Tabs.TabPane;
 class DetailedMermView extends React.Component {
   state = {
     editMode: false,
-    title: "abc"
+    title: ""
   };
 
   componentDidMount() {
@@ -32,9 +32,11 @@ class DetailedMermView extends React.Component {
   handleTabChange = key => {
     history.push(`${this.props.match.url}/${key}`);
   };
-  updateTitle(newTitle) {
+
+  updateTitle = newTitle => {
     this.setState({ title: newTitle });
   };
+
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
     const { name, resourceUrl, favorite } = this.props.detailedMerm;
@@ -45,8 +47,7 @@ class DetailedMermView extends React.Component {
         <div className="detailed-merm-header">
           <div style={{ float: "left", marginLeft: "15px" }}>
             <Button type="primary" shape="circle" icon="medium" size="large" />
-            <h1>{name}</h1>
-            <h1>{this.state.title}</h1>
+            <h1>{this.state.title === "" ? name : this.state.title}</h1>
             <Button
               className="favorite-button"
               shape="circle"
