@@ -15,7 +15,8 @@ const TabPane = Tabs.TabPane;
 
 class DetailedMermView extends React.Component {
   state = {
-    editMode: false
+    editMode: false,
+    title: "abc"
   };
 
   componentDidMount() {
@@ -31,7 +32,9 @@ class DetailedMermView extends React.Component {
   handleTabChange = key => {
     history.push(`${this.props.match.url}/${key}`);
   };
-
+  updateTitle(newTitle) {
+    this.setState({ title: newTitle });
+  };
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
     const { name, resourceUrl, favorite } = this.props.detailedMerm;
@@ -43,6 +46,7 @@ class DetailedMermView extends React.Component {
           <div style={{ float: "left", marginLeft: "15px" }}>
             <Button type="primary" shape="circle" icon="medium" size="large" />
             <h1>{name}</h1>
+            <h1>{this.state.title}</h1>
             <Button
               className="favorite-button"
               shape="circle"
@@ -133,7 +137,7 @@ class DetailedMermView extends React.Component {
               <OverviewOwner
                 onRef={ref => (this.child = ref)}
                 editMode={this.state.editMode}
-                updateMerm={this.updateMerm}
+                updateTitle={this.updateTitle}
               />
             ) : (
               <Overview />

@@ -12,6 +12,7 @@ class Overview extends React.Component {
 
   render() {
     const {
+      name,
       source,
       category,
       resourceName,
@@ -32,6 +33,9 @@ class Overview extends React.Component {
           <Col className="merm-overview" span={15}>
             <Divider orientation="left">Details</Divider>
             <div className="merm-overview-container">
+              <p>
+                <b>Name:</b> {name}
+              </p>
               <p>
                 <b>Source:</b> {source}
               </p>

@@ -61,6 +61,10 @@ class OverviewOwner extends React.Component {
       }
     });
   }
+  updateTitle = (e) => {
+    debugger;
+    this.props.updateTitle(e.target.value);
+  }
 
   render() {
     const { inputVisible, inputValue } = this.state;
@@ -68,6 +72,7 @@ class OverviewOwner extends React.Component {
     const Option = Select.Option;
     const { getFieldDecorator } = this.props.form;
     const {
+      name,
       source,
       category,
       resourceName,
@@ -100,6 +105,28 @@ class OverviewOwner extends React.Component {
             <Col className="merm-overview" span={15}>
               <Divider orientation="left">Details</Divider>
               <div className="merm-overview-container">
+                {editMode ? (
+                  <div className="overview-edit-container">
+                    <p>
+                      <b>Name:</b>
+                    </p>
+                    <Form.Item>
+                      {getFieldDecorator("name", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Required: Please input a name"
+                          }
+                        ],
+                        initialValue: name
+                      })(<Input onChange={this.updateTitle}/>)}
+                    </Form.Item>
+                  </div>
+                ) : (
+                  <p>
+                    <b>Name: </b> {name}
+                  </p>
+                )}
                 <p>
                   <b>Source:</b> {source}
                 </p>
@@ -299,7 +326,7 @@ OverviewOwner.propTypes = {
   detailedMerm: PropTypes.object.isRequired,
   userObject: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired,
-  updateMerm: PropTypes.func.isRequired
+  updateTitle: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
