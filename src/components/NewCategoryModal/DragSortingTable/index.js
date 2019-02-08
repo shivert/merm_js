@@ -61,9 +61,7 @@ class BodyRow extends React.Component {
     delete trProps.moveRow;
 
     return connectDragSource(
-      connectDropTarget(
-        <tr {...trProps} className={className} style={style} />
-      )
+      connectDropTarget(<tr {...trProps} className={className} style={style} />)
     );
   }
 }
@@ -156,7 +154,11 @@ class EditableCell extends React.Component {
       <td ref={node => (this.cell = node)} {...tdProps}>
         {editable ? (
           editing ? (
-            <Input defaultValue={record[dataIndex]} onPressEnter={this.save} />
+            <Input
+              defaultValue={record[dataIndex]}
+              ref={node => (this.input = node)}
+              onPressEnter={this.save}
+            />
           ) : (
             <div
               className="editable-cell-value-wrap"
