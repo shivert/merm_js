@@ -41,7 +41,7 @@ const MermCard = ({
         actions={actions}
       >
         <Meta title={title} description={mermMetaData} />
-        <Card className="merm-card-inner" size="small">
+        <Card className="merm-card-inner">
           {tagsVisible != null
             ? tagsVisible.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
             : ""}

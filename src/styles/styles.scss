@@ -35,11 +35,13 @@ div.header-container > * {
   display: inline-block;
 }
 
-.login-form, .register-form {
+.login-form,
+.register-form {
   max-width: 300px;
   margin: 0 auto !important;
 }
-.login-form-button, .register-form-button {
+.login-form-button,
+.register-form-button {
   width: 100%;
 }
 
@@ -57,7 +59,7 @@ div.header-container > * {
   margin-bottom: 0px;
 }
 
-.detailed-merm-header >  div > * {
+.detailed-merm-header > div > * {
   display: inline-block;
 }
 
@@ -66,7 +68,8 @@ div.ant-card-body {
 }
 
 div.merm-card-outer {
-  width: 270px;
+  width: 100%;
+  height: 100%;
   text-align: left;
 }
 
@@ -111,7 +114,7 @@ div.merm-card-inner > div.ant-card-body {
 }
 
 .ant-avatar.ant-avatar-icon {
- margin: 0 10px;
+  margin: 0 10px;
 }
 
 button.favorite-button {
@@ -131,7 +134,7 @@ button.favorite-button {
   text-align: right;
 }
 
-.ant-tabs-ink-bar{
+.ant-tabs-ink-bar {
   width: 33% !important;
 }
 
@@ -146,7 +149,6 @@ button.favorite-button {
   text-align: center;
   padding: 20px;
 }
-
 
 .steps-content {
   margin-top: 16px;
@@ -182,7 +184,7 @@ div.custom-steps {
   opacity: 1 !important;
 }
 
-.ant-collapse-item button.close-advanced{
+.ant-collapse-item button.close-advanced {
   -webkit-transition: opacity 0.5s ease-in-out;
   -moz-transition: opacity 0.5s ease-in-out;
   -ms-transition: opacity 0.5s ease-in-out;
