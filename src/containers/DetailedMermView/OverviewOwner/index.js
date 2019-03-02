@@ -63,7 +63,7 @@ class OverviewOwner extends React.Component {
   }
   updateTitle = (e) => {
     this.props.updateTitle(e.target.value);
-  }
+  };
 
   render() {
     const { inputVisible, inputValue } = this.state;
@@ -106,10 +106,10 @@ class OverviewOwner extends React.Component {
               <div className="merm-overview-container">
                 {editMode ? (
                   <div className="overview-edit-container">
-                    <p>
-                      <b>Name:</b>
-                    </p>
                     <Form.Item>
+                      <b>Name:</b>
+                    </Form.Item>
+                    <Form.Item className="edit-form-entry">
                       {getFieldDecorator("name", {
                         rules: [
                           {
@@ -131,9 +131,9 @@ class OverviewOwner extends React.Component {
                 </p>
                 {editMode ? (
                   <div className="overview-edit-container">
-                    <p>
+                    <Form.Item>
                       <b>Category:</b>
-                    </p>
+                    </Form.Item>
                     {/*<Form.Item>*/}
                       {/*{getFieldDecorator("category", {*/}
                         {/*initialValue: category*/}
@@ -165,10 +165,10 @@ class OverviewOwner extends React.Component {
                 )}
                 {editMode ? (
                   <div className="overview-edit-container">
-                    <p>
-                      <b>Resource URL:</b>
-                    </p>
                     <Form.Item>
+                      <b>Resource URL:</b>
+                    </Form.Item>
+                    <Form.Item className="edit-form-entry">
                       {getFieldDecorator("resourceUrl", {
                         rules: [
                           {
@@ -191,10 +191,10 @@ class OverviewOwner extends React.Component {
                 )}
                 {editMode ? (
                   <div className="overview-edit-container">
-                    <p>
-                      <b>Resource Title:</b>
-                    </p>
                     <Form.Item>
+                      <b>Resource Title:</b>
+                    </Form.Item>
+                    <Form.Item className="edit-form-entry">
                       {getFieldDecorator("resourceName", {
                         rules: [
                           {
@@ -215,7 +215,7 @@ class OverviewOwner extends React.Component {
               <Divider orientation="left">Description</Divider>
               <div className="merm-overview-container overview-edit-container">
                 {editMode ? (
-                  <Form.Item>
+                  <Form.Item className="edit-form-entry">
                     {getFieldDecorator("description", {
                       rules: [
                         {

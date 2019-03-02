@@ -214,4 +214,9 @@ div.overview-edit-container .ant-select{
 
 div.overview-edit-container {
   width: 100%;
+  display: flex;
+}
+
+div.edit-form-entry{
+  flex: 1;
 }
