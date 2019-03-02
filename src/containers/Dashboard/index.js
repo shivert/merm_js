@@ -58,6 +58,11 @@ class Dashboard extends React.Component {
     this.setState({ visible: false });
   };
 
+  findMermsByCategory = categoryId =>
+    Object.keys(this.props.merms).includes(categoryId)
+      ? this.props.merms[categoryId]
+      : [];
+
   render() {
     const { visible, confirmLoading } = this.state;
     const { loading } = this.props.requestStatus;
@@ -74,10 +79,7 @@ class Dashboard extends React.Component {
         ) : (
           <div>
             <div className="dashboard-button-container">
-              <Button
-                onClick={this.showModal}
-                type="primary"
-              >
+              <Button onClick={this.showModal} type="primary">
                 Manage Categories
               </Button>
             </div>
@@ -88,10 +90,14 @@ class Dashboard extends React.Component {
               style={{ marginTop: "-32px" }}
             >
               {this.props.categories.map((category, idx) => (
-                <Panel header={category.name} key={idx} style={customPanelStyle}>
+                <Panel
+                  header={category.name}
+                  key={idx}
+                  style={customPanelStyle}
+                >
                   <Row gutter={16}>
                     <MermCardCarousel
-                      items={this.props.merms[category.id].map(merm => (
+                      items={this.findMermsByCategory(category.id).map(merm => (
                         <MermCard
                           id={merm.id}
                           key={merm.id}

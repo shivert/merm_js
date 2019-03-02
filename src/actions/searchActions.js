@@ -110,3 +110,73 @@ export function clearSearchResults() {
     dispatch({ type: ActionTypes.CLEAR_SEARCH_RESULTS_LIST });
   };
 }
+
+export function getFavMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.mermsByCategory("Favorites").then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_FAV_MERMS_LIST,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to add Merm Comment",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function clearFavMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_FAV_MERMS_LIST });
+  };
+}
+
+export function getRecMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.mermsByCategory("Recent").then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_REC_MERMS_LIST,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to add Merm Comment",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function clearRecMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_REC_MERMS_LIST });
+  };
+}
+
+

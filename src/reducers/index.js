@@ -9,6 +9,8 @@ import searchResults from "./searchResults";
 import autocompleteResults from "./autocompleteResults";
 import requestStatus from "./requestStatus";
 import detailedMerm from "./detailedMerm";
+import favourites from "./favourites";
+import recent from "./recent";
 
 const rootReducer = combineReducers({
   notification,
@@ -20,6 +22,8 @@ const rootReducer = combineReducers({
   updateCategoryStatus,
   autocompleteResults,
   merms,
+  favourites,
+  recent,
   router: connectRouter(history)
 });
 
