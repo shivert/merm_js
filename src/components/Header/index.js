@@ -48,11 +48,11 @@ class CustomHeader extends React.Component {
     }
   }
 
-  handleOk = () => {
+  handleOk = fields => {
     this.setState({ loading: true });
-    setTimeout(() => {
+    this.props.mermActions.createMerm(fields, () => {
       this.setState({ loading: false, visible: false });
-    }, 3000);
+    });
   };
 
   handleCancel = () => {
