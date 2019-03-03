@@ -23,10 +23,6 @@ class SearchResults extends React.Component {
     }
   }
 
-  // componentWillUnmount() {
-  //   this.props.actions.clearSearchResults();
-  // }
-
   searchMerms = () => {
     const queryParams = queryString.parse(this.props.location.search);
     this.props.actions.searchMerms(queryParams["q"]);
