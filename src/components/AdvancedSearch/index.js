@@ -90,7 +90,6 @@ class AdvancedSearch extends React.Component {
 }
 
 AdvancedSearch.propTypes = {
-  handleCancel: PropTypes.func.isRequired
 };
 
 export default AdvancedSearch;

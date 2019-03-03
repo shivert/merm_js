@@ -1,12 +1,20 @@
 import React from "react";
-import { Button, Layout, Badge, Icon, Input, Popover } from "antd";
-const Search = Input.Search;
+import {
+  Button,
+  Layout,
+  Badge,
+  Icon,
+  Input,
+  Popover,
+  AutoComplete
+} from "antd";
 
 import NewResourceModal from "../NewResourceModal";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as authActions from "../../actions/authenticationActions";
 import * as mermActions from "../../actions/mermActions";
+import * as searchActions from "../../actions/searchActions";
 import { history } from "./../../store/configureStore";
 import * as queryString from "query-string";
 
@@ -40,16 +48,6 @@ class CustomHeader extends React.Component {
     }
   }
 
-  handleChange = e => {
-    this.setState({
-      queryString: e.target.value
-    });
-  };
-
-  search = queryString => {
-    history.push(`/search?q=${queryString}`);
-  };
-
   handleOk = () => {
     this.setState({ loading: true });
     setTimeout(() => {
@@ -59,6 +57,26 @@ class CustomHeader extends React.Component {
 
   handleCancel = () => {
     this.setState({ visible: false });
+  };
+
+  onChange = value => {
+    this.setState({ queryString: value });
+  };
+
+  onSelect = value => {
+    this.setState({ queryString: "" });
+    const obj = this.props.autocompleteResults.find(obj => obj.value == value);
+    history.push(`/merm/${obj.id}/overview`);
+  };
+
+  search = () => {
+    history.push(`/search?q=${this.state.queryString}`);
+  };
+
+  popAuto = () => {
+    if (this.props.autocompleteResults.length == 0) {
+      this.props.searchActions.autoComplete();
+    }
   };
 
   render() {
@@ -73,21 +91,53 @@ class CustomHeader extends React.Component {
             </Button>
           </div>
           <h2>merm.io</h2>
-          <div
-            style={{ marginTop: "16px", marginRight: "10px", float: "right" }}
-          >
-            <div style={{ float: "left" }}>
-              <Search
+
+          <div className="header-right-container">
+            <div>
+              <AutoComplete
+                className="global-search"
+                size="large"
+                filterOption={true}
                 value={this.state.queryString}
-                placeholder="Search..."
-                onChange={this.handleChange}
-                onSearch={this.search}
-                enterButton
-              />
+                style={{ width: "100%" }}
+                dataSource={this.props.autocompleteResults}
+                onSelect={this.onSelect}
+                onSearch={this.onChange}
+                onFocus={this.popAuto}
+                backfill={true}
+                placeholder="Search.."
+              >
+                <Input
+                  suffix={
+                    <Button
+                      onClick={this.search}
+                      className="search-btn"
+                      size="large"
+                      type="primary"
+                    >
+                      <Icon type="search" />
+                    </Button>
+                  }
+                />
+              </AutoComplete>
             </div>
-            <div
-              style={{ marginTop: "-8px", marginLeft: "10px", float: "right" }}
-            >
+            <div>
+              <Popover
+                placement="bottomRight"
+                title={this.text}
+                content={<div>Insert Notifications Here</div>}
+                trigger="click"
+              >
+                <Badge count={5}>
+                  <Icon
+                    style={{ fontSize: "24px" }}
+                    type="bell"
+                    theme="filled"
+                  />
+                </Badge>
+              </Popover>
+            </div>
+            <div>
               <Popover
                 placement="bottomRight"
                 title={<span>Settings</span>}
@@ -107,22 +157,6 @@ class CustomHeader extends React.Component {
                 />
               </Popover>
             </div>
-            <div style={{ margin: "-8px 10px 0px 10px", float: "right" }}>
-              <Popover
-                placement="bottomRight"
-                title={this.text}
-                content={<div>Insert Notifications Here</div>}
-                trigger="click"
-              >
-                <Badge count={5}>
-                  <Icon
-                    style={{ fontSize: "24px" }}
-                    type="bell"
-                    theme="filled"
-                  />
-                </Badge>
-              </Popover>
-            </div>
           </div>
         </div>
         <NewResourceModal
@@ -139,20 +173,24 @@ class CustomHeader extends React.Component {
 CustomHeader.propTypes = {
   authActions: PropTypes.object.isRequired,
   mermActions: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
+  searchActions: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  autocompleteResults: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     location: state.router.location,
-    history: state.history
+    history: state.history,
+    autocompleteResults: state.autocompleteResults
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     authActions: bindActionCreators(authActions, dispatch),
-    mermActions: bindActionCreators(mermActions, dispatch)
+    mermActions: bindActionCreators(mermActions, dispatch),
+    searchActions: bindActionCreators(searchActions, dispatch)
   };
 }
 

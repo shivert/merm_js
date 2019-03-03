@@ -3,12 +3,12 @@ import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
 import { tokenSelector, setAuthHeader } from './../middleware/api'
+import { tokenSelectorSearch, setAuthHeaderSearch } from './../middleware/searchApi'
 
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import rootReducer from "../reducers";
 import { loadState, saveState } from "../localStorage";
-
 
 export const history = createHistory();
 const connectRouterHistory = connectRouter(history);
@@ -38,6 +38,7 @@ function configureStoreProd() {
     });
     const token = tokenSelector(store.getState());
     setAuthHeader(token);
+    setAuthHeaderSearch(token);
   });
 
   return store;
@@ -78,6 +79,7 @@ function configureStoreDev() {
     });
     const token = tokenSelector(store.getState());
     setAuthHeader(token);
+    setAuthHeaderSearch(token);
   });
 
   return store;
