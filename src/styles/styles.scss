@@ -201,6 +201,7 @@ div.search-results-container .merm-card-outer {
   margin-right: inherit !important;
 }
 
+<<<<<<< HEAD
 div.overview-edit-container p {
   display: inline-block;
   padding-right: 8px;
@@ -314,7 +315,6 @@ td.column-action {
   height: 64px;
 }
 
-
 .header-right-container > div {
   display: inline-block;
   height: 40px;
@@ -330,4 +330,24 @@ td.column-action {
   top: -6px;
   width: 246px;
   padding-right: 46px;
+}
+
+div.access-date-question{
+  margin-bottom: 20px;
+}
+
+div.owner-question{
+  margin-bottom: 20px;
+}
+
+div.category-question{
+  margin-bottom: 20px;
+}
+
+div.source-question{
+  margin-bottom: 20px;
+}
+
+div.tag-question{
+  margin-bottom: 20px;
 }
