@@ -160,7 +160,7 @@ export function getMerm(mermId) {
 
 export function favoriteMerm(mermId, favorite) {
   const query = `
-    mutation editMerm($id: ID!, $merm: EditMermInputType!) {
+    mutation favoriteMerm($id: ID!, $merm: EditMermInputType!) {
       editMerm(id: $id, merm: $merm) {
         id
         name
@@ -283,5 +283,61 @@ export function addTag(tag) {
   const variables = {
     tagDetails: tag
   };
+  return authClient.rawRequest(query, variables);
+}
+
+export function editMerm(mermId, fields) {
+  const query = `
+    mutation editMerm($id: ID!, $merm: EditMermInputType!) {
+      editMerm(id: $id, merm: $merm) {
+        id
+        name
+        source
+        favorite
+        resourceName
+        resourceUrl
+        description
+        capturedText
+        lastAccessed
+        createdAt
+        updatedAt
+        comments {
+          content
+          author {
+            id
+            name
+          }
+          createdAt
+          updatedAt
+        }
+        sharedWith {
+          id  
+          name
+        }
+        owner {
+          id  
+          name
+        }
+        tags {
+          id
+          name
+        }
+        comments {
+          content
+          author {
+            id
+            name
+          }
+          createdAt
+          updatedAt
+        }
+      }
+    }`;
+
+  const variables = {
+    id: mermId,
+    merm: fields
+  };
+
   return authClient.rawRequest(query, variables);
 }

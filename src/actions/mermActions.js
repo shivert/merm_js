@@ -224,3 +224,31 @@ export function addTag(tag) {
     );
   };
 }
+
+export function editMerm(mermId, fields) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.editMerm(mermId, fields).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_EDIT_DETAILED_MERM,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable update Merm",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}

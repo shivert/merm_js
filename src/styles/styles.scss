@@ -200,3 +200,26 @@ div.search-results-container .merm-card-outer {
   margin-left: inherit !important;
   margin-right: inherit !important;
 }
+
+div.overview-edit-container p {
+  display: inline-block;
+  padding-right: 8px;
+}
+
+div.overview-edit-container input {
+  display: inline-block;
+  width: 80%;
+}
+div.overview-edit-container .ant-select{
+  display: inline-block;
+  width: 50%;
+}
+
+div.overview-edit-container {
+  width: 100%;
+  display: flex;
+}
+
+div.edit-form-entry{
+  flex: 1;
+}

@@ -7,15 +7,17 @@ import * as actions from "../../actions/mermActions";
 import { history } from "../../store/configureStore";
 
 import Overview from "./Overview";
+import OverviewOwner from "./OverviewOwner";
 import Comments from "./Comments";
 import Statistics from "./Statistics";
 
 const TabPane = Tabs.TabPane;
 
 class DetailedMermView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  state = {
+    editMode: false,
+    title: ""
+  };
 
   componentDidMount() {
     const mermId = this.props.match.params.mermId;
@@ -31,16 +33,21 @@ class DetailedMermView extends React.Component {
     history.push(`${this.props.match.url}/${key}`);
   };
 
-  render() {
-    const { name, resourceUrl, favorite } = this.props.detailedMerm;
-    const activeTab = this.props.pathname.split("/").slice(-1)[0];
+  updateTitle = newTitle => {
+    this.setState({ title: newTitle });
+  };
 
+  render() {
+    const activeTab = this.props.pathname.split("/").slice(-1)[0];
+    const { name, resourceUrl, favorite } = this.props.detailedMerm;
+    const isOwner =
+      this.props.detailedMerm.owner.id === this.props.userObject.id;
     return (
       <div>
         <div className="detailed-merm-header">
           <div style={{ float: "left", marginLeft: "15px" }}>
             <Button type="primary" shape="circle" icon="medium" size="large" />
-            <h1>{name}</h1>
+            <h1>{this.state.title === "" ? name : this.state.title}</h1>
             <Button
               className="favorite-button"
               shape="circle"
@@ -58,15 +65,68 @@ class DetailedMermView extends React.Component {
               )}
             </Button>
           </div>
-
-          <div style={{ float: "right" }}>
-            <Button style={{ marginRight: "20px" }} size="large" type="primary">
-              Edit
-            </Button>
-            <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-              <Button type="primary" shape="circle" icon="link" size="large" />
-            </a>
-          </div>
+          {isOwner ? (
+            this.state.editMode === false ? (
+              <div style={{ float: "right" }}>
+                <Button
+                  style={{ marginRight: "20px" }}
+                  size="large"
+                  type="primary"
+                  onClick={() => this.setState({ editMode: true })}
+                >
+                  Edit
+                </Button>
+                <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon="link"
+                    size="large"
+                  />
+                </a>
+              </div>
+            ) : (
+              <div style={{ float: "right" }}>
+                <Button
+                  style={{ marginRight: "20px" }}
+                  size="large"
+                  type="primary"
+                  onClick={() => {
+                    this.setState({ editMode: false });
+                    this.child.onSubmit();
+                  }}
+                >
+                  Save
+                </Button>
+                <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon="link"
+                    size="large"
+                  />
+                </a>
+              </div>
+            )
+          ) : (
+            <div style={{ float: "right" }}>
+              <Button
+                style={{ marginRight: "20px" }}
+                size="large"
+                type="primary"
+              >
+                Copy to My Merms
+              </Button>
+              <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon="link"
+                  size="large"
+                />
+              </a>
+            </div>
+          )}
         </div>
         <Tabs
           tabPosition="top"
@@ -74,7 +134,15 @@ class DetailedMermView extends React.Component {
           onChange={this.handleTabChange}
         >
           <TabPane tab="Overview" key="overview">
-            <Overview />
+            {isOwner ? (
+              <OverviewOwner
+                onRef={ref => (this.child = ref)}
+                editMode={this.state.editMode}
+                updateTitle={this.updateTitle}
+              />
+            ) : (
+              <Overview />
+            )}
           </TabPane>
           <TabPane tab="Comments" key="comments">
             <Comments />
@@ -92,13 +160,15 @@ DetailedMermView.propTypes = {
   actions: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   pathname: PropTypes.string.isRequired,
-  detailedMerm: PropTypes.object.isRequired
+  detailedMerm: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     detailedMerm: state.detailedMerm,
-    pathname: state.router.location.pathname
+    pathname: state.router.location.pathname,
+    userObject: state.userObject
   };
 }
 
