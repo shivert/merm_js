@@ -1,11 +1,11 @@
 import React from "react";
 import { Collapse, Col, Row, Icon } from "antd";
 import MermCard from "../../components/MermCard/index";
-import CustomCarousel from "../../components/Carousel/CustomCarousel";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import * as actions from "../../actions/mermActions";
 import { bindActionCreators } from "redux";
+import MermCardCarousel from "../../components/Carousel/MermCardCarousel";
 
 const Panel = Collapse.Panel;
 
@@ -46,26 +46,34 @@ class Dashboard extends React.Component {
           <Row gutter={16}>
             <Col>
               <Row>
-                <CustomCarousel>
-                  {this.props.merms.dashboardMerms.suggested.map(merm => (
-                    <MermCard
-                      id={merm.id}
+                <MermCardCarousel
+                  items={this.props.merms.dashboardMerms.suggested.map(merm => (
+                    <div
                       key={merm.id}
-                      title={merm.name}
-                      lastAccessed={merm.lastAccessed}
-                      sharedTime="Jan 12, 2018"
-                      owner={`${merm.owner.firstName} ${merm.owner.lastName}`}
-                      sharer="Veryvery long named Person"
-                      cover={
-                        <img
-                          alt="example"
-                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                      }
-                      tags={merm.tags}
-                    />
+                      style={{
+                        paddingLeft: "4px",
+                        paddingRight: "4px"
+                      }}
+                    >
+                      <MermCard
+                        id={merm.id}
+                        key={merm.id}
+                        title={merm.name}
+                        lastAccessed={merm.lastAccessed}
+                        sharedTime="Jan 12, 2018"
+                        owner={`${merm.owner.firstName} ${merm.owner.lastName}`}
+                        sharer="Veryvery long named Person"
+                        cover={
+                          <img
+                            alt="example"
+                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                          />
+                        }
+                        tags={merm.tags}
+                      />
+                    </div>
                   ))}
-                </CustomCarousel>
+                />
               </Row>
             </Col>
           </Row>
@@ -74,8 +82,8 @@ class Dashboard extends React.Component {
           <Row gutter={16}>
             <Col>
               <Row>
-                <CustomCarousel>
-                  {this.props.merms.dashboardMerms.favorites.map(merm => (
+                <MermCardCarousel
+                  items={this.props.merms.dashboardMerms.favorites.map(merm => (
                     <MermCard
                       id={merm.id}
                       key={merm.id}
@@ -93,7 +101,7 @@ class Dashboard extends React.Component {
                       tags={merm.tags}
                     />
                   ))}
-                </CustomCarousel>
+                />
               </Row>
             </Col>
           </Row>
