@@ -220,6 +220,61 @@ div.overview-edit-container {
   display: flex;
 }
 
-div.edit-form-entry{
+div.edit-form-entry {
   flex: 1;
+}
+
+.edit-category-button.ant-btn {
+  position: absolute;
+  right: 50px;
+}
+
+.dashboard-collapse .ant-collapse-header{
+  width: 80%;
+}
+
+.add-new-category-field .ant-input-suffix {
+  width: 58px;
+}
+
+tr.drop-over-downward td {
+  border-bottom: 2px dashed #1890ff !important;
+}
+
+tr.drop-over-upward td {
+  border-top: 2px dashed #1890ff !important;
+}
+
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.fixed-row {
+  background: #F9F9F9;
+}
+
+tr.fixed-row td.column-name {
+  padding-left: 28px;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
+}
+
+th.column-rank,
+td.column-rank,
+th.column-action,
+td.column-action {
+  text-align: center !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #E8E8E8 !important;
 }

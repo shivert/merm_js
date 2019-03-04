@@ -237,27 +237,6 @@ export function addMermComment(comment) {
   return authClient.rawRequest(query, variables);
 }
 
-export function searchMerms(queryString) {
-  const query = `
-    query {
-      searchMerm(queryString: "${queryString}") {
-         id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-    }`;
-
-  return authClient.rawRequest(query);
-}
-
 export function removeTag(tagId) {
   const query = `
   mutation deleteTag($id: ID!) {
@@ -339,5 +318,32 @@ export function editMerm(mermId, fields) {
     merm: fields
   };
 
+  return authClient.rawRequest(query, variables);
+}
+
+export function getCategories() {
+  const query = `
+  query {
+    categories {
+      id
+      name
+      rank
+      custom
+    }
+  }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function updateCategories(categories) {
+  categories.map(category => delete category.custom);
+  const query = `
+   mutation updateCategories($data: CategoriesInputType!) {
+      updateCategories(data: $data) {
+        id
+        name
+      }
+    }`;
+  const variables = { data: { categories } };
   return authClient.rawRequest(query, variables);
 }
