@@ -66,6 +66,28 @@ export function userCreate(fields) {
   return client.rawRequest(query, variables);
 }
 
+export function createMerm(fields) {
+  const query = `
+    mutation createMerm ($mermDetails: MermInputType!) {
+      createMerm(mermDetails: $mermDetails) {
+        id
+      }
+    }
+  `;
+
+  const variables = {
+    mermDetails: {
+      name: fields.name,
+      capturedText: fields.capturedText,
+      description: fields.description,
+      resourceUrl: fields.resourceUrl,
+      tags: fields.tags
+    }
+  };
+
+  return client.rawRequest(query, variables);
+}
+
 export function getMerms() {
   const query = `
   query {

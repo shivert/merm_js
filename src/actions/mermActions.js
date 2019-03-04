@@ -2,6 +2,38 @@ import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
 import { history } from "../store/configureStore";
 
+export function createMerm(mermDetails, callback) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+    API.createMerm(mermDetails).then(
+      response => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Success",
+            message: "Merm created!"
+          }
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+        callback();
+      },
+      () => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to create Merms",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
 export function getMerms() {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });

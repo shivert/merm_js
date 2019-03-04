@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Modal } from "antd";
+import { Button, Modal, Form } from "antd";
 import PropTypes from "prop-types";
+import NewResourceForm from "./NewResourceForm";
 
 class NewResourceModal extends React.Component {
   render() {
     const { visible, loading } = this.props;
-
+    const AddNewResourceForm = Form.create()(NewResourceForm);
     return (
       <Modal
         visible={visible}
@@ -15,23 +16,20 @@ class NewResourceModal extends React.Component {
         width={"65vw"}
         footer={[
           <Button key="back" onClick={this.props.handleCancel}>
-            Return
+            Cancel
           </Button>,
           <Button
+            form="createNewMerm"
             key="submit"
             type="primary"
+            htmlType="submit"
             loading={loading}
-            onClick={this.props.handleOk}
           >
             Submit
           </Button>
         ]}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <AddNewResourceForm onSubmitClick={this.props.handleOk} />
       </Modal>
     );
   }
