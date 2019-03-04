@@ -26,6 +26,10 @@ class ManageCategoriesModal extends React.Component {
     this.setState({ categories: state });
   };
 
+  handleClose = () => {
+    this.props.handleCancel();
+  };
+
   handleSubmit = () => {
     this.setState({ loading: true });
     this.props.actions.updateCategories(this.state.categories);
@@ -42,7 +46,7 @@ class ManageCategoriesModal extends React.Component {
         onCancel={this.props.handleCancel}
         width={"45vw"}
         footer={[
-          <Button key="back" onClick={this.props.handleCancel}>
+          <Button key="back" onClick={this.handleClose}>
             Cancel
           </Button>,
           <Button

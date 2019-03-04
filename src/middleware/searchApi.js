@@ -27,3 +27,11 @@ export function search(query) {
 export function loadDashboard() {
   return authClient.get("/search");
 }
+
+export function mermsByCategory(category) {
+  return authClient.get("/category", {
+    params: {
+      q: category
+    }
+  });
+}
