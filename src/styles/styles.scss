@@ -224,11 +224,6 @@ div.edit-form-entry {
   flex: 1;
 }
 
-.edit-category-button.ant-btn {
-  position: absolute;
-  right: 50px;
-}
-
 .dashboard-collapse .ant-collapse-header{
   width: 80%;
 }
@@ -277,4 +272,82 @@ td.column-action {
 
 .ant-table-thead > tr > th {
   background: #E8E8E8 !important;
+}
+
+.global-search-wrapper {
+  padding-right: 50px;
+}
+
+.global-search {
+  width: 100%;
+}
+
+.global-search.ant-select-auto-complete .ant-select-selection--single {
+  margin-right: -46px;
+}
+
+.global-search.ant-select-auto-complete .ant-input-affix-wrapper .ant-input:not(:last-child) {
+  padding-right: 62px;
+}
+
+.global-search.ant-select-auto-complete .ant-input-affix-wrapper .ant-input-suffix {
+  right: 0;
+}
+
+.global-search.ant-select-auto-complete .ant-input-affix-wrapper .ant-input-suffix button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.global-search-item-count {
+  position: absolute;
+  right: 16px;
+}
+
+.header-right-container {
+  float: right;
+  height: 64px;
+}
+
+.header-right-container > div {
+  display: inline-block;
+  height: 40px;
+  margin-top: 8px;
+}
+
+.header-right-container > div:not(:last-child) {
+  margin-right: 20px;
+}
+
+.header-right-container > div:first-child {
+  position: relative;
+  top: -6px;
+  width: 246px;
+  padding-right: 46px;
+}
+
+div.access-date-question{
+  margin-bottom: 20px;
+}
+
+div.owner-question{
+  margin-bottom: 20px;
+}
+
+div.category-question{
+  margin-bottom: 20px;
+}
+
+div.source-question{
+  margin-bottom: 20px;
+}
+
+div.tag-question{
+  margin-bottom: 20px;
+}
+
+div.dashboard-button-container {
+  position: relative;
+  left: calc(100% - 165px);
+  width: fit-content;
 }

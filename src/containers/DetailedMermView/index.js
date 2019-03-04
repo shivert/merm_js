@@ -24,6 +24,17 @@ class DetailedMermView extends React.Component {
     this.props.actions.getMerm(mermId);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.mermId !== this.props.match.params.mermId) {
+      const mermId = this.props.match.params.mermId;
+      this.props.actions.getMerm(mermId);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.actions.clearDetailedMerm();
+  }
+
   favoriteMerm = () => {
     const flipFav = !this.props.detailedMerm.favorite;
     this.props.actions.favoriteMerm(this.props.detailedMerm.id, flipFav);

@@ -3,15 +3,16 @@ import PropTypes from "prop-types";
 import { Steps, Button, message, Icon } from "antd";
 const Step = Steps.Step;
 
-import ContentTypeQuestion from "./questions/ContentTypeQuestion";
+import CategoryQuestion from "./questions/CategoryQuestion";
 import OwnerQuestion from "./questions/OwnerQuestion";
 import AccessDateQuestion from "./questions/AccessDateQuestion";
 import TagQuestion from "./questions/TagQuestion";
+import SourceQuestion from "./questions/SourceQuestion"
 
 const steps = [
   {
-    title: "Content Type",
-    content: <ContentTypeQuestion />,
+    title: "Category",
+    content: <CategoryQuestion />,
     iconType: "file-unknown"
   },
   {
@@ -28,6 +29,11 @@ const steps = [
     title: "Tags",
     content: <TagQuestion />,
     iconType: "tag"
+  },
+  {
+    title: "Source",
+    content: <SourceQuestion />,
+    iconType: "question-circle"
   }
 ];
 
@@ -90,7 +96,6 @@ class AdvancedSearch extends React.Component {
 }
 
 AdvancedSearch.propTypes = {
-  handleCancel: PropTypes.func.isRequired
 };
 
 export default AdvancedSearch;

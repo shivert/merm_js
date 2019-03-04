@@ -6,6 +6,7 @@ import categories from "./categories";
 import merms from "./merms";
 import updateCategoryStatus from "./updateCategoryStatus";
 import searchResults from "./searchResults";
+import autocompleteResults from "./autocompleteResults";
 import requestStatus from "./requestStatus";
 import detailedMerm from "./detailedMerm";
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   searchResults,
   categories,
   updateCategoryStatus,
+  autocompleteResults,
   merms,
   router: connectRouter(history)
 });

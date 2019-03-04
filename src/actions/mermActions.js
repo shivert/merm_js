@@ -79,6 +79,12 @@ export function getMerm(mermId) {
   };
 }
 
+export function clearDetailedMerm() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_DETAILED_MERM });
+  };
+}
+
 export function favoriteMerm(mermId, favorite) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });

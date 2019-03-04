@@ -16,18 +16,18 @@ function handleFocus() {
   console.log('focus');
 }
 
-class OwnerQuestion extends React.Component {
+class CategoryQuestion extends React.Component {
   render() {
     return (
       <>
-      <div className="owner-question">
-        Who is the owner?
+      <div className="category-question">
+        What is the content type?
       </div>
 
       <Select
       showSearch
       style={{ width: 200 }}
-      placeholder="Select a person"
+      placeholder="Select a category"
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={handleFocus}
@@ -38,13 +38,13 @@ class OwnerQuestion extends React.Component {
       <Option value="lucy">Lucy</Option>
       <Option value="tom">Tom</Option>
     </Select>
-    </>
+      </>
     );
+    
   }
 }
 
-OwnerQuestion.propTypes = {
-
+CategoryQuestion.propTypes = {
 };
 
-export default OwnerQuestion;
+export default CategoryQuestion;

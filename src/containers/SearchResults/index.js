@@ -4,9 +4,8 @@ import MermCard from "../../components/MermCard";
 import AdvancedSearch from "../../components/AdvancedSearch";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import * as actions from "../../actions/mermActions";
+import * as actions from "../../actions/searchActions";
 import { bindActionCreators } from "redux";
-import { chunk } from "./../../utils/searchResults";
 import * as queryString from "query-string";
 
 import { Grid, Row, Col } from "react-flexbox-grid";
@@ -14,10 +13,6 @@ import { Grid, Row, Col } from "react-flexbox-grid";
 const Panel = Collapse.Panel;
 
 class SearchResults extends React.Component {
-  state = {
-    advancedSearch: ""
-  };
-
   componentDidMount() {
     this.searchMerms();
   }
@@ -26,10 +21,6 @@ class SearchResults extends React.Component {
     if (prevProps.location !== this.props.location) {
       this.searchMerms();
     }
-  }
-
-  componentWillUnmount() {
-    this.props.actions.clearSearchResults();
   }
 
   searchMerms = () => {
@@ -85,7 +76,7 @@ class SearchResults extends React.Component {
                   title={merm.name}
                   lastAccessed={merm.lastAccessed}
                   sharedTime="Jan 12, 2018"
-                  owner={`${merm.owner.firstName} ${merm.owner.lastName}`}
+                  owner={`${merm.user["first_name"]} ${merm.user["last_name"]}`}
                   sharer="Veryvery long named Person"
                   cover={
                     <img

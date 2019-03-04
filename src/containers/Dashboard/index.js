@@ -4,7 +4,7 @@ import { Collapse, Row, Icon } from "antd";
 import MermCardCarousel from "../../components/Carousel/MermCardCarousel";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import * as mermActions from "../../actions/mermActions";
+import * as mermActions from "../../actions/searchActions";
 import * as categoryActions from "../../actions/categoryActions";
 import { bindActionCreators } from "redux";
 import Button from "antd/es/button";
@@ -28,19 +28,20 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    this.props.mermActions.getMerms();
+    this.props.categoryActions.getCategories();
+    this.props.mermActions.getDashboardMerms();
   }
 
   componentWillUnmount() {
-    this.props.mermActions.clearMerms();
+    this.props.categoryActions.clearCategories();
+    this.props.mermActions.clearDashboardMerms();
   }
 
   getMerms = () => {
-    this.props.mermActions.getMerms();
+    this.props.mermActions.getDashboardMerms();
   };
 
   showModal = () => {
-    this.props.categoryActions.getCategories();
     this.setState({
       visible: true
     });
@@ -50,11 +51,11 @@ class Dashboard extends React.Component {
     this.setState({
       visible: false
     });
+    this.props.categoryActions.getCategories();
   };
 
   handleCancel = () => {
     this.setState({ visible: false });
-    this.props.categoryActions.clearCategories();
   };
 
   render() {
@@ -72,33 +73,32 @@ class Dashboard extends React.Component {
           />
         ) : (
           <div>
-            <Button
-              onClick={this.showModal}
-              className="edit-category-button"
-              type="primary"
-            >
-              Manage Categories
-            </Button>
-
+            <div className="dashboard-button-container">
+              <Button
+                onClick={this.showModal}
+                type="primary"
+              >
+                Manage Categories
+              </Button>
+            </div>
             <Collapse
               bordered={false}
-              defaultActiveKey={["1", "2"]}
+              defaultActiveKey={["0", "1", "2", "3"]}
               className="dashboard-collapse"
+              style={{ marginTop: "-32px" }}
             >
-              <Panel header="Suggested" key="1" style={customPanelStyle}>
-                <Row gutter={16}>
-                  <MermCardCarousel
-                    items={this.props.merms.dashboardMerms.suggested.map(
-                      merm => (
+              {this.props.categories.map((category, idx) => (
+                <Panel header={category.name} key={idx} style={customPanelStyle}>
+                  <Row gutter={16}>
+                    <MermCardCarousel
+                      items={this.props.merms[category.id].map(merm => (
                         <MermCard
                           id={merm.id}
                           key={merm.id}
                           title={merm.name}
                           lastAccessed={merm.lastAccessed}
                           sharedTime="Jan 12, 2018"
-                          owner={`${merm.owner.firstName} ${
-                            merm.owner.lastName
-                            }`}
+                          owner={`${merm.user.firstName} ${merm.user.lastName}`}
                           sharer="Veryvery long named Person"
                           cover={
                             <img
@@ -108,42 +108,11 @@ class Dashboard extends React.Component {
                           }
                           tags={merm.tags}
                         />
-                      )
-                    )}
-                  />
-                </Row>
-              </Panel>
-              <Panel header="Favorites" key="2" style={customPanelStyle}>
-                <Row>
-                  <MermCardCarousel
-                    items={this.props.merms.dashboardMerms.favorites.map(
-                      merm => (
-                        <MermCard
-                          id={merm.id}
-                          key={merm.id}
-                          title={merm.name}
-                          lastAccessed={merm.lastAccessed}
-                          sharedTime="Jan 12, 2018"
-                          owner={`${merm.owner.firstName} ${
-                            merm.owner.lastName
-                            }`}
-                          sharer="Veryvery long named Person"
-                          cover={
-                            <img
-                              alt="example"
-                              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                            />
-                          }
-                          tags={merm.tags}
-                        />
-                      )
-                    )}
-                  />
-                </Row>
-              </Panel>
-              <Panel header="Unread Resources" key="3" style={customPanelStyle}>
-                <Row gutter={16} />
-              </Panel>
+                      ))}
+                    />
+                  </Row>
+                </Panel>
+              ))}
             </Collapse>
           </div>
         )}
@@ -163,12 +132,14 @@ Dashboard.propTypes = {
   mermActions: PropTypes.object.isRequired,
   categoryActions: PropTypes.object.isRequired,
   merms: PropTypes.object.isRequired,
+  categories: PropTypes.array.isRequired,
   requestStatus: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     merms: state.merms,
+    categories: state.categories,
     requestStatus: state.requestStatus
   };
 }

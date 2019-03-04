@@ -141,7 +141,7 @@ class TopLevelContainer extends React.Component {
         </Sider>
         <Layout>
           <CustomHeader />
-          <Content style={{ margin: "10px 24px 0", overflow: "initial" }}>
+          <Content style={{ margin: "0 24px 0", overflow: "initial" }}>
             <div
               style={{
                 padding: "24px",
