@@ -6,7 +6,7 @@ import { DragDropContext, DragSource, DropTarget } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import { bindActionCreators } from "redux";
-import * as actions from "../../../actions/authenticationActions";
+import * as actions from "../../../actions/categoryActions";
 import { connect } from "react-redux";
 
 function dragDirection(
@@ -158,6 +158,7 @@ class EditableCell extends React.Component {
               defaultValue={record[dataIndex]}
               ref={node => (this.input = node)}
               onPressEnter={this.save}
+              onBlur={this.save}
             />
           ) : (
             <div
@@ -178,9 +179,15 @@ class EditableCell extends React.Component {
 
 class DragSortingTable extends React.Component {
   state = {
-    data: this.props.userCategory.data,
+    data: this.props.categories,
     newCategory: ""
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.categories !== this.props.categories) {
+      this.setState({ data: this.props.categories });
+    }
+  }
 
   columns = [
     {
@@ -192,20 +199,24 @@ class DragSortingTable extends React.Component {
     },
     {
       title: "Order",
-      key: "order",
+      key: "rank",
+      className: "column-rank",
       render: (text, record, index) => index + 1
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      className: "column-name",
       editable: true
     },
     {
       title: "",
-      dataIndex: "operation",
-      render: (text, record) =>
-        this.state.data.length >= 1 ? (
+      dataIndex: "custom",
+      key: "custom",
+      className: "column-action",
+      render: (custom, record) =>
+        custom ? (
           <Popconfirm
             title="Sure to delete?"
             onConfirm={() => this.handleDelete(record.key)}
@@ -247,7 +258,7 @@ class DragSortingTable extends React.Component {
 
   handleDelete = key => {
     const data = [...this.state.data];
-    this.setState({ data: data.filter(item => item.key !== key) });
+    this.setState({ data: data.filter(item => item.key !== key) }, this.updateParentState);
   };
 
   handleSave = row => {
@@ -258,7 +269,7 @@ class DragSortingTable extends React.Component {
       ...item,
       ...row
     });
-    this.setState({ data: newData });
+    this.setState({ data: newData }, this.updateParentState);
   };
 
   onChange = e => {
@@ -274,7 +285,7 @@ class DragSortingTable extends React.Component {
         ...col,
         onCell: record => ({
           record,
-          editable: col.editable,
+          editable: record.custom ? col.editable : false,
           dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave
@@ -287,8 +298,9 @@ class DragSortingTable extends React.Component {
         columns={columns}
         dataSource={this.state.data}
         components={this.components}
-        rowClassName={() => "editable-row"}
+        rowClassName={record => (record.custom ? "editable-row" : "fixed-row")}
         pagination={false}
+        bordered
         footer={() => (
           <div style={{ margin: "0 auto" }}>
             <Search
@@ -300,6 +312,7 @@ class DragSortingTable extends React.Component {
                 const updatedState = [
                   ...this.state.data,
                   {
+                    custom: true,
                     key: value,
                     name: value
                   }
@@ -322,13 +335,13 @@ class DragSortingTable extends React.Component {
 }
 
 DragSortingTable.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  userCategory: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  categories: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    userCategory: state.userCategory
+    categories: state.categories
   };
 }
 

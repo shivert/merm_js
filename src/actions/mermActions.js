@@ -135,40 +135,6 @@ export function addMermComment(comment) {
   };
 }
 
-export function searchMerms(queryString) {
-  return dispatch => {
-    dispatch({ type: ActionTypes.REQUEST_INITIATED });
-
-    API.searchMerms(queryString).then(
-      response => {
-        dispatch({
-          type: ActionTypes.UPDATE_SEARCH_RESULTS_LIST,
-          value: response.data
-        });
-        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
-        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
-      },
-      error => {
-        dispatch({
-          type: ActionTypes.SHOW_NOTIFICATION,
-          value: {
-            show: true,
-            type: "Error",
-            message: "Unable to add Merm Comment",
-            description: "Something is broken!"
-          }
-        });
-      }
-    );
-  };
-}
-
-export function clearSearchResults() {
-  return dispatch => {
-    dispatch({ type: ActionTypes.CLEAR_SEARCH_RESULTS_LIST });
-  };
-}
-
 export function removeTag(tagId) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });

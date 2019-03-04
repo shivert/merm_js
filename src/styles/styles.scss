@@ -254,8 +254,27 @@ tr.drop-over-upward td {
   cursor: pointer;
 }
 
+.fixed-row {
+  background: #F9F9F9;
+}
+
+tr.fixed-row td.column-name {
+  padding-left: 28px;
+}
+
 .editable-row:hover .editable-cell-value-wrap {
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   padding: 4px 11px;
+}
+
+th.column-rank,
+td.column-rank,
+th.column-action,
+td.column-action {
+  text-align: center !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #E8E8E8 !important;
 }
