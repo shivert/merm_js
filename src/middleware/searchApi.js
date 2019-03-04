@@ -23,3 +23,7 @@ export function search(query) {
     }
   });
 }
+
+export function loadDashboard() {
+  return authClient.get("/search");
+}

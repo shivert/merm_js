@@ -42,6 +42,41 @@ export function autoComplete(query) {
   };
 }
 
+export function getDashboardMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.loadDashboard().then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_MERM_LIST,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to add Merm Comment",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function clearDashboardMerms() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_MERM_LIST });
+  };
+}
+
+
 export function searchMerms(queryString) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });

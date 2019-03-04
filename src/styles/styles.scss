@@ -201,7 +201,6 @@ div.search-results-container .merm-card-outer {
   margin-right: inherit !important;
 }
 
-<<<<<<< HEAD
 div.overview-edit-container p {
   display: inline-block;
   padding-right: 8px;
@@ -223,11 +222,6 @@ div.overview-edit-container {
 
 div.edit-form-entry {
   flex: 1;
-}
-
-.edit-category-button.ant-btn {
-  position: absolute;
-  right: 50px;
 }
 
 .dashboard-collapse .ant-collapse-header{
@@ -350,4 +344,10 @@ div.source-question{
 
 div.tag-question{
   margin-bottom: 20px;
+}
+
+div.dashboard-button-container {
+  position: relative;
+  left: calc(100% - 165px);
+  width: fit-content;
 }
