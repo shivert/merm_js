@@ -88,55 +88,6 @@ export function createMerm(fields) {
   return client.rawRequest(query, variables);
 }
 
-export function getMerms() {
-  const query = `
-  query {
-    dashboardMerms {
-      suggested {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-      favorites {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-      unread {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-    }
-  }`;
-
-  return authClient.rawRequest(query);
-}
-
 export function getMerm(mermId) {
   const query = `
   query {
@@ -149,11 +100,16 @@ export function getMerm(mermId) {
       resourceUrl
       description
       capturedText
+      contentType
       lastAccessed
       createdAt
       updatedAt
       sharedWith {
         id  
+        name
+      }
+      category {
+        id
         name
       }
       owner {
@@ -182,8 +138,8 @@ export function getMerm(mermId) {
 
 export function favoriteMerm(mermId, favorite) {
   const query = `
-    mutation favoriteMerm($id: ID!, $merm: EditMermInputType!) {
-      editMerm(id: $id, merm: $merm) {
+    mutation favoriteMerm($id: ID!, $merm: FavoriteMermInputType!) {
+      favoriteMerm(id: $id, merm: $merm) {
         id
         name
         source
@@ -192,6 +148,7 @@ export function favoriteMerm(mermId, favorite) {
         resourceUrl
         description
         capturedText
+        contentType
         lastAccessed
         createdAt
         updatedAt
@@ -212,18 +169,13 @@ export function favoriteMerm(mermId, favorite) {
           id  
           name
         }
-        tags {
+        category {
           id
           name
         }
-        comments {
-          content
-          author {
-            id
-            name
-          }
-          createdAt
-          updatedAt
+        tags {
+          id
+          name
         }
       }
     }`;
@@ -312,6 +264,10 @@ export function editMerm(mermId, fields) {
           updatedAt
         }
         sharedWith {
+          id  
+          name
+        }
+        category {
           id  
           name
         }

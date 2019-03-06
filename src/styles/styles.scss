@@ -68,9 +68,12 @@ div.ant-card-body {
 }
 
 div.merm-card-outer {
-  width: 100%;
-  height: 100%;
+  width: 280px;
   text-align: left;
+}
+
+li.alice-carousel__stage-item {
+  text-align: center;
 }
 
 div.merm-card-outer > div.ant-card-body {
@@ -84,7 +87,7 @@ div.merm-card-inner {
 
 div.merm-card-inner > div.ant-card-body {
   padding: 4px 0 !important;
-  height: 31px !important;
+  height: 28px !important;
   overflow: hidden;
 }
 
@@ -155,13 +158,14 @@ button.favorite-button {
   border: 1px dashed #e9e9e9;
   border-radius: 6px;
   background-color: #fafafa;
-  min-height: 200px;
+  min-height: 140px;
   text-align: center;
-  padding-top: 80px;
+  padding-top: 30px;
 }
 
 .steps-action {
   margin-top: 10px;
+  height: 22px;
 }
 
 .ant-steps-item {
@@ -354,4 +358,14 @@ div.dashboard-button-container {
 
 .search-result-row > div {
   margin-bottom: 20px;
+}
+
+.cover-icon-container {
+  width: 100%;
+  background: #d9d9d9;
+  text-align: center;
+}
+
+.cover-icon {
+  margin: 20px auto;
 }

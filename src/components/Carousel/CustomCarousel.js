@@ -200,6 +200,7 @@ export default class CustomCarousel extends React.PureComponent {
       // prevent invalid values from being used
       slidesToShow: slidesToShow > 0 ? slidesToShow : 1,
       slidesToScroll: slidesToScroll > 0 ? slidesToScroll : 1,
+      fadeOutAnimation: true,
       prevArrow: (
         <Arrow
           isHidden={isPrevArrowHidden}

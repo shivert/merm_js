@@ -7,7 +7,7 @@ import CategoryQuestion from "./questions/CategoryQuestion";
 import OwnerQuestion from "./questions/OwnerQuestion";
 import AccessDateQuestion from "./questions/AccessDateQuestion";
 import TagQuestion from "./questions/TagQuestion";
-import SourceQuestion from "./questions/SourceQuestion"
+import SourceQuestion from "./questions/SourceQuestion";
 
 const steps = [
   {
@@ -72,17 +72,22 @@ class AdvancedSearch extends React.Component {
         <div className="steps-content">{steps[current].content}</div>
         <div className="steps-action">
           {current > 0 && (
-            <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+            <Button style={{ float: "left" }} onClick={() => this.prev()}>
               Previous
             </Button>
           )}
           {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => this.next()}>
+            <Button
+              style={{ float: "right" }}
+              type="primary"
+              onClick={() => this.next()}
+            >
               Next
             </Button>
           )}
           {current === steps.length - 1 && (
             <Button
+              style={{ float: "right" }}
               type="primary"
               onClick={() => message.success("Processing complete!")}
             >
@@ -95,7 +100,6 @@ class AdvancedSearch extends React.Component {
   }
 }
 
-AdvancedSearch.propTypes = {
-};
+AdvancedSearch.propTypes = {};
 
 export default AdvancedSearch;

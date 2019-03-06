@@ -26,6 +26,8 @@ const mapFetchResponse = data => data.merm;
 
 const mapEditResponse = data => data.editMerm;
 
+const mapFavResponse = data => data.favoriteMerm;
+
 const mapCommentResponse = (state, data) => {
   const updatedComments = {
     comments: state.comments.concat(data["addComment"])
@@ -55,6 +57,8 @@ export default function detailedMerm(state = initialState, action) {
       return mapFetchResponse(action.value);
     case ActionTypes.UPDATE_EDIT_DETAILED_MERM:
       return mapEditResponse(action.value);
+    case ActionTypes.UPDATE_FAV_DETAILED_MERM:
+      return mapFavResponse(action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_COMMENTS:
       return mapCommentResponse(state, action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_TAGS:

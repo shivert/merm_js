@@ -5,6 +5,7 @@ import { Button, Tabs, Icon } from "antd";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
 import { history } from "../../store/configureStore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Overview from "./Overview";
 import OverviewOwner from "./OverviewOwner";
@@ -50,14 +51,19 @@ class DetailedMermView extends React.Component {
 
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
-    const { name, resourceUrl, favorite } = this.props.detailedMerm;
+    const { name, resourceUrl, favorite, contentType } = this.props.detailedMerm;
     const isOwner =
       this.props.detailedMerm.owner.id === this.props.userObject.id;
     return (
       <div>
         <div className="detailed-merm-header">
           <div style={{ float: "left", marginLeft: "15px" }}>
-            <Button type="primary" shape="circle" icon="medium" size="large" />
+            <FontAwesomeIcon
+              icon={["fab", contentType]}
+              className={contentType}
+              size="3x"
+              style={{marginBottom: '-8px'}}
+            />
             <h1>{this.state.title === "" ? name : this.state.title}</h1>
             <Button
               className="favorite-button"

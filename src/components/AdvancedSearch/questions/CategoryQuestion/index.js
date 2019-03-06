@@ -9,42 +9,41 @@ function handleChange(value) {
 }
 
 function handleBlur() {
-  console.log('blur');
+  console.log("blur");
 }
 
 function handleFocus() {
-  console.log('focus');
+  console.log("focus");
 }
 
 class CategoryQuestion extends React.Component {
   render() {
     return (
       <>
-      <div className="category-question">
-        What is the content type?
-      </div>
+        <div className="category-question">What is the category?</div>
 
-      <Select
-      showSearch
-      style={{ width: 200 }}
-      placeholder="Select a category"
-      optionFilterProp="children"
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-    >
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="tom">Tom</Option>
-    </Select>
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Select a category"
+          optionFilterProp="children"
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
+            0
+          }
+        >
+          <Option value="jack">Jack</Option>
+          <Option value="lucy">Lucy</Option>
+          <Option value="tom">Tom</Option>
+        </Select>
       </>
     );
-    
   }
 }
 
-CategoryQuestion.propTypes = {
-};
+CategoryQuestion.propTypes = {};
 
 export default CategoryQuestion;

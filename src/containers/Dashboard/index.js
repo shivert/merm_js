@@ -1,6 +1,6 @@
 import React from "react";
 import MermCard from "../../components/MermCard/";
-import { Collapse, Row, Icon } from "antd";
+import { Collapse, Row, Icon, Empty } from "antd";
 import MermCardCarousel from "../../components/Carousel/MermCardCarousel";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -14,7 +14,6 @@ const Panel = Collapse.Panel;
 
 const customPanelStyle = {
   borderRadius: 4,
-  marginBottom: 24,
   border: 0,
   overflow: "hidden",
   textAlign: "left"
@@ -36,10 +35,6 @@ class Dashboard extends React.Component {
     this.props.categoryActions.clearCategories();
     this.props.mermActions.clearDashboardMerms();
   }
-
-  getMerms = () => {
-    this.props.mermActions.getDashboardMerms();
-  };
 
   showModal = () => {
     this.setState({
@@ -85,7 +80,9 @@ class Dashboard extends React.Component {
             </div>
             <Collapse
               bordered={false}
-              defaultActiveKey={["0", "1", "2", "3"]}
+              defaultActiveKey={this.props.categories.map(
+                (category, idx) => `${idx}`
+              )}
               className="dashboard-collapse"
               style={{ marginTop: "-32px" }}
             >
@@ -96,26 +93,27 @@ class Dashboard extends React.Component {
                   style={customPanelStyle}
                 >
                   <Row gutter={16}>
-                    <MermCardCarousel
-                      items={this.findMermsByCategory(category.id).map(merm => (
-                        <MermCard
-                          id={merm.id}
-                          key={merm.id}
-                          title={merm.name}
-                          lastAccessed={merm.lastAccessed}
-                          sharedTime="Jan 12, 2018"
-                          owner={`${merm.user.firstName} ${merm.user.lastName}`}
-                          sharer="Veryvery long named Person"
-                          cover={
-                            <img
-                              alt="example"
-                              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    {this.findMermsByCategory(category.id).length === 0 ? (
+                      <Empty description={`No Merms in ${category.name}!`} />
+                    ) : (
+                      <MermCardCarousel
+                        items={this.findMermsByCategory(category.id).map(
+                          merm => (
+                            <MermCard
+                              id={merm.id}
+                              key={merm.id}
+                              title={merm.name}
+                              lastAccessed={merm.last_accessed}
+                              owner={`${merm.user.first_name} ${
+                                merm.user.last_name
+                              }`}
+                              contentType={merm.content_type}
+                              tags={merm.tags}
                             />
-                          }
-                          tags={merm.tags}
-                        />
-                      ))}
-                    />
+                          )
+                        )}
+                      />
+                    )}
                   </Row>
                 </Panel>
               ))}
