@@ -13,17 +13,27 @@ import {
   Input,
   Icon,
   Select,
-  Form
+  Form,
+  Button
 } from "antd";
 
 class OverviewOwner extends React.Component {
   state = {
     inputVisible: false,
-    inputValue: ""
+    inputValue: "",
+    isEditingSharing: false,
+    sharedWith: []
   };
+
+  sharingInput = React.createRef();
 
   componentDidMount() {
     this.props.onRef(this);
+    const { sharedWith } = this.props.detailedMerm;
+    this.setState({
+      sharedWith:
+        sharedWith.length !== 0 ? sharedWith.map(person => person.name) : []
+    });
   }
 
   componentWillUnmount() {
@@ -41,6 +51,8 @@ class OverviewOwner extends React.Component {
   handleInputChange = e => {
     this.setState({ inputValue: e.target.value });
   };
+
+  saveSharingInputRef = input => (this.sharingInput = input);
 
   handleInputConfirm = () => {
     this.setState({
@@ -61,7 +73,7 @@ class OverviewOwner extends React.Component {
       }
     });
   }
-  updateTitle = (e) => {
+  updateTitle = e => {
     this.props.updateTitle(e.target.value);
   };
 
@@ -89,6 +101,7 @@ class OverviewOwner extends React.Component {
     const editMode = this.props.editMode;
 
     const { loading } = this.props.requestStatus;
+
     return loading === true ? (
       <Icon
         type="loading"
@@ -118,7 +131,7 @@ class OverviewOwner extends React.Component {
                           }
                         ],
                         initialValue: name
-                      })(<Input onChange={this.updateTitle}/>)}
+                      })(<Input onChange={this.updateTitle} />)}
                     </Form.Item>
                   </div>
                 ) : (
@@ -135,26 +148,26 @@ class OverviewOwner extends React.Component {
                       <b>Category:</b>
                     </Form.Item>
                     {/*<Form.Item>*/}
-                      {/*{getFieldDecorator("category", {*/}
-                        {/*initialValue: category*/}
-                      {/*})(*/}
-                        {/*<Select*/}
-                          {/*dropdownRender={menu => (*/}
-                            {/*<div>*/}
-                              {/*{menu}*/}
-                              {/*<Divider style={{ margin: "4px 0" }} />*/}
-                              {/*<div*/}
-                                {/*style={{ padding: "8px", cursor: "pointer" }}*/}
-                              {/*>*/}
-                                {/*<Icon type="plus" /> Add item*/}
-                              {/*</div>*/}
-                            {/*</div>*/}
-                          {/*)}*/}
-                        {/*>*/}
-                          {/*<Option value="abc">abc</Option>*/}
-                          {/*<Option value="def">def</Option>*/}
-                        {/*</Select>*/}
-                      {/*)}*/}
+                    {/*{getFieldDecorator("category", {*/}
+                    {/*initialValue: category*/}
+                    {/*})(*/}
+                    {/*<Select*/}
+                    {/*dropdownRender={menu => (*/}
+                    {/*<div>*/}
+                    {/*{menu}*/}
+                    {/*<Divider style={{ margin: "4px 0" }} />*/}
+                    {/*<div*/}
+                    {/*style={{ padding: "8px", cursor: "pointer" }}*/}
+                    {/*>*/}
+                    {/*<Icon type="plus" /> Add item*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
+                    {/*)}*/}
+                    {/*>*/}
+                    {/*<Option value="abc">abc</Option>*/}
+                    {/*<Option value="def">def</Option>*/}
+                    {/*</Select>*/}
+                    {/*)}*/}
                     {/*</Form.Item>*/}
                   </div>
                 ) : (
@@ -278,16 +291,56 @@ class OverviewOwner extends React.Component {
                 </p>
                 <p>
                   <b>Shared With:</b>
+                  <span style={{ margin: "0px 12px" }}>
+                    <Button
+                      onClick={() => {
+                        if (this.state.isEditingSharing) {
+                          // do something
+                        }
+                        this.setState({
+                          isEditingSharing: !this.state.isEditingSharing
+                        });
+                      }}
+                      type="primary"
+                      shape="circle"
+                      icon={this.state.isEditingSharing ? "check" : "edit"}
+                      size="small"
+                    />
+                  </span>
                 </p>
-                <div className="shared-with">
-                  {sharedWith.length !== 0
-                    ? sharedWith.map(person => (
-                        <p key={person.name}>
-                          <Avatar icon="user" /> {person.name}
-                        </p>
-                      ))
-                    : ""}
-                </div>
+                {this.state.isEditingSharing ? (
+                  <div className="shared-with">
+                    <Select
+                      ref={this.saveSharingInputRef}
+                      mode="tags"
+                      placeholder="Tags"
+                      value={this.state.sharedWith}
+                      onChange={value => {
+                        console.log(value);
+                        this.setState({ sharedWith: value });
+                      }}
+                    >
+                      {sharedWith.length !== 0
+                        ? sharedWith.map(person => (
+                            <Option key={person.name}>
+                              <Icon type="user" />
+                              {person.name}
+                            </Option>
+                          ))
+                        : ""}
+                    </Select>
+                  </div>
+                ) : (
+                  <div className="shared-with">
+                    {sharedWith.length !== 0
+                      ? sharedWith.map(person => (
+                          <p key={person.name}>
+                            <Avatar icon="user" /> {person.name}
+                          </p>
+                        ))
+                      : ""}
+                  </div>
+                )}
               </div>
               <Divider orientation="left">Dates</Divider>
               <div className="merm-overview-container">
