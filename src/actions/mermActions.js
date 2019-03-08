@@ -258,7 +258,7 @@ export function getTags() {
           value: {
             show: true,
             type: "Error",
-            message: "Unable fetch Categories",
+            message: "Unable fetch tags!",
             description: "Something is broken!"
           }
         });

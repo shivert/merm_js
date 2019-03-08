@@ -56,26 +56,6 @@ class OverviewOwner extends React.Component {
     });
   };
 
-  handleChange = value => {
-    console.log(`selected ${value}`);
-  };
-
-  handleBlur = () => {
-    console.log("blur");
-  };
-
-  handleFocus = () => {
-    console.log("focus");
-  };
-
-  confirm = e => {
-    console.log(e);
-  };
-
-  cancel = e => {
-    console.log(e);
-  };
-
   onSubmit() {
     const id = this.props.detailedMerm.id;
     this.props.form.validateFields((err, values) => {
@@ -167,9 +147,6 @@ class OverviewOwner extends React.Component {
                           style={{ width: 200 }}
                           placeholder="No category selected!"
                           optionFilterProp="children"
-                          onChange={this.handleChange}
-                          onFocus={this.handleFocus}
-                          onBlur={this.handleBlur}
                           filterOption={(input, option) =>
                             option.props.children
                               .toLowerCase()
