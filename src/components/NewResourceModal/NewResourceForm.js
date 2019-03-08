@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Select } from "antd";
+import PropTypes from "prop-types";
 
 export default class NewResourceForm extends React.PureComponent {
   handleSubmit = e => {
@@ -33,9 +34,13 @@ export default class NewResourceForm extends React.PureComponent {
         </Form.Item>
         <div>Category</div>
         <Form.Item>
-          {getFieldDecorator("category")(
+          {getFieldDecorator("categoryId")(
             <Select>
-              <Select.Option value="test">test</Select.Option>
+              {this.props.categories.map(category => (
+                <Select.Option key={category.id} value={Number(category.id)}>
+                  {category.name}
+                </Select.Option>
+              ))}
             </Select>
           )}
         </Form.Item>
@@ -49,7 +54,11 @@ export default class NewResourceForm extends React.PureComponent {
         <Form.Item>
           {getFieldDecorator("tags")(
             <Select mode="tags" placeholder="Tags">
-              <Select.Option value="test">test</Select.Option>
+              {this.props.tags.map(tag => (
+                <Select.Option key={tag.id} value={tag.name}>
+                  {tag.name}
+                </Select.Option>
+              ))}
             </Select>
           )}
         </Form.Item>
@@ -57,3 +66,8 @@ export default class NewResourceForm extends React.PureComponent {
     );
   }
 }
+
+NewResourceForm.propTypes = {
+  categories: PropTypes.array.isRequired,
+  tags: PropTypes.array.isRequired
+};

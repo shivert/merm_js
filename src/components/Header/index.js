@@ -51,6 +51,7 @@ class CustomHeader extends React.Component {
   handleOk = fields => {
     this.setState({ loading: true });
     this.props.mermActions.createMerm(fields, () => {
+      this.props.searchActions.getDashboardMerms();
       this.setState({ loading: false, visible: false });
     });
   };

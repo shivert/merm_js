@@ -1,50 +1,68 @@
 import React from "react";
-import { Button, Modal, Select } from "antd";
+import { Select } from "antd";
+import { connect } from "react-redux";
+import * as mermActions from "../../../../actions/mermActions";
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 
 const Option = Select.Option;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
-function handleBlur() {
-  console.log('blur');
-}
-
-function handleFocus() {
-  console.log('focus');
-}
-
 class OwnerQuestion extends React.Component {
+  componentDidMount() {
+    this.props.mermActions.getUsers();
+  }
+
+  handleChange = userId => {
+    this.props.next("owner", userId);
+  };
+
   render() {
     return (
       <>
-      <div className="owner-question">
-        Who is the owner?
-      </div>
+        <div className="category-question">Who is the owner of the merm?</div>
 
-      <Select
-      showSearch
-      style={{ width: 200 }}
-      placeholder="Select a person"
-      optionFilterProp="children"
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-    >
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="tom">Tom</Option>
-    </Select>
-    </>
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Select a user"
+          defaultValue={this.props.value}
+          onChange={this.handleChange}
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
+            0
+          }
+        >
+          {this.props.users.map(user => (
+            <Option key={user.id} value={Number(user.id)}>
+              {user.name}
+            </Option>
+          ))}
+        </Select>
+      </>
     );
   }
 }
 
 OwnerQuestion.propTypes = {
-
+  value: PropTypes.number.isRequired,
+  next: PropTypes.func.isRequired,
+  mermActions: PropTypes.object.isRequired,
+  users: PropTypes.array.isRequired
 };
 
-export default OwnerQuestion;
+function mapStateToProps(state) {
+  return {
+    users: state.users
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    mermActions: bindActionCreators(mermActions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OwnerQuestion);

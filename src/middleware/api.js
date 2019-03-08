@@ -75,17 +75,14 @@ export function createMerm(fields) {
     }
   `;
 
-  const variables = {
-    mermDetails: {
-      name: fields.name,
-      capturedText: fields.capturedText,
-      description: fields.description,
-      resourceUrl: fields.resourceUrl,
-      tags: fields.tags
-    }
+  const mermDetails = {
+    ...fields,
+    source: "merm.io"
   };
 
-  return client.rawRequest(query, variables);
+  const variables = { mermDetails };
+
+  return authClient.rawRequest(query, variables);
 }
 
 export function getMerm(mermId) {
@@ -324,4 +321,28 @@ export function updateCategories(categories) {
     }`;
   const variables = { data: { categories } };
   return authClient.rawRequest(query, variables);
+}
+
+export function getUsers() {
+  const query = `
+  query {
+    users {
+      id
+      name
+    }
+  }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function getTags() {
+  const query = `
+  query {
+    tags {
+      id
+      name
+    }
+  }`;
+
+  return authClient.rawRequest(query);
 }

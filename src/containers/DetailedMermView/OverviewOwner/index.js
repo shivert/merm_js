@@ -14,9 +14,7 @@ import {
   Input,
   Icon,
   Select,
-  Form,
-  Button,
-  Popconfirm
+  Form
 } from "antd";
 
 class OverviewOwner extends React.Component {
@@ -27,7 +25,6 @@ class OverviewOwner extends React.Component {
 
   componentDidMount() {
     this.props.onRef(this);
-    this.props.categoryActions.getCategories();
   }
 
   componentWillUnmount() {
@@ -37,7 +34,9 @@ class OverviewOwner extends React.Component {
   removeTag = tagId => {
     this.props.mermActions.removeTag(tagId);
   };
+
   showInput = () => {
+    this.props.categoryActions.getCategories();
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
@@ -178,7 +177,9 @@ class OverviewOwner extends React.Component {
                           }
                         >
                           {this.props.categories.map(category => (
-                            <Option key={category.id} value={category.id}>{category.name}</Option>
+                            <Option key={category.id} value={category.id}>
+                              {category.name}
+                            </Option>
                           ))}
                         </Select>
                       )}
