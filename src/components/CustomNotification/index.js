@@ -18,11 +18,19 @@ class CustomNotification extends React.Component {
 
   checkForNotification = props => {
     if (props.notification.show) {
-      notification["error"]({
-        message: props.notification.message,
-        duration: 7,
-        description: props.notification.description
-      });
+      if (props.notification.type === "Success") {
+        notification["success"]({
+          message: props.notification.message,
+          duration: 7,
+          description: props.notification.description
+        });
+      } else {
+        notification["error"]({
+          message: props.notification.message,
+          duration: 7,
+          description: props.notification.description
+        });
+      }
     } else {
       notification.destroy();
     }

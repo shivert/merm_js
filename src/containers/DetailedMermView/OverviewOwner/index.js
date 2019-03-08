@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
-import * as actions from "../../../actions/mermActions";
+import * as mermActions from "../../../actions/mermActions";
+import * as categoryActions from "../../../actions/categoryActions";
 import {
   Row,
   Col,
@@ -31,9 +32,11 @@ class OverviewOwner extends React.Component {
   }
 
   removeTag = tagId => {
-    this.props.actions.removeTag(tagId);
+    this.props.mermActions.removeTag(tagId);
   };
+
   showInput = () => {
+    this.props.categoryActions.getCategories();
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
@@ -47,7 +50,7 @@ class OverviewOwner extends React.Component {
       inputVisible: false,
       inputValue: ""
     });
-    this.props.actions.addTag({
+    this.props.mermActions.addTag({
       name: this.state.inputValue,
       merm_id: this.props.detailedMerm.id
     });
@@ -57,11 +60,11 @@ class OverviewOwner extends React.Component {
     const id = this.props.detailedMerm.id;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.actions.editMerm(id, values);
+        this.props.mermActions.editMerm(id, values);
       }
     });
   }
-  updateTitle = (e) => {
+  updateTitle = e => {
     this.props.updateTitle(e.target.value);
   };
 
@@ -118,7 +121,7 @@ class OverviewOwner extends React.Component {
                           }
                         ],
                         initialValue: name
-                      })(<Input onChange={this.updateTitle}/>)}
+                      })(<Input onChange={this.updateTitle} />)}
                     </Form.Item>
                   </div>
                 ) : (
@@ -134,33 +137,35 @@ class OverviewOwner extends React.Component {
                     <Form.Item>
                       <b>Category:</b>
                     </Form.Item>
-                    {/*<Form.Item>*/}
-                      {/*{getFieldDecorator("category", {*/}
-                        {/*initialValue: category*/}
-                      {/*})(*/}
-                        {/*<Select*/}
-                          {/*dropdownRender={menu => (*/}
-                            {/*<div>*/}
-                              {/*{menu}*/}
-                              {/*<Divider style={{ margin: "4px 0" }} />*/}
-                              {/*<div*/}
-                                {/*style={{ padding: "8px", cursor: "pointer" }}*/}
-                              {/*>*/}
-                                {/*<Icon type="plus" /> Add item*/}
-                              {/*</div>*/}
-                            {/*</div>*/}
-                          {/*)}*/}
-                        {/*>*/}
-                          {/*<Option value="abc">abc</Option>*/}
-                          {/*<Option value="def">def</Option>*/}
-                        {/*</Select>*/}
-                      {/*)}*/}
-                    {/*</Form.Item>*/}
+                    <Form.Item>
+                      {getFieldDecorator("categoryId", {
+                        initialValue: category.id
+                      })(
+                        <Select
+                          showSearch
+                          allowClear={true}
+                          style={{ width: 200 }}
+                          placeholder="No category selected!"
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.props.children
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {this.props.categories.map(category => (
+                            <Option key={category.id} value={category.id}>
+                              {category.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
                   </div>
                 ) : (
                   <p>
                     <b>Category: </b>
-                    {category == null ? "None" : category}
+                    {category == null ? "None" : category.name}
                   </p>
                 )}
                 {editMode ? (
@@ -321,8 +326,10 @@ class OverviewOwner extends React.Component {
 }
 
 OverviewOwner.propTypes = {
-  actions: PropTypes.object.isRequired,
+  mermActions: PropTypes.object.isRequired,
+  categoryActions: PropTypes.object.isRequired,
   detailedMerm: PropTypes.object.isRequired,
+  categories: PropTypes.array.isRequired,
   userObject: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired,
   updateTitle: PropTypes.func.isRequired
@@ -331,6 +338,7 @@ OverviewOwner.propTypes = {
 function mapStateToProps(state) {
   return {
     detailedMerm: state.detailedMerm,
+    categories: state.categories,
     userObject: state.userObject,
     requestStatus: state.requestStatus
   };
@@ -338,7 +346,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    mermActions: bindActionCreators(mermActions, dispatch),
+    categoryActions: bindActionCreators(categoryActions, dispatch)
   };
 }
 

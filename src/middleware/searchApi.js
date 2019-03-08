@@ -24,6 +24,12 @@ export function search(query) {
   });
 }
 
+export function advancedSearch(params) {
+  return authClient.get("/advanced-search", {
+    params: params
+  });
+}
+
 export function loadDashboard() {
   return authClient.get("/search");
 }

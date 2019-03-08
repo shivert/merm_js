@@ -1,6 +1,5 @@
 import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
-import { history } from "../store/configureStore";
 
 export function createMerm(mermDetails, callback) {
   return dispatch => {
@@ -12,7 +11,7 @@ export function createMerm(mermDetails, callback) {
           value: {
             show: true,
             type: "Success",
-            message: "Merm created!"
+            message: `Merm created! ID: ${response.data.createMerm.id}`
           }
         });
         dispatch({ type: ActionTypes.REQUEST_SUCCESS });
@@ -29,49 +28,6 @@ export function createMerm(mermDetails, callback) {
             description: "Something is broken!"
           }
         });
-      }
-    );
-  };
-}
-
-export function getMerms() {
-  return dispatch => {
-    dispatch({ type: ActionTypes.REQUEST_INITIATED });
-
-    API.getMerms().then(
-      response => {
-        dispatch({
-          type: ActionTypes.UPDATE_MERM_LIST,
-          value: response.data
-        });
-        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
-        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
-      },
-      error => {
-        if (error["response"].errors[0].message == "User not signed in") {
-          dispatch({ type: ActionTypes.CLEAR_USER_OBJECT });
-          history.push("/login");
-          dispatch({
-            type: ActionTypes.SHOW_NOTIFICATION,
-            value: {
-              show: true,
-              type: "Error",
-              message: "Not Signed It!",
-              description:
-                "Looks like your token has expired, please sign in again!"
-            }
-          });
-        } else {
-          dispatch({
-            type: ActionTypes.SHOW_NOTIFICATION,
-            value: {
-              show: true,
-              type: "Error",
-              message: "Unable fetch Merms",
-              description: "Something is broken!"
-            }
-          });
-        }
       }
     );
   };
@@ -119,12 +75,10 @@ export function clearDetailedMerm() {
 
 export function favoriteMerm(mermId, favorite) {
   return dispatch => {
-    dispatch({ type: ActionTypes.REQUEST_INITIATED });
-
     API.favoriteMerm(mermId, favorite).then(
       response => {
         dispatch({
-          type: ActionTypes.UPDATE_EDIT_DETAILED_MERM,
+          type: ActionTypes.UPDATE_FAV_DETAILED_MERM,
           value: response.data
         });
         dispatch({ type: ActionTypes.REQUEST_SUCCESS });
@@ -256,3 +210,66 @@ export function editMerm(mermId, fields) {
     );
   };
 }
+
+export function getUsers() {
+  return dispatch => {
+
+    API.getUsers().then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_USER_LIST,
+          value: response.data
+        });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch Categories",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function clearUsers() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_USER_LIST });
+  };
+}
+
+export function getTags() {
+  return dispatch => {
+
+    API.getTags().then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_TAG_LIST,
+          value: response.data
+        });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch tags!",
+            description: "Something is broken!"
+          }
+        });
+      }
+    );
+  };
+}
+
+export function clearTags() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.CLEAR_TAG_LIST });
+  };
+}
+

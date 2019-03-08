@@ -4,6 +4,8 @@ import notification from "./notification";
 import userObject from "./userObject";
 import categories from "./categories";
 import merms from "./merms";
+import users from "./users";
+import tags from "./tags";
 import updateCategoryStatus from "./updateCategoryStatus";
 import searchResults from "./searchResults";
 import autocompleteResults from "./autocompleteResults";
@@ -22,6 +24,8 @@ const rootReducer = combineReducers({
   updateCategoryStatus,
   autocompleteResults,
   merms,
+  users,
+  tags,
   favourites,
   recent,
   router: connectRouter(history)

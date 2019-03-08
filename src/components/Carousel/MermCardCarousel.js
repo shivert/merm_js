@@ -37,24 +37,41 @@ export default class MermCardCarousel extends React.Component {
 
   slideNextPage = e => {
     e.preventDefault();
+    if (!this.state.isNextArrowDisabled) {
+      const length = this.props.items.length;
 
-    const length = this.props.items.length;
+      if (this.state.currentIndex > length - 1) return;
 
-    if (this.state.currentIndex > length - 1) return;
-
-    const { itemsInSlide } = this.state;
-    let currentIndex = this.state.currentIndex + itemsInSlide;
-    if (currentIndex > length - 1) currentIndex = length - 1;
-    this.setState({
-      currentIndex,
-      isNextArrowDisabled: currentIndex === length - 1,
-      isPrevArrowDisabled: currentIndex === 0
-    });
+      const { itemsInSlide } = this.state;
+      let currentIndex = this.state.currentIndex + itemsInSlide;
+      if (currentIndex > length - 1) currentIndex = length - 1;
+      this.setState({
+        currentIndex,
+        isNextArrowDisabled: currentIndex === length - 1,
+        isPrevArrowDisabled: currentIndex === 0
+      });
+    }
   };
 
   handleOnSlideChange = event => {
     const { itemsInSlide, item } = event;
     this.setState({ itemsInSlide, currentIndex: item });
+  };
+
+  getItems = () => {
+    const items = this.props.items;
+    const mermLength = items.length;
+    const threshold = 4;
+
+    if (mermLength < threshold) {
+      this.setState({ isNextArrowDisabled: true });
+
+      for (let i = 0; i < threshold - mermLength; i++) {
+        items.push(<div style={{ width: "310px" }} />);
+      }
+    }
+
+    return items;
   };
 
   render() {
@@ -64,7 +81,6 @@ export default class MermCardCarousel extends React.Component {
       isPrevArrowDisabled,
       isNextArrowDisabled
     } = this.state;
-    const { items } = this.props;
 
     return (
       <>
@@ -78,9 +94,10 @@ export default class MermCardCarousel extends React.Component {
             buttonsDisabled
             responsive={responsive}
             slideToIndex={currentIndex}
+            fadeOutAnimation={true}
             dotsDisabled
             infinite={false}
-            items={items}
+            items={this.getItems()}
             onInitialized={this.handleOnSlideChange}
             onResized={this.handleOnSlideChange}
           />

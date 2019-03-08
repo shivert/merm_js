@@ -8,7 +8,7 @@ export function getInitialState() {
 const initialState = getInitialState();
 
 const mapData = data =>
-  groupBy(data.results.map(merm => merm._source), merm => merm.category.id);
+  groupBy(data.results.map(merm => merm._source), merm => merm.category_id);
 
 export default function merms(state = initialState, action) {
   switch (action.type) {

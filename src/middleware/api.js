@@ -75,66 +75,14 @@ export function createMerm(fields) {
     }
   `;
 
-  const variables = {
-    mermDetails: {
-      name: fields.name,
-      capturedText: fields.capturedText,
-      description: fields.description,
-      resourceUrl: fields.resourceUrl,
-      tags: fields.tags
-    }
+  const mermDetails = {
+    ...fields,
+    source: "merm.io"
   };
 
-  return client.rawRequest(query, variables);
-}
+  const variables = { mermDetails };
 
-export function getMerms() {
-  const query = `
-  query {
-    dashboardMerms {
-      suggested {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-      favorites {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-      unread {
-        id
-        name
-        lastAccessed
-        owner {
-          firstName
-          lastName
-        }
-        tags {
-          id
-          name
-        }
-      }
-    }
-  }`;
-
-  return authClient.rawRequest(query);
+  return authClient.rawRequest(query, variables);
 }
 
 export function getMerm(mermId) {
@@ -149,11 +97,16 @@ export function getMerm(mermId) {
       resourceUrl
       description
       capturedText
+      contentType
       lastAccessed
       createdAt
       updatedAt
       sharedWith {
         id  
+        name
+      }
+      category {
+        id
         name
       }
       owner {
@@ -182,8 +135,8 @@ export function getMerm(mermId) {
 
 export function favoriteMerm(mermId, favorite) {
   const query = `
-    mutation favoriteMerm($id: ID!, $merm: EditMermInputType!) {
-      editMerm(id: $id, merm: $merm) {
+    mutation favoriteMerm($id: ID!, $merm: FavoriteMermInputType!) {
+      favoriteMerm(id: $id, merm: $merm) {
         id
         name
         source
@@ -192,6 +145,7 @@ export function favoriteMerm(mermId, favorite) {
         resourceUrl
         description
         capturedText
+        contentType
         lastAccessed
         createdAt
         updatedAt
@@ -212,18 +166,13 @@ export function favoriteMerm(mermId, favorite) {
           id  
           name
         }
-        tags {
+        category {
           id
           name
         }
-        comments {
-          content
-          author {
-            id
-            name
-          }
-          createdAt
-          updatedAt
+        tags {
+          id
+          name
         }
       }
     }`;
@@ -315,6 +264,10 @@ export function editMerm(mermId, fields) {
           id  
           name
         }
+        category {
+          id  
+          name
+        }
         owner {
           id  
           name
@@ -368,4 +321,28 @@ export function updateCategories(categories) {
     }`;
   const variables = { data: { categories } };
   return authClient.rawRequest(query, variables);
+}
+
+export function getUsers() {
+  const query = `
+  query {
+    users {
+      id
+      name
+    }
+  }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function getTags() {
+  const query = `
+  query {
+    tags {
+      id
+      name
+    }
+  }`;
+
+  return authClient.rawRequest(query);
 }

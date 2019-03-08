@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/mermActions";
-import { Row, Col, Divider, Tag, Avatar, Form } from "antd";
+import { Row, Col, Divider, Tag, Avatar } from "antd";
 class Overview extends React.Component {
   constructor(props) {
     super(props);

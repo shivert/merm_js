@@ -8,6 +8,8 @@ import {
   faArrowAltCircleRight
 } from "@fortawesome/free-solid-svg-icons";
 
+import { fab } from "@fortawesome/free-brands-svg-icons";
+
 function initLibrary() {
   // fontawesome library initialization
   // add icons as needed
@@ -18,7 +20,8 @@ function initLibrary() {
     faComments,
     faHeart,
     faArrowAltCircleLeft,
-    faArrowAltCircleRight
+    faArrowAltCircleRight,
+    fab
   );
 }
 

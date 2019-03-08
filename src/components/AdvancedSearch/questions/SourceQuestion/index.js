@@ -1,50 +1,35 @@
 import React from "react";
-import { Button, Modal, Select } from "antd";
 import PropTypes from "prop-types";
+import { Button } from "antd";
 
-const Option = Select.Option;
-
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
-function handleBlur() {
-  console.log('blur');
-}
-
-function handleFocus() {
-  console.log('focus');
-}
+const ButtonGroup = Button.Group;
 
 class SourceQuestion extends React.Component {
+  handleClick = source => {
+    this.props.next("source", source);
+  };
+
   render() {
     return (
       <>
-      <div className="source-question">
-        What is the Source of the Resource?
-      </div>
+        <div className="source-question">
+          What is the Source of the Resource?
+        </div>
 
-      <Select
-      showSearch
-      style={{ width: 200 }}
-      placeholder="Select a source type"
-      optionFilterProp="children"
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-    >
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="tom">Tom</Option>
-    </Select>
-    </>
+        <ButtonGroup>
+          <Button onClick={() => this.handleClick("Browser Extension")}>
+            Browser Extension
+          </Button>
+          <Button onClick={() => this.handleClick("merm.io")}>merm.io</Button>
+          <Button onClick={() => this.handleClick("Slackbot")}>Slackbot</Button>
+        </ButtonGroup>
+      </>
     );
   }
 }
 
 SourceQuestion.propTypes = {
-
+  next: PropTypes.func.isRequired
 };
 
 export default SourceQuestion;

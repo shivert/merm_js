@@ -2,8 +2,16 @@ import React from "react";
 import { Button, Modal, Form } from "antd";
 import PropTypes from "prop-types";
 import NewResourceForm from "./NewResourceForm";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as actions from "../../actions/mermActions";
 
 class NewResourceModal extends React.Component {
+
+  componentDidMount() {
+    this.props.actions.getTags();
+  }
+
   render() {
     const { visible, loading } = this.props;
     const AddNewResourceForm = Form.create()(NewResourceForm);
@@ -29,7 +37,7 @@ class NewResourceModal extends React.Component {
           </Button>
         ]}
       >
-        <AddNewResourceForm onSubmitClick={this.props.handleOk} />
+        <AddNewResourceForm onSubmitClick={this.props.handleOk} categories={this.props.categories}  tags={this.props.tags} />
       </Modal>
     );
   }
@@ -42,4 +50,20 @@ NewResourceModal.propTypes = {
   handleCancel: PropTypes.func.isRequired
 };
 
-export default NewResourceModal;
+function mapStateToProps(state) {
+  return {
+    categories: state.categories,
+    tags: state.tags
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewResourceModal);

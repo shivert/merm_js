@@ -1,21 +1,13 @@
 import React from "react";
-import { Card, Tag, Icon, Tooltip } from "antd";
+import { Card, Tag } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import PropTypes from "prop-types";
 
 const { Meta } = Card;
 
-const MermCard = ({
-  id,
-  lastAccessed,
-  sharedTime,
-  owner,
-  sharer,
-  cover,
-  actions,
-  title,
-  tags
-}) => {
+const MermCard = ({ id, lastAccessed, owner, contentType, title, tags }) => {
   const mermMetaData = (
     <div style={{ padding: "0px 0px 4px" }}>
       <div>
@@ -27,10 +19,16 @@ const MermCard = ({
     </div>
   );
 
-  const tagsToShow = 2;
+  const cover = (
+    <div className="cover-icon-container">
+      <FontAwesomeIcon
+        icon={["fab", contentType]}
+        className={`cover-icon ${contentType}`}
+        size="5x"
+      />
+    </div>
+  );
 
-  const tagsVisible = tags.slice(0, tagsToShow);
-  const tagsHidden = tags.slice(tagsToShow);
   return (
     <Link to={`/merm/${id}/overview`}>
       <Card
@@ -38,27 +36,25 @@ const MermCard = ({
         className="merm-card-outer"
         bodyStyle={{ padding: "16px" }}
         cover={cover}
-        actions={actions}
       >
         <Meta title={title} description={mermMetaData} />
         <Card className="merm-card-inner">
-          {tagsVisible != null
-            ? tagsVisible.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
-            : ""}
-          <Tooltip
-            placement="bottom"
-            title={
-              tagsHidden != null
-                ? tagsHidden.map(tag => <Tag key={tag.id}>{tag.name}</Tag>)
-                : ""
-            }
-          >
-            <Icon type="ellipsis" />
-          </Tooltip>
+          {tags.map(tag => (
+            <Tag key={tag.id}>{tag.name}</Tag>
+          ))}
         </Card>
       </Card>
     </Link>
   );
+};
+
+MermCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  lastAccessed: PropTypes.string.isRequired,
+  owner: PropTypes.string.isRequired,
+  contentType: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  tags: PropTypes.array.isRequired
 };
 
 export default MermCard;

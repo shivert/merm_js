@@ -26,6 +26,16 @@ class Recent extends React.Component {
     this.props.actions.getRecMerms();
   };
 
+  addExtraCols = (numExtra = 3) => {
+    const cols = [];
+
+    for (let i = 0; i < numExtra; i++) {
+      cols.push(<Col style={{ width: "310px" }} key={100 + i} />);
+    }
+
+    return cols;
+  };
+
   render() {
     const { loading } = this.props.requestStatus;
     return loading === true ? (
@@ -41,25 +51,19 @@ class Recent extends React.Component {
         <Grid fluid>
           <Row className="search-result-row" between="xs">
             {this.props.recent.map(merm => (
-              <Col>
+              <Col key={merm.id}>
                 <MermCard
                   id={merm.id}
                   key={merm.id}
                   title={merm.name}
-                  lastAccessed={merm.lastAccessed}
-                  sharedTime="Jan 12, 2018"
-                  owner={`${merm.user.firstName} ${merm.user.lastName}`}
-                  sharer="Veryvery long named Person"
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
+                  lastAccessed={merm.last_accessed}
+                  owner={`${merm.user.first_name} ${merm.user.last_name}`}
+                  contentType={merm.content_type}
                   tags={merm.tags}
                 />
               </Col>
             ))}
+            {this.addExtraCols()}
           </Row>
         </Grid>
       </div>
