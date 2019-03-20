@@ -16,7 +16,7 @@ export function userLogIn(fields) {
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
         history.push("/dashboard");
       },
-      error => {
+      () => {
         dispatch({
           type: ActionTypes.SHOW_NOTIFICATION,
           value: {
@@ -52,7 +52,7 @@ export function userCreate(fields) {
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
         history.push("/dashboard");
       },
-      error => {
+      () => {
         dispatch({
           type: ActionTypes.SHOW_NOTIFICATION,
           value: {

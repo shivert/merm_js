@@ -1,10 +1,11 @@
 import React from "react";
-import { Icon, Button, Collapse } from "antd";
+import { Icon, Empty, Button, Collapse } from "antd";
 import MermCard from "../../components/MermCard";
 import AdvancedSearch from "../../components/AdvancedSearch";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import * as actions from "../../actions/searchActions";
+import * as mermActions from "../../actions/mermActions";
+import * as searchActions from "../../actions/searchActions";
 import { bindActionCreators } from "redux";
 import * as queryString from "query-string";
 
@@ -13,6 +14,10 @@ import { Grid, Row, Col } from "react-flexbox-grid";
 const Panel = Collapse.Panel;
 
 class SearchResults extends React.Component {
+  state = {
+    activePanel: ""
+  };
+
   componentDidMount() {
     this.searchMerms();
   }
@@ -25,7 +30,10 @@ class SearchResults extends React.Component {
 
   searchMerms = () => {
     const queryParams = queryString.parse(this.props.location.search);
-    this.props.actions.searchMerms(queryParams["q"]);
+    this.setState(
+      queryParams,
+      this.props.searchActions.searchMerms(queryParams)
+    );
   };
 
   addExtraCols = (numExtra = 3) => {
@@ -38,27 +46,32 @@ class SearchResults extends React.Component {
     return cols;
   };
 
+  logAccess = mermId => {
+    this.props.mermActions.logAccess(mermId);
+  };
+
+  onChange = e => {
+    this.setState({ activePanel: e });
+  };
+
   render() {
     const count = this.props.searchResults.length;
 
     const { loading } = this.props.requestStatus;
-    return loading === true ? (
-      <Icon
-        type="loading"
-        style={{
-          fontSize: "100px",
-          marginTop: "125px"
-        }}
-      />
-    ) : (
+    return (
       <div className="search-results-container">
-        <Collapse bordered={false} className="advanced-search-collapse">
+        <Collapse
+          bordered={false}
+          className="advanced-search-collapse"
+          activeKey={this.state.activePanel}
+          onChange={this.onChange}
+        >
           <Panel
             key="show-advanced-search"
             showArrow={false}
             header={
               <p>
-                Don't see what you're looking for? Try our{" "}
+                Don&apos;t see what you&apos;re looking for? Try our{" "}
                 <a>Advanced Search</a>!
                 <Button
                   className="close-advanced"
@@ -70,37 +83,56 @@ class SearchResults extends React.Component {
               </p>
             }
           >
-            <AdvancedSearch />
+            <AdvancedSearch query={this.state} />
           </Panel>
         </Collapse>
-        <Grid fluid>
-          <Row style={{ textAlign: "left", marginTop: "10px" }}>
-            <p>Showing {count} search results...</p>
-          </Row>
-          <Row className="search-result-row" between="xs">
-            {this.props.searchResults.map(merm => (
-              <Col key={merm.id}>
-                <MermCard
-                  id={merm.id}
-                  key={merm.id}
-                  title={merm.name}
-                  lastAccessed={merm.last_accessed}
-                  owner={`${merm.user.first_name} ${merm.user.last_name}`}
-                  contentType={merm.content_type}
-                  tags={merm.tags}
-                />
-              </Col>
-            ))}
-            {this.addExtraCols()}
-          </Row>
-        </Grid>
+        {loading === true ? (
+          <Icon
+            type="loading"
+            style={{
+              fontSize: "100px",
+              marginTop: "125px"
+            }}
+          />
+        ) : this.props.searchResults.length == 0 ? (
+          <Empty
+            style={{ margin: 100 }}
+            description="No Merms meet your criteria!"
+          />
+        ) : (
+          <Grid fluid>
+            <Row style={{ textAlign: "left", marginTop: "10px" }}>
+              <p>Showing {count} search results...</p>
+            </Row>
+            <Row className="search-result-row" between="xs">
+              {this.props.searchResults.map(merm => (
+                <Col key={merm.id}>
+                  <MermCard
+                    id={merm.id}
+                    key={merm.id}
+                    title={merm.name}
+                    shared={merm.shared}
+                    time={merm.last_accessed}
+                    user={merm.user}
+                    resourceUrl={merm.resource_url}
+                    contentType={merm.content_type}
+                    tags={merm.tags}
+                    logAccess={this.logAccess}
+                  />
+                </Col>
+              ))}
+              {this.addExtraCols()}
+            </Row>
+          </Grid>
+        )}
       </div>
     );
   }
 }
 
 SearchResults.propTypes = {
-  actions: PropTypes.object.isRequired,
+  mermActions: PropTypes.object.isRequired,
+  searchActions: PropTypes.object.isRequired,
   searchResults: PropTypes.array.isRequired,
   requestStatus: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
@@ -115,7 +147,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    mermActions: bindActionCreators(mermActions, dispatch),
+    searchActions: bindActionCreators(searchActions, dispatch)
   };
 }
 

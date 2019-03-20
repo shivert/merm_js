@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Button, Tabs, Icon } from "antd";
+import { Button, Tabs, Icon, Popconfirm } from "antd";
 import { bindActionCreators } from "redux";
-import * as actions from "../../actions/mermActions";
+import * as mermActions from "../../actions/mermActions";
+import * as categoryActions from "../../actions/categoryActions";
 import { history } from "../../store/configureStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as queryString from "query-string";
 
 import Overview from "./Overview";
 import OverviewOwner from "./OverviewOwner";
@@ -21,24 +23,25 @@ class DetailedMermView extends React.Component {
   };
 
   componentDidMount() {
+    const queryParams = queryString.parse(this.props.location.search);
     const mermId = this.props.match.params.mermId;
-    this.props.actions.getMerm(mermId);
+    this.props.mermActions.getMerm(mermId, queryParams.shared);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.mermId !== this.props.match.params.mermId) {
       const mermId = this.props.match.params.mermId;
-      this.props.actions.getMerm(mermId);
+      this.props.mermActions.getMerm(mermId);
     }
   }
 
   componentWillUnmount() {
-    this.props.actions.clearDetailedMerm();
+    this.props.mermActions.clearDetailedMerm();
   }
 
   favoriteMerm = () => {
     const flipFav = !this.props.detailedMerm.favorite;
-    this.props.actions.favoriteMerm(this.props.detailedMerm.id, flipFav);
+    this.props.mermActions.favoriteMerm(this.props.detailedMerm.id, flipFav);
   };
 
   handleTabChange = key => {
@@ -49,9 +52,21 @@ class DetailedMermView extends React.Component {
     this.setState({ title: newTitle });
   };
 
+  confirm = () => {
+    this.props.mermActions.deleteMerm(this.props.detailedMerm.id);
+  };
+
+  loadEditMermFields = () => {
+    this.props.categoryActions.getCategories();
+  };
+
+  copyToMyMerms = () => {
+    this.props.mermActions.copyMerm(this.props.detailedMerm.id);
+  };
+
   render() {
     const activeTab = this.props.pathname.split("/").slice(-1)[0];
-    const { name, resourceUrl, favorite, contentType } = this.props.detailedMerm;
+    const { name, favorite, contentType } = this.props.detailedMerm;
     const isOwner =
       this.props.detailedMerm.owner.id === this.props.userObject.id;
     return (
@@ -62,7 +77,7 @@ class DetailedMermView extends React.Component {
               icon={["fab", contentType]}
               className={contentType}
               size="3x"
-              style={{marginBottom: '-8px'}}
+              style={{ marginBottom: "-8px" }}
             />
             <h1>{this.state.title === "" ? name : this.state.title}</h1>
             <Button
@@ -82,68 +97,71 @@ class DetailedMermView extends React.Component {
               )}
             </Button>
           </div>
-          {isOwner ? (
-            this.state.editMode === false ? (
-              <div style={{ float: "right" }}>
-                <Button
-                  style={{ marginRight: "20px" }}
-                  size="large"
-                  type="primary"
-                  onClick={() => this.setState({ editMode: true })}
-                >
-                  Edit
-                </Button>
-                <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
+          <div style={{ float: "right" }}>
+            {isOwner ? (
+              this.state.editMode === false ? (
+                <>
                   <Button
-                    type="primary"
-                    shape="circle"
-                    icon="link"
+                    style={{ marginRight: "15px" }}
                     size="large"
-                  />
-                </a>
-              </div>
+                    type="primary"
+                    onClick={() =>
+                      this.setState({ editMode: true }, this.loadEditMermFields)
+                    }
+                  >
+                    Edit
+                  </Button>
+                  <Popconfirm
+                    title="Are you sure delete this merm?"
+                    placement="bottomRight"
+                    onConfirm={this.confirm}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon="delete"
+                      size="large"
+                    />
+                  </Popconfirm>
+                </>
+              ) : (
+                <>
+                  <Button
+                    style={{ marginRight: "20px" }}
+                    size="large"
+                    type="primary"
+                    onClick={() => {
+                      this.setState({ editMode: false });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    style={{ marginRight: "20px" }}
+                    size="large"
+                    type="primary"
+                    onClick={() => {
+                      this.setState({ editMode: false });
+                      this.child.onSubmit();
+                    }}
+                  >
+                    Save
+                  </Button>
+                </>
+              )
             ) : (
-              <div style={{ float: "right" }}>
-                <Button
-                  style={{ marginRight: "20px" }}
-                  size="large"
-                  type="primary"
-                  onClick={() => {
-                    this.setState({ editMode: false });
-                    this.child.onSubmit();
-                  }}
-                >
-                  Save
-                </Button>
-                <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    type="primary"
-                    shape="circle"
-                    icon="link"
-                    size="large"
-                  />
-                </a>
-              </div>
-            )
-          ) : (
-            <div style={{ float: "right" }}>
               <Button
                 style={{ marginRight: "20px" }}
                 size="large"
                 type="primary"
+                onClick={this.copyToMyMerms}
               >
                 Copy to My Merms
               </Button>
-              <a href={resourceUrl} target="_blank" rel="noopener noreferrer">
-                <Button
-                  type="primary"
-                  shape="circle"
-                  icon="link"
-                  size="large"
-                />
-              </a>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <Tabs
           tabPosition="top"
@@ -174,8 +192,10 @@ class DetailedMermView extends React.Component {
 }
 
 DetailedMermView.propTypes = {
-  actions: PropTypes.object.isRequired,
+  mermActions: PropTypes.object.isRequired,
+  categoryActions: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   pathname: PropTypes.string.isRequired,
   detailedMerm: PropTypes.object.isRequired,
   userObject: PropTypes.object.isRequired
@@ -191,7 +211,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    mermActions: bindActionCreators(mermActions, dispatch),
+    categoryActions: bindActionCreators(categoryActions, dispatch)
   };
 }
 

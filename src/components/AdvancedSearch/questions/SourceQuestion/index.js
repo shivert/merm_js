@@ -17,7 +17,7 @@ class SourceQuestion extends React.Component {
         </div>
 
         <ButtonGroup>
-          <Button onClick={() => this.handleClick("Browser Extension")}>
+          <Button onClick={() => this.handleClick("Browser")}>
             Browser Extension
           </Button>
           <Button onClick={() => this.handleClick("merm.io")}>merm.io</Button>

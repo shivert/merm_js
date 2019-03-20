@@ -7,9 +7,10 @@ import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
 
 class NewResourceModal extends React.Component {
-
   componentDidMount() {
-    this.props.actions.getTags();
+    if (this.props.userObject.id !== 0) {
+      this.props.actions.getTags();
+    }
   }
 
   render() {
@@ -21,7 +22,7 @@ class NewResourceModal extends React.Component {
         title="Add New Resource"
         onOk={this.props.handleOk}
         onCancel={this.props.handleCancel}
-        width={"65vw"}
+        width={"50vw"}
         footer={[
           <Button key="back" onClick={this.props.handleCancel}>
             Cancel
@@ -37,7 +38,11 @@ class NewResourceModal extends React.Component {
           </Button>
         ]}
       >
-        <AddNewResourceForm onSubmitClick={this.props.handleOk} categories={this.props.categories}  tags={this.props.tags} />
+        <AddNewResourceForm
+          onSubmitClick={this.props.handleOk}
+          categories={this.props.categories}
+          tags={this.props.tags}
+        />
       </Modal>
     );
   }
@@ -47,13 +52,18 @@ NewResourceModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   handleOk: PropTypes.func.isRequired,
-  handleCancel: PropTypes.func.isRequired
+  handleCancel: PropTypes.func.isRequired,
+  tags: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     categories: state.categories,
-    tags: state.tags
+    tags: state.tags,
+    userObject: state.userObject
   };
 }
 

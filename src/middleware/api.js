@@ -1,6 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
-const endpoint = "http://localhost:3000/graphql";
+const endpoint = `http://${location.hostname}:3000/graphql`;
+
 const client = new GraphQLClient(endpoint, {
   mode: "cors",
   headers: {
@@ -85,10 +86,10 @@ export function createMerm(fields) {
   return authClient.rawRequest(query, variables);
 }
 
-export function getMerm(mermId) {
+export function getMerm(mermId, shared) {
   const query = `
   query {
-    merm(id: ${mermId}) {
+    merm(id: ${mermId}, shared: ${shared}) {
       id
       name
       source
@@ -101,6 +102,7 @@ export function getMerm(mermId) {
       lastAccessed
       createdAt
       updatedAt
+      expiryDate
       sharedWith {
         id  
         name
@@ -116,6 +118,11 @@ export function getMerm(mermId) {
       tags {
         id
         name
+      }
+      history {
+        title
+        url
+        visitTime
       }
       comments {
         content
@@ -138,42 +145,7 @@ export function favoriteMerm(mermId, favorite) {
     mutation favoriteMerm($id: ID!, $merm: FavoriteMermInputType!) {
       favoriteMerm(id: $id, merm: $merm) {
         id
-        name
-        source
         favorite
-        resourceName
-        resourceUrl
-        description
-        capturedText
-        contentType
-        lastAccessed
-        createdAt
-        updatedAt
-        comments {
-          content
-          author {
-            id
-            name
-          }
-          createdAt
-          updatedAt
-        }
-        sharedWith {
-          id  
-          name
-        }
-        owner {
-          id  
-          name
-        }
-        category {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
       }
     }`;
 
@@ -222,6 +194,20 @@ export function removeTag(tagId) {
   return authClient.rawRequest(query, variables);
 }
 
+export function deleteMerm(mermId) {
+  const query = `
+  mutation deleteMerm($id: ID!) {
+    deleteMerm(id: $id) {
+      id
+      name
+    }
+  }`;
+  const variables = {
+    id: mermId
+  };
+  return authClient.rawRequest(query, variables);
+}
+
 export function addTag(tag) {
   const query = `
    mutation addTag($tagDetails: TagInputType!) {
@@ -248,9 +234,11 @@ export function editMerm(mermId, fields) {
         resourceUrl
         description
         capturedText
+        contentType
         lastAccessed
         createdAt
         updatedAt
+        expiryDate
         comments {
           content
           author {
@@ -275,6 +263,11 @@ export function editMerm(mermId, fields) {
         tags {
           id
           name
+        }
+        history {
+          title
+          url
+          visitTime
         }
         comments {
           content
@@ -317,9 +310,17 @@ export function updateCategories(categories) {
       updateCategories(data: $data) {
         id
         name
+        rank
       }
     }`;
-  const variables = { data: { categories } };
+
+  const trimmed = categories.map(c => ({
+    id: c.id,
+    name: c.name,
+    rank: c.rank
+  }));
+
+  const variables = { data: { categories: trimmed } };
   return authClient.rawRequest(query, variables);
 }
 
@@ -327,6 +328,18 @@ export function getUsers() {
   const query = `
   query {
     users {
+      id
+      name
+    }
+  }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function getAllUsers() {
+  const query = `
+  query {
+    usersAll {
       id
       name
     }
@@ -345,4 +358,84 @@ export function getTags() {
   }`;
 
   return authClient.rawRequest(query);
+}
+
+export function shareMerm(mermId, users) {
+  const query = `
+   mutation shareMerm($id: ID!, $users: [ID!]) {
+      shareMerm(id: $id, users: $users) {
+        id
+        name
+        sharedWith {
+          id
+          name
+        }
+      }
+    }`;
+  const variables = {
+    id: mermId,
+    users
+  };
+  return authClient.rawRequest(query, variables);
+}
+
+export function getSharedMerms(userId) {
+  const query = `
+  query {
+    sharedMerms {
+      id
+      name
+      lastAccessed
+      owner {
+        id
+        name
+      }
+      contentType
+      tags {
+        id
+        name
+      }
+      shares(user_id: ${userId}) {
+        id
+        sharer {
+          id
+          name
+        }
+        sharedWith {
+          id
+          name
+        }
+        createdAt
+      }
+    }
+  }`;
+
+  return authClient.rawRequest(query);
+}
+
+export function copyMerm(id) {
+  const query = `
+   mutation copyMerm($id: ID!) {
+      copyMerm(id: $id) {
+        id
+        name
+        sharedWith {
+          id
+          name
+        }
+      }
+    }`;
+  const variables = { id };
+  return authClient.rawRequest(query, variables);
+}
+
+export function logMermAccess(id) {
+  const query = `
+   mutation logMermAccess($id: ID!) {
+      logMermAccess(id: $id) {
+        id
+      }
+    }`;
+  const variables = { id };
+  return authClient.rawRequest(query, variables);
 }

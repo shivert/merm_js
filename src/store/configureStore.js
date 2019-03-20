@@ -1,9 +1,9 @@
-import {createStore, compose, applyMiddleware} from 'redux';
-import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
-import thunk from 'redux-thunk';
-import createHistory from 'history/createBrowserHistory';
-import { tokenSelector, setAuthHeader } from './../middleware/api'
-import { tokenSelectorSearch, setAuthHeaderSearch } from './../middleware/searchApi'
+import { createStore, compose, applyMiddleware } from "redux";
+import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
+import thunk from "redux-thunk";
+import createHistory from "history/createBrowserHistory";
+import { tokenSelector, setAuthHeader } from "./../middleware/api";
+import { setAuthHeaderSearch } from "./../middleware/searchApi";
 
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
 import { connectRouter, routerMiddleware } from "connected-react-router";
@@ -58,7 +58,8 @@ function configureStoreDev() {
     reactRouterMiddleware
   ];
 
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
   const store = createStore(
     connectRouterHistory(rootReducer),
     persistedState,
@@ -67,8 +68,8 @@ function configureStoreDev() {
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers').default; // eslint-disable-line global-require
+    module.hot.accept("../reducers", () => {
+      const nextRootReducer = require("../reducers").default; // eslint-disable-line global-require
       store.replaceReducer(connectRouterHistory(nextRootReducer));
     });
   }
@@ -85,6 +86,9 @@ function configureStoreDev() {
   return store;
 }
 
-const configureStore = process.env.NODE_ENV === 'production' ? configureStoreProd : configureStoreDev;
+const configureStore =
+  process.env.NODE_ENV === "production"
+    ? configureStoreProd
+    : configureStoreDev;
 
 export default configureStore;

@@ -6,15 +6,24 @@ import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 
 class TagQuestion extends React.Component {
+  state = {
+    selectedItems: []
+  };
+
   componentDidMount() {
+    this.setState({ selectedItems: this.props.value })
     this.props.mermActions.getTags();
   }
 
-  handleChange = value => {
-    console.log(`selected ${value}`);
+  handleChange = selectedItems => {
+    this.setState(
+      { selectedItems },
+      this.props.next("tags", selectedItems, true)
+    );
   };
 
   render() {
+    const { selectedItems } = this.state;
     return (
       <>
         <div className="category-question">What are the tags?</div>
@@ -23,6 +32,7 @@ class TagQuestion extends React.Component {
           showSearch
           mode="multiple"
           style={{ width: 400 }}
+          value={selectedItems}
           placeholder="Search for tags"
           onChange={this.handleChange}
           filterOption={(input, option) =>
@@ -31,7 +41,7 @@ class TagQuestion extends React.Component {
           }
         >
           {this.props.tags.map(user => (
-            <Select.Option key={user.id} value={user.id}>
+            <Select.Option key={user.id} value={user.name}>
               {user.name}
             </Select.Option>
           ))}
@@ -43,6 +53,8 @@ class TagQuestion extends React.Component {
 
 TagQuestion.propTypes = {
   mermActions: PropTypes.object.isRequired,
+  next: PropTypes.func.isRequired,
+  value: PropTypes.array.isRequired,
   tags: PropTypes.array.isRequired
 };
 

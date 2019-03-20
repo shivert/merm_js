@@ -13,7 +13,7 @@ class CategoryQuestion extends React.Component {
   }
 
   handleChange = categoryName => {
-    this.props.next("category", categoryName);
+    this.props.next("categoryId", categoryName);
   };
 
   render() {
@@ -33,7 +33,7 @@ class CategoryQuestion extends React.Component {
           }
         >
           {this.props.categories.map(category => (
-            <Option key={category.id} value={category.name}>
+            <Option key={category.id} value={category.id}>
               {category.name}
             </Option>
           ))}
@@ -47,7 +47,7 @@ CategoryQuestion.propTypes = {
   next: PropTypes.func.isRequired,
   categoryActions: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string
 };
 
 function mapStateToProps(state) {

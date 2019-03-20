@@ -9,11 +9,11 @@ const Option = Select.Option;
 
 class OwnerQuestion extends React.Component {
   componentDidMount() {
-    this.props.mermActions.getUsers();
+    this.props.mermActions.getAllUsers();
   }
 
   handleChange = userId => {
-    this.props.next("owner", userId);
+    this.props.next("ownerId", userId);
   };
 
   render() {
@@ -44,7 +44,7 @@ class OwnerQuestion extends React.Component {
 }
 
 OwnerQuestion.propTypes = {
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
   next: PropTypes.func.isRequired,
   mermActions: PropTypes.object.isRequired,
   users: PropTypes.array.isRequired

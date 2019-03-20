@@ -25,6 +25,7 @@ class CustomHeader extends React.Component {
   state = {
     loading: false,
     visible: false,
+    open: false,
     queryString: ""
   };
 
@@ -61,7 +62,7 @@ class CustomHeader extends React.Component {
   };
 
   onChange = value => {
-    this.setState({ queryString: value });
+    this.setState({ queryString: value, open: value.length !== 0 });
   };
 
   onSelect = value => {
@@ -74,8 +75,13 @@ class CustomHeader extends React.Component {
     history.push(`/search?q=${this.state.queryString}`);
   };
 
-  popAuto = () => {
+  onBlur = () => {
+    this.setState({ open: false });
+  };
+
+  onFocus = () => {
     if (this.props.autocompleteResults.length == 0) {
+      this.setState({ open: true });
       this.props.searchActions.autoComplete();
     }
   };
@@ -104,7 +110,9 @@ class CustomHeader extends React.Component {
                 dataSource={this.props.autocompleteResults}
                 onSelect={this.onSelect}
                 onSearch={this.onChange}
-                onFocus={this.popAuto}
+                onBlur={this.onBlur}
+                onFocus={this.onFocus}
+                open={this.state.open}
                 backfill={true}
                 placeholder="Search.."
               >

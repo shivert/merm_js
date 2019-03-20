@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import * as mermActions from "../../../actions/mermActions";
 import * as categoryActions from "../../../actions/categoryActions";
@@ -14,29 +15,48 @@ import {
   Input,
   Icon,
   Select,
-  Form
+  Form,
+  Button,
+  DatePicker,
+  Timeline,
 } from "antd";
+var moment = require("moment");
+
+const Bold = ({ children }) => (
+  <p style={{ fontWeight: "bold", display: "inline-block", margin: 0 }}>{children}</p>
+);
 
 class OverviewOwner extends React.Component {
   state = {
     inputVisible: false,
-    inputValue: ""
+    inputValue: "",
+    isEditingSharing: false,
+    sharedWith: []
   };
+
+  sharingInput = React.createRef();
 
   componentDidMount() {
     this.props.onRef(this);
+
+    const { sharedWith } = this.props.detailedMerm;
+    this.setState({
+      sharedWith:
+        sharedWith.length !== 0 ? sharedWith.map(person => person.id) : []
+    });
   }
 
   componentWillUnmount() {
     this.props.onRef(undefined);
   }
 
+  saveSharingInputRef = input => (this.sharingInput = input);
+
   removeTag = tagId => {
     this.props.mermActions.removeTag(tagId);
   };
 
   showInput = () => {
-    this.props.categoryActions.getCategories();
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
@@ -45,21 +65,25 @@ class OverviewOwner extends React.Component {
     this.setState({ inputValue: e.target.value });
   };
 
-  handleInputConfirm = () => {
-    this.setState({
-      inputVisible: false,
-      inputValue: ""
-    });
-    this.props.mermActions.addTag({
-      name: this.state.inputValue,
-      merm_id: this.props.detailedMerm.id
-    });
+  handleInputConfirm = e => {
+    e.preventDefault();
+    if (e.target.value.length !== 0) {
+      this.setState({
+        inputVisible: false,
+        inputValue: ""
+      });
+      this.props.mermActions.addTag({
+        name: e.target.value,
+        merm_id: this.props.detailedMerm.id
+      });
+    }
   };
 
   onSubmit() {
     const id = this.props.detailedMerm.id;
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        values.categoryId = values.categoryId ? values.categoryId : null;
         this.props.mermActions.editMerm(id, values);
       }
     });
@@ -86,12 +110,14 @@ class OverviewOwner extends React.Component {
       lastAccessed,
       createdAt,
       updatedAt,
-      sharedWith
+      sharedWith,
+      expiryDate,
+      history
     } = this.props.detailedMerm;
 
     const editMode = this.props.editMode;
-
     const { loading } = this.props.requestStatus;
+
     return loading === true ? (
       <Icon
         type="loading"
@@ -129,9 +155,11 @@ class OverviewOwner extends React.Component {
                     <b>Name: </b> {name}
                   </p>
                 )}
-                <p>
-                  <b>Source:</b> {source}
-                </p>
+                <div className="overview-edit-container">
+                  <p className={editMode ? "edit-mode" : ""}>
+                    <b>Source:</b> {source}
+                  </p>
+                </div>
                 {editMode ? (
                   <div className="overview-edit-container">
                     <Form.Item>
@@ -139,12 +167,13 @@ class OverviewOwner extends React.Component {
                     </Form.Item>
                     <Form.Item>
                       {getFieldDecorator("categoryId", {
-                        initialValue: category.id
+                        initialValue: (category || {}).id
                       })(
                         <Select
                           showSearch
                           allowClear={true}
-                          style={{ width: 200 }}
+                          showArrow={false}
+                          style={{ width: 200, marginLeft: 10 }}
                           placeholder="No category selected!"
                           optionFilterProp="children"
                           filterOption={(input, option) =>
@@ -168,54 +197,23 @@ class OverviewOwner extends React.Component {
                     {category == null ? "None" : category.name}
                   </p>
                 )}
-                {editMode ? (
-                  <div className="overview-edit-container">
-                    <Form.Item>
-                      <b>Resource URL:</b>
-                    </Form.Item>
-                    <Form.Item className="edit-form-entry">
-                      {getFieldDecorator("resourceUrl", {
-                        rules: [
-                          {
-                            required: true,
-                            type: "url",
-                            message: "Required: Please input a valid URL"
-                          }
-                        ],
-                        initialValue: resourceUrl
-                      })(<Input />)}
-                    </Form.Item>
-                  </div>
-                ) : (
-                  <p>
+                <div className="overview-edit-container">
+                  <p className={editMode ? "edit-mode" : ""}>
                     <b>Resource URL:</b>{" "}
-                    <a href={resourceUrl} target="_blank">
+                    <a
+                      href={resourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {resourceUrl}
                     </a>
                   </p>
-                )}
-                {editMode ? (
-                  <div className="overview-edit-container">
-                    <Form.Item>
-                      <b>Resource Title:</b>
-                    </Form.Item>
-                    <Form.Item className="edit-form-entry">
-                      {getFieldDecorator("resourceName", {
-                        rules: [
-                          {
-                            required: true,
-                            message: "Required: Please input a Title"
-                          }
-                        ],
-                        initialValue: resourceName
-                      })(<Input />)}
-                    </Form.Item>
-                  </div>
-                ) : (
-                  <p>
-                    <b>Resource Title:</b> {resourceName}
+                </div>
+                <div className="overview-edit-container">
+                  <p className={editMode ? "edit-mode" : ""}>
+                    <b>Resource Title:</b> {resourceName ? resourceName : "N/A"}
                   </p>
-                )}
+                </div>
               </div>
               <Divider orientation="left">Description</Divider>
               <div className="merm-overview-container overview-edit-container">
@@ -235,7 +233,7 @@ class OverviewOwner extends React.Component {
                   <p>{description}</p>
                 )}
               </div>
-              <Divider orientation="left">Captured Text</Divider>
+              <Divider orientation="left">Snippet</Divider>
               <div className="merm-overview-container">
                 <p>{`"${capturedText}"`}</p>
               </div>
@@ -273,6 +271,21 @@ class OverviewOwner extends React.Component {
                   </Tag>
                 )}
               </div>
+              <Divider orientation="left">History</Divider>
+              <div className="merm-overview-container">
+                <Timeline>
+                  {history.map(h => (
+                    <Timeline.Item>
+                      <Bold>{h.title}</Bold>{" "}
+                      <Moment format="lll">{h.visitTime}</Moment>
+                    </Timeline.Item>
+                  ))}
+                  <Timeline.Item>
+                    <Bold>{name}</Bold>{" "}
+                    <Moment format="lll">{createdAt}</Moment>
+                  </Timeline.Item>
+                </Timeline>
+              </div>
             </Col>
             <Col span={9}>
               <Divider orientation="left">Sharing</Divider>
@@ -283,16 +296,67 @@ class OverviewOwner extends React.Component {
                 </p>
                 <p>
                   <b>Shared With:</b>
+                  <span style={{ margin: "0px 12px" }}>
+                    <Button
+                      onClick={() => {
+                        if (!this.state.isEditingSharing) {
+                          this.props.mermActions.getUsers();
+                        } else {
+                          this.props.mermActions.shareMerm(
+                            this.props.detailedMerm.id,
+                            this.state.sharedWith
+                          );
+                        }
+                        this.setState({
+                          isEditingSharing: !this.state.isEditingSharing
+                        });
+                      }}
+                      type="primary"
+                      shape="circle"
+                      icon={this.state.isEditingSharing ? "check" : "edit"}
+                      size="small"
+                    />
+                  </span>
                 </p>
-                <div className="shared-with">
-                  {sharedWith.length !== 0
-                    ? sharedWith.map(person => (
-                        <p key={person.name}>
-                          <Avatar icon="user" /> {person.name}
-                        </p>
-                      ))
-                    : ""}
-                </div>
+                {this.state.isEditingSharing ? (
+                  <div className="shared-with">
+                    <Select
+                      ref={this.saveSharingInputRef}
+                      mode="multiple"
+                      placeholder="Users"
+                      filterOption={(input, option) =>
+                        option.key.toLowerCase().indexOf(input.toLowerCase()) >=
+                        0
+                      }
+                      value={this.state.sharedWith}
+                      onChange={value => {
+                        this.setState({ sharedWith: value });
+                      }}
+                    >
+                      {this.props.users.length !== 0
+                        ? this.props.users.map(person => (
+                            <Select.Option key={person.name} value={person.id}>
+                              <Icon
+                                style={{ marginRight: "8px" }}
+                                type="user"
+                              />
+                              {person.name}
+                            </Select.Option>
+                          ))
+                        : ""}
+                    </Select>
+                  </div>
+                ) : (
+                  <div className="shared-with">
+                    {sharedWith.length !== 0
+                      ? sharedWith.map(person => (
+                          <p key={person.id}>
+                            <Avatar icon="user" /> {person.name}
+                          </p>
+                        ))
+                      : ""}
+                  </div>
+                )}
               </div>
               <Divider orientation="left">Dates</Divider>
               <div className="merm-overview-container">
@@ -306,6 +370,40 @@ class OverviewOwner extends React.Component {
                 <p>
                   <b>Updated:</b> <Moment format="lll">{updatedAt}</Moment>
                 </p>
+                <div
+                  style={{
+                    width: "fit-content",
+                    display: "inline-block"
+                  }}
+                >
+                  <b>Expires At:</b>{" "}
+                  {editMode ? (
+                    <Form.Item
+                      className="edit-form-entry"
+                      style={{
+                        marginTop: "-9px",
+                        display: "inline-block",
+                        width: "60%"
+                      }}
+                    >
+                      {getFieldDecorator("expiryDate", {
+                        initialValue: moment(expiryDate)
+                      })(
+                        <DatePicker
+                          style={{
+                            paddingLeft: 5,
+                            width: "100%",
+                            display: "inline-block"
+                          }}
+                          showToday={false}
+                          defaultPickerValue={moment(expiryDate)}
+                        />
+                      )}
+                    </Form.Item>
+                  ) : (
+                    <Moment format="ll">{expiryDate}</Moment>
+                  )}
+                </div>
               </div>
               <Divider orientation="left">Related</Divider>
               <div className="merm-overview-container">
@@ -313,7 +411,13 @@ class OverviewOwner extends React.Component {
                   {category === null ? (
                     "No Related Merms, Add a category to see related Merms"
                   ) : (
-                    <a>View Related Merms</a>
+                    <Link
+                      to={`/search?categoryId=${
+                        this.props.detailedMerm.category.id
+                      }`}
+                    >
+                      View Related Merms
+                    </Link>
                   )}
                 </p>
               </div>
@@ -330,9 +434,13 @@ OverviewOwner.propTypes = {
   categoryActions: PropTypes.object.isRequired,
   detailedMerm: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
   userObject: PropTypes.object.isRequired,
+  requestStatus: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   editMode: PropTypes.bool.isRequired,
-  updateTitle: PropTypes.func.isRequired
+  updateTitle: PropTypes.func.isRequired,
+  onRef: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -340,6 +448,7 @@ function mapStateToProps(state) {
     detailedMerm: state.detailedMerm,
     categories: state.categories,
     userObject: state.userObject,
+    users: state.users,
     requestStatus: state.requestStatus
   };
 }

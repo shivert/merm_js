@@ -6,10 +6,11 @@ export function getInitialState() {
     id: 0,
     source: "",
     favorite: false,
-    category: null,
+    category: {},
     resourceUrl: "",
     resourceName: "",
     description: "",
+    contentType: "chrome",
     capturedText: "",
     tags: [],
     owner: {},
@@ -26,7 +27,13 @@ const mapFetchResponse = data => data.merm;
 
 const mapEditResponse = data => data.editMerm;
 
-const mapFavResponse = data => data.favoriteMerm;
+const mapFavResponse = (state, data) => {
+  const updatedFav = {
+    favorite: data["favoriteMerm"]["favorite"]
+  };
+
+  return { ...state, ...updatedFav };
+};
 
 const mapCommentResponse = (state, data) => {
   const updatedComments = {
@@ -40,6 +47,14 @@ const mapTagResponse = (state, data) => {
     tags: state.tags.concat(data["addTag"])
   };
   return { ...state, ...updatedTags };
+};
+
+const mapSharingResponse = (state, data) => {
+  const updatedSharing = {
+    sharedWith: data["shareMerm"]["sharedWith"]
+  };
+
+  return { ...state, ...updatedSharing };
 };
 
 const mapRemoveTagResponse = (state, data) => {
@@ -57,6 +72,8 @@ export default function detailedMerm(state = initialState, action) {
       return mapFetchResponse(action.value);
     case ActionTypes.UPDATE_EDIT_DETAILED_MERM:
       return mapEditResponse(action.value);
+    case ActionTypes.UPDATE_DETAILED_MERM_SHARING:
+      return mapSharingResponse(state, action.value);
     case ActionTypes.UPDATE_FAV_DETAILED_MERM:
       return mapFavResponse(action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_COMMENTS:

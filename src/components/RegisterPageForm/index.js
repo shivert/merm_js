@@ -16,7 +16,9 @@ class RegisterPageForm extends React.Component {
       <Form className="register-form" onSubmit={this.handleSubmit}>
         <Form.Item>
           {getFieldDecorator("firstName", {
-            rules: [{ required: true, message: "Please input your first name!" }]
+            rules: [
+              { required: true, message: "Please input your first name!" }
+            ]
           })(
             <Input
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -25,15 +27,15 @@ class RegisterPageForm extends React.Component {
           )}
         </Form.Item>
         <Form.Item>
-        {getFieldDecorator("lastName", {
-          rules: [{ required: true, message: "Please input your last name!" }]
-        })(
-          <Input
-            prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="Last Name"
-          />
-        )}
-      </Form.Item>
+          {getFieldDecorator("lastName", {
+            rules: [{ required: true, message: "Please input your last name!" }]
+          })(
+            <Input
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="Last Name"
+            />
+          )}
+        </Form.Item>
         <Form.Item>
           {getFieldDecorator("email", {
             rules: [{ required: true, message: "Please input your email!" }]
@@ -64,7 +66,7 @@ class RegisterPageForm extends React.Component {
           >
             Create Account
           </Button>
-          Already have an account?  <a href="/login"> Sign in Here!</a>
+          Already have an account? <a href="/login"> Sign in Here!</a>
         </Form.Item>
       </Form>
     );

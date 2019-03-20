@@ -6,39 +6,37 @@ import * as actions from "../../actions/searchActions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-var moment = require("moment");
-
 import CategoryQuestion from "./questions/CategoryQuestion";
 import OwnerQuestion from "./questions/OwnerQuestion";
 import AccessDateQuestion from "./questions/AccessDateQuestion";
 import TagQuestion from "./questions/TagQuestion";
 import SourceQuestion from "./questions/SourceQuestion";
 
+/*eslint no-unused-vars: ["error", { "args": "none" }]*/
+
 class AdvancedSearch extends React.Component {
   state = {
     current: 0,
     source: null,
-    owner: null,
+    ownerId: null,
     tags: [],
-    category: null,
-    accessDates: {
-      startDate: moment().subtract(7, "days"),
-      endDate: moment()
-    }
+    categoryId: null,
+    accessDates: null
   };
 
-  next = (field, value) => {
-    this.setState({ [field]: value }, console.log(this.state));
-
-    this.props.actions.advancedSearchMerms(this.state);
-
-    const current = this.state.current + 1;
-    this.setState({ current });
+  next = (field, value, done = false) => {
+    const current = done ? this.state.current : this.state.current + 1;
+    this.setState({ current, [field]: value }, this.advancedSearch);
   };
 
-  prev = () => {
+  advancedSearch = () => {
+    const { current, ...searchTerms } = this.state;
+    this.props.actions.advancedSearchMerms(searchTerms);
+  };
+
+  prev = field => {
     const current = this.state.current - 1;
-    this.setState({ current });
+    this.setState({ current, [field]: null });
   };
 
   render() {
@@ -53,18 +51,18 @@ class AdvancedSearch extends React.Component {
       {
         title: "Category",
         content: (
-          <CategoryQuestion next={this.next} value={this.state.category} />
+          <CategoryQuestion next={this.next} value={this.state.categoryId} />
         ),
         iconType: "file-unknown"
       },
       {
         title: "Owner",
-        content: <OwnerQuestion next={this.next} value={this.state.owner} />,
+        content: <OwnerQuestion next={this.next} value={this.state.ownerId} />,
         iconType: "user"
       },
       {
         title: "Access Date",
-        content: <AccessDateQuestion next={this.next} startDate={this.state.accessDates.startDate} endDate={this.state.accessDates.endDate} />,
+        content: <AccessDateQuestion next={this.next} />,
         iconType: "calendar"
       },
       {
@@ -99,15 +97,6 @@ class AdvancedSearch extends React.Component {
               onClick={() => this.next()}
             >
               Skip
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button
-              style={{ float: "right" }}
-              type="primary"
-              onClick={() => message.success("Processing complete!")}
-            >
-              Done
             </Button>
           )}
         </div>

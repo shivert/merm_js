@@ -210,11 +210,16 @@ div.overview-edit-container p {
   padding-right: 8px;
 }
 
+div.overview-edit-container p.edit-mode {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 div.overview-edit-container input {
   display: inline-block;
-  width: 80%;
+  margin-left: 10px;
 }
-div.overview-edit-container .ant-select{
+div.overview-edit-container .ant-select {
   display: inline-block;
   width: 50%;
 }
@@ -224,12 +229,25 @@ div.overview-edit-container {
   display: flex;
 }
 
+div.overview-edit-container > div.ant-form-item {
+  margin-bottom: 0px;
+}
+
 div.edit-form-entry {
   flex: 1;
 }
 
 .dashboard-collapse .ant-collapse-header{
   width: 80%;
+}
+
+.dashboard-collapse {
+  margin-top: -32px !important;
+}
+
+.dashboard-loading {
+  font-size: 100px;
+  margin-top: 125px;
 }
 
 .add-new-category-field .ant-input-suffix {
@@ -373,3 +391,46 @@ div.dashboard-button-container {
 .ant-btn-group > .ant-btn {
   min-width: 175px;
 }
+
+.search-result-row > .ant-empty {
+  width: 100%;
+  margin-top: 100px;
+}
+
+.merm-card-button-link {
+  float: right;
+  border: none !important;
+  padding: 0 !important;
+  margin-top: -20px;
+}
+
+.merm-card-link {
+  margin-top: 6px;
+  font-size: 20px;
+}
+
+div.merm-meta-desc {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+div.ant-card-meta-title > a {
+  color: rgba(0,0,0,.85);
+}
+
+div.ant-card-meta-title {
+  width: calc(100% - 25px);
+}
+
+div.split {
+  width: 50%;
+  display: inline-block;
+}
+
+div.split div {
+  text-align: left;
+}
+
+div.edit-form-entry div.ant-form-item-control {
+  text-align: left;
+}
+

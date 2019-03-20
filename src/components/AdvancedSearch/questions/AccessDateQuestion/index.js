@@ -1,10 +1,14 @@
 import React from "react";
-import { Button, Modal, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import PropTypes from "prop-types";
+
+var moment = require("moment");
 
 class AccessDateQuestion extends React.Component {
   state = {
-    endOpen: false
+    endOpen: false,
+    startDate: moment().subtract(7, "days"),
+    endDate: moment()
   };
 
   disabledStartDate = startValue => {
@@ -24,8 +28,24 @@ class AccessDateQuestion extends React.Component {
   };
 
   onChange = (field, value) => {
-    this.setState({
-      [field]: value
+    if (field === "endDate") {
+      this.setState(
+        {
+          [field]: value
+        },
+        this.next
+      );
+    } else {
+      this.setState({
+        [field]: value
+      });
+    }
+  };
+
+  next = () => {
+    this.props.next("accessDates", {
+      startDate: this.state.startDate,
+      endDate: this.state.endDate
     });
   };
 
@@ -35,7 +55,6 @@ class AccessDateQuestion extends React.Component {
 
   onEndChange = value => {
     this.onChange("endDate", value);
-    this.props.next();
   };
 
   handleStartOpenChange = open => {
@@ -49,8 +68,7 @@ class AccessDateQuestion extends React.Component {
   };
 
   render() {
-    const { endOpen } = this.state;
-    const { startDate, endDate } = this.props;
+    const { startDate, endDate, endOpen } = this.state;
     return (
       <div>
         <div className="access-date-question">
@@ -81,9 +99,7 @@ class AccessDateQuestion extends React.Component {
 }
 
 AccessDateQuestion.propTypes = {
-  next: PropTypes.func.isRequired,
-  startDate: PropTypes.object.isRequired,
-  endDate: PropTypes.object.isRequired
+  next: PropTypes.func.isRequired
 };
 
 export default AccessDateQuestion;

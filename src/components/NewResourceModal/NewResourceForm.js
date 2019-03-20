@@ -1,6 +1,7 @@
 import React from "react";
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, DatePicker, Tooltip, Icon } from "antd";
 import PropTypes from "prop-types";
+var moment = require("moment");
 
 export default class NewResourceForm extends React.PureComponent {
   handleSubmit = e => {
@@ -13,7 +14,11 @@ export default class NewResourceForm extends React.PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form id="createNewMerm" onSubmit={this.handleSubmit}>
+      <Form
+        className="manual-add-merm"
+        id="createNewMerm"
+        onSubmit={this.handleSubmit}
+      >
         <div>Resource URL</div>
         <Form.Item>
           {getFieldDecorator("resourceUrl", {
@@ -32,16 +37,39 @@ export default class NewResourceForm extends React.PureComponent {
             <Input.TextArea placeholder="Resource Description" />
           )}
         </Form.Item>
-        <div>Category</div>
-        <Form.Item>
+        <Form.Item className="split" style={{ paddingRight: 30 }}>
+          <div>Category</div>
           {getFieldDecorator("categoryId")(
             <Select>
-              {this.props.categories.map(category => (
-                <Select.Option key={category.id} value={Number(category.id)}>
-                  {category.name}
-                </Select.Option>
-              ))}
+              {this.props.categories
+                .filter(c => c.custom === true)
+                .map(category => (
+                  <Select.Option key={category.id} value={Number(category.id)}>
+                    {category.name}
+                  </Select.Option>
+                ))}
             </Select>
+          )}
+        </Form.Item>
+        <Form.Item className="split">
+          <div>
+            Expiry Date
+            <Tooltip title="All resources expire in 6 months by default, but don't worry, if we see you're using this resource, we'll extend it automatically!">
+              <Icon
+                style={{ paddingLeft: 5 }}
+                type="info-circle"
+                theme="filled"
+              />
+            </Tooltip>
+          </div>
+          {getFieldDecorator("expiryDate", {
+            initialValue: moment().add(6, "months")
+          })(
+            <DatePicker
+              style={{ width: "100%" }}
+              showToday={false}
+              defaultPickerValue={moment().add(6, "months")}
+            />
           )}
         </Form.Item>
         <div>Snippet</div>
@@ -69,5 +97,7 @@ export default class NewResourceForm extends React.PureComponent {
 
 NewResourceForm.propTypes = {
   categories: PropTypes.array.isRequired,
-  tags: PropTypes.array.isRequired
+  tags: PropTypes.array.isRequired,
+  form: PropTypes.object.isRequired,
+  onSubmitClick: PropTypes.func.isRequired
 };

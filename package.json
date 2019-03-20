@@ -18,8 +18,8 @@
     "lint:watch": "npm run lint -- --watch",
     "clean-dist": "npm run remove-dist && mkdir dist",
     "remove-dist": "rimraf ./dist",
-    "prebuild": "npm run lint && npm run test && npm run clean-dist",
-    "build": "babel-node tools/build.js && npm run open:dist",
+    "prebuild": "npm run lint && npm run clean-dist",
+    "build": "babel-node tools/build.js",
     "test": "jest",
     "test:CI": "jest",
     "test:cover": "npm run test -- --coverage ",
@@ -52,10 +52,8 @@
     "react-moment": "0.8.4",
     "react-redux": "5.0.7",
     "react-router-dom": "4.3.1",
-    "react-slick": "0.23.2",
     "redux": "4.0.0",
-    "redux-thunk": "2.3.0",
-    "slick-carousel": "1.8.1"
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "7.0.0",

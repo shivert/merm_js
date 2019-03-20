@@ -4,16 +4,7 @@ import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/mermActions";
-import {
-  Comment,
-  Avatar,
-  Form,
-  Button,
-  List,
-  Input,
-  Tooltip,
-  Divider
-} from "antd";
+import { Comment, Form, Button, List, Input, Tooltip, Divider } from "antd";
 
 const TextArea = Input.TextArea;
 
@@ -124,6 +115,12 @@ class Comments extends React.Component {
     );
   }
 }
+
+Editor.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
+};
 
 Comments.propTypes = {
   actions: PropTypes.object.isRequired,
