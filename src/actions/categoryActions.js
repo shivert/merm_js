@@ -1,9 +1,36 @@
 import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
+import * as searchAPI from "../middleware/searchApi";
+
+export function getDashboardCategories() {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+    searchAPI.getDashboardCategories().then(
+      response => {
+        dispatch({ type: ActionTypes.CATEGORIES_READY });
+        dispatch({
+          type: ActionTypes.UPDATE_DASHBOARD_CATEGORY_LIST,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch Categories",
+            description: error["response"].errors[0].message
+          }
+        });
+      }
+    );
+  };
+}
 
 export function getCategories() {
   return dispatch => {
-
     API.getCategories().then(
       response => {
         dispatch({
@@ -18,7 +45,7 @@ export function getCategories() {
             show: true,
             type: "Error",
             message: "Unable fetch Categories",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -36,8 +63,10 @@ export function updateCategories(categories) {
   return dispatch => {
     dispatch({ type: ActionTypes.UPDATE_CATEGORY_STARTED });
     API.updateCategories(categories).then(
-      response => {
-        dispatch({ type: ActionTypes.UPDATE_CATEGORY_FINISHED });
+      () => {
+        setTimeout(() => {
+          dispatch({ type: ActionTypes.UPDATE_CATEGORY_FINISHED });
+        }, 500);
       },
       error => {
         dispatch({
@@ -46,7 +75,7 @@ export function updateCategories(categories) {
             show: true,
             type: "Error",
             message: "Unable fetch Categories",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }

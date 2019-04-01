@@ -25,6 +25,7 @@ class CustomHeader extends React.Component {
   state = {
     loading: false,
     visible: false,
+    open: false,
     queryString: ""
   };
 
@@ -50,10 +51,20 @@ class CustomHeader extends React.Component {
 
   handleOk = fields => {
     this.setState({ loading: true });
-    this.props.mermActions.createMerm(fields, () => {
-      this.props.searchActions.getDashboardMerms();
-      this.setState({ loading: false, visible: false });
-    });
+    this.props.mermActions.createMerm(
+      fields,
+      this.handleSuccess,
+      this.handleFailure
+    );
+  };
+
+  handleSuccess = () => {
+    this.props.searchActions.getDashboardMerms();
+    this.setState({ loading: false, visible: false });
+  };
+
+  handleFailure = () => {
+    this.setState({ loading: false, visible: true });
   };
 
   handleCancel = () => {
@@ -61,7 +72,7 @@ class CustomHeader extends React.Component {
   };
 
   onChange = value => {
-    this.setState({ queryString: value });
+    this.setState({ queryString: value, open: value.length !== 0 });
   };
 
   onSelect = value => {
@@ -74,8 +85,13 @@ class CustomHeader extends React.Component {
     history.push(`/search?q=${this.state.queryString}`);
   };
 
-  popAuto = () => {
+  onBlur = () => {
+    this.setState({ open: false });
+  };
+
+  onFocus = () => {
     if (this.props.autocompleteResults.length == 0) {
+      this.setState({ open: true });
       this.props.searchActions.autoComplete();
     }
   };
@@ -104,7 +120,9 @@ class CustomHeader extends React.Component {
                 dataSource={this.props.autocompleteResults}
                 onSelect={this.onSelect}
                 onSearch={this.onChange}
-                onFocus={this.popAuto}
+                onBlur={this.onBlur}
+                onFocus={this.onFocus}
+                open={this.state.open}
                 backfill={true}
                 placeholder="Search.."
               >
@@ -126,7 +144,12 @@ class CustomHeader extends React.Component {
               <Popover
                 placement="bottomRight"
                 title={this.text}
-                content={<div>Insert Notifications Here</div>}
+                content={
+                  <div style={{ margin: "50px 0", textAlign: "center" }}>
+                    <Icon style={{ fontSize: "48px" }} type="tool" />
+                    <h2>Under construction!</h2>
+                  </div>
+                }
                 trigger="click"
               >
                 <Badge count={5}>

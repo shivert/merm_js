@@ -8,7 +8,7 @@ import * as searchActions from "../../actions/searchActions";
 import { bindActionCreators } from "redux";
 import { Grid, Row, Col } from "react-flexbox-grid";
 
-class Recent extends React.Component {
+class Expired extends React.Component {
   componentDidMount() {
     this.getRecMerms();
   }
@@ -20,11 +20,11 @@ class Recent extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.searchActions.clearRecentMerms();
+    this.props.searchActions.clearExpiredMerms();
   }
 
   getRecMerms = () => {
-    this.props.searchActions.getRecentMerms();
+    this.props.searchActions.getExpiredMerms();
   };
 
   addExtraCols = (numExtra = 3) => {
@@ -43,7 +43,7 @@ class Recent extends React.Component {
 
   render() {
     const { loading } = this.props.requestStatus;
-    const { recent } = this.props;
+    const { expired } = this.props;
     return loading === true ? (
       <Icon
         type="loading"
@@ -56,10 +56,10 @@ class Recent extends React.Component {
       <div className="search-results-container">
         <Grid fluid>
           <Row className="search-result-row" between="xs">
-            {recent.length === 0 ? (
-              <Empty description="No Merms in Recent!" />
+            {expired.length === 0 ? (
+              <Empty description="No expired Merms!" />
             ) : (
-              recent.map(merm => (
+              expired.map(merm => (
                 <Col key={merm.id}>
                   <MermCard
                     id={merm.id}
@@ -84,17 +84,17 @@ class Recent extends React.Component {
   }
 }
 
-Recent.propTypes = {
+Expired.propTypes = {
   searchActions: PropTypes.object.isRequired,
   mermActions: PropTypes.object.isRequired,
-  recent: PropTypes.array.isRequired,
+  expired: PropTypes.array.isRequired,
   requestStatus: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    recent: state.recent,
+    expired: state.expired,
     requestStatus: state.requestStatus
   };
 }
@@ -109,4 +109,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Recent);
+)(Expired);

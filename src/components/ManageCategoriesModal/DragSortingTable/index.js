@@ -258,7 +258,10 @@ class DragSortingTable extends React.Component {
 
   handleDelete = key => {
     const data = [...this.state.data];
-    this.setState({ data: data.filter(item => item.key !== key) }, this.updateParentState);
+    this.setState(
+      { data: data.filter(item => item.key !== key) },
+      this.updateParentState
+    );
   };
 
   handleSave = row => {
@@ -336,7 +339,8 @@ class DragSortingTable extends React.Component {
 
 DragSortingTable.propTypes = {
   actions: PropTypes.object.isRequired,
-  categories: PropTypes.array.isRequired
+  categories: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

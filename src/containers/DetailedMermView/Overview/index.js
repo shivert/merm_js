@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/mermActions";
 import { Row, Col, Divider, Tag, Avatar } from "antd";
@@ -24,7 +25,8 @@ class Overview extends React.Component {
       lastAccessed,
       createdAt,
       updatedAt,
-      sharedWith
+      sharedWith,
+      expiryDate
     } = this.props.detailedMerm;
 
     return (
@@ -41,10 +43,13 @@ class Overview extends React.Component {
               </p>
               <p>
                 <b>Category: </b>
-                {category === null ? "None" : category}
+                {category === null ? "None" : category.name}
               </p>
               <p>
-                <b>Resource URL:</b> <a href={resourceUrl} target="_blank">{resourceUrl}</a>
+                <b>Resource URL:</b>{" "}
+                <a href={resourceUrl} rel="noopener noreferrer">
+                  {resourceUrl}
+                </a>
               </p>
               <p>
                 <b>Resource Title:</b> {resourceName}
@@ -54,7 +59,7 @@ class Overview extends React.Component {
             <div className="merm-overview-container">
               <p>{description}</p>
             </div>
-            <Divider orientation="left">Captured Text</Divider>
+            <Divider orientation="left">Snippet</Divider>
             <div className="merm-overview-container">
               <p>{`"${capturedText}"`}</p>
             </div>
@@ -96,6 +101,9 @@ class Overview extends React.Component {
               <p>
                 <b>Updated:</b> <Moment format="lll">{updatedAt}</Moment>
               </p>
+              <p>
+                <b>Expires At:</b> <Moment format="ll">{expiryDate}</Moment>
+              </p>
             </div>
             <Divider orientation="left">Related</Divider>
             <div className="merm-overview-container">
@@ -103,7 +111,13 @@ class Overview extends React.Component {
                 {category === null ? (
                   "No Related Merms, Add a category to see related Merms"
                 ) : (
-                  <a>View Related Merms</a>
+                  <Link
+                    to={`/search?categoryId=${
+                      this.props.detailedMerm.category.id
+                    }`}
+                  >
+                    View Related Merms
+                  </Link>
                 )}
               </p>
             </div>

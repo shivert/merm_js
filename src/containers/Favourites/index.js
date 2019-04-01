@@ -1,9 +1,10 @@
 import React from "react";
-import { Icon  } from "antd";
+import { Icon, Empty } from "antd";
 import MermCard from "../../components/MermCard";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import * as actions from "../../actions/searchActions";
+import * as mermActions from "../../actions/mermActions";
+import * as searchActions from "../../actions/searchActions";
 import { bindActionCreators } from "redux";
 import { Grid, Row, Col } from "react-flexbox-grid";
 
@@ -19,11 +20,11 @@ class Favourites extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.actions.clearFavMerms();
+    this.props.searchActions.clearFavMerms();
   }
 
   getFavMerms = () => {
-    this.props.actions.getFavMerms();
+    this.props.searchActions.getFavMerms();
   };
 
   addExtraCols = (numExtra = 3) => {
@@ -36,8 +37,13 @@ class Favourites extends React.Component {
     return cols;
   };
 
+  logAccess = mermId => {
+    this.props.mermActions.logAccess(mermId);
+  };
+
   render() {
     const { loading } = this.props.requestStatus;
+    const { favourites } = this.props;
     return loading === true ? (
       <Icon
         type="loading"
@@ -50,21 +56,26 @@ class Favourites extends React.Component {
       <div className="search-results-container">
         <Grid fluid>
           <Row className="search-result-row" between="xs">
-            {this.props.favourites.map(merm => (
-              <Col key={merm.id}>
-                <MermCard
-                  id={merm.id}
-                  key={merm.id}
-                  title={merm.name}
-                  lastAccessed={merm.last_accessed}
-                  owner={`${merm.user.first_name} ${
-                    merm.user.last_name
-                    }`}
-                  contentType={merm.content_type}
-                  tags={merm.tags}
-                />
-              </Col>
-            ))}
+            {favourites.length === 0 ? (
+              <Empty description="No Favourite Merms!" />
+            ) : (
+              favourites.map(merm => (
+                <Col key={merm.id}>
+                  <MermCard
+                    id={merm.id}
+                    key={merm.id}
+                    title={merm.name}
+                    shared={merm.shared}
+                    time={merm.last_accessed}
+                    user={merm.user}
+                    resourceUrl={merm.resource_url}
+                    contentType={merm.content_type}
+                    tags={merm.tags}
+                    logAccess={this.logAccess}
+                  />
+                </Col>
+              ))
+            )}
             {this.addExtraCols()}
           </Row>
         </Grid>
@@ -74,7 +85,8 @@ class Favourites extends React.Component {
 }
 
 Favourites.propTypes = {
-  actions: PropTypes.object.isRequired,
+  searchActions: PropTypes.object.isRequired,
+  mermActions: PropTypes.object.isRequired,
   favourites: PropTypes.array.isRequired,
   requestStatus: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
@@ -89,7 +101,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    mermActions: bindActionCreators(mermActions, dispatch),
+    searchActions: bindActionCreators(searchActions, dispatch)
   };
 }
 

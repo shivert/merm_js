@@ -1,7 +1,8 @@
 import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
+import { history } from "../store/configureStore";
 
-export function createMerm(mermDetails, callback) {
+export function createMerm(mermDetails, successCallback, failureCallback) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });
     API.createMerm(mermDetails).then(
@@ -16,18 +17,21 @@ export function createMerm(mermDetails, callback) {
         });
         dispatch({ type: ActionTypes.REQUEST_SUCCESS });
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
-        callback();
+        successCallback();
       },
-      () => {
+      error => {
         dispatch({
           type: ActionTypes.SHOW_NOTIFICATION,
           value: {
             show: true,
             type: "Error",
-            message: "Unable to create Merms",
-            description: "Something is broken!"
+            message: "Unable to Create Merm!",
+            description: error["response"].errors[0].message
           }
         });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+        failureCallback();
       }
     );
   };
@@ -39,11 +43,11 @@ export function clearMerms() {
   };
 }
 
-export function getMerm(mermId) {
+export function getMerm(mermId, shared = false) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });
 
-    API.getMerm(mermId).then(
+    API.getMerm(mermId, shared).then(
       response => {
         dispatch({
           type: ActionTypes.UPDATE_DETAILED_MERM,
@@ -59,7 +63,7 @@ export function getMerm(mermId) {
             show: true,
             type: "Error",
             message: "Unable fetch Merms",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -91,7 +95,7 @@ export function favoriteMerm(mermId, favorite) {
             show: true,
             type: "Error",
             message: "Unable fetch Merms",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -119,7 +123,7 @@ export function addMermComment(comment) {
             show: true,
             type: "Error",
             message: "Unable to add Merm Comment",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -147,7 +151,7 @@ export function removeTag(tagId) {
             show: true,
             type: "Error",
             message: "Unable to delete Tag",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -175,7 +179,7 @@ export function addTag(tag) {
             show: true,
             type: "Error",
             message: "Unable to Add Tag",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -203,7 +207,7 @@ export function editMerm(mermId, fields) {
             show: true,
             type: "Error",
             message: "Unable update Merm",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -213,7 +217,6 @@ export function editMerm(mermId, fields) {
 
 export function getUsers() {
   return dispatch => {
-
     API.getUsers().then(
       response => {
         dispatch({
@@ -228,7 +231,31 @@ export function getUsers() {
             show: true,
             type: "Error",
             message: "Unable fetch Categories",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
+          }
+        });
+      }
+    );
+  };
+}
+
+export function getAllUsers() {
+  return dispatch => {
+    API.getAllUsers().then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_USER_ALL_LIST,
+          value: response.data
+        });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable fetch Categories",
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -244,7 +271,6 @@ export function clearUsers() {
 
 export function getTags() {
   return dispatch => {
-
     API.getTags().then(
       response => {
         dispatch({
@@ -259,7 +285,7 @@ export function getTags() {
             show: true,
             type: "Error",
             message: "Unable fetch tags!",
-            description: "Something is broken!"
+            description: error["response"].errors[0].message
           }
         });
       }
@@ -273,3 +299,104 @@ export function clearTags() {
   };
 }
 
+export function deleteMerm(mermId) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.deleteMerm(mermId).then(
+      () => {
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+        history.push("/dashboard");
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to delete Merm",
+            description: error["response"].errors[0].message
+          }
+        });
+      }
+    );
+  };
+}
+
+export function shareMerm(mermId, users) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.shareMerm(mermId, users).then(
+      response => {
+        dispatch({
+          type: ActionTypes.UPDATE_DETAILED_MERM_SHARING,
+          value: response.data
+        });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to delete Merm",
+            description: error["response"].errors[0].message
+          }
+        });
+      }
+    );
+  };
+}
+
+export function copyMerm(mermId) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.copyMerm(mermId).then(
+      response => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Success",
+            message: `Merm copied! ID: ${response.data.copyMerm.id}`
+          }
+        });
+        history.push(`/merm/${response.data.copyMerm.id}/overview`);
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      error => {
+        dispatch({
+          type: ActionTypes.SHOW_NOTIFICATION,
+          value: {
+            show: true,
+            type: "Error",
+            message: "Unable to copy Merm",
+            description: error["response"].errors[0].message
+          }
+        });
+      }
+    );
+  };
+}
+
+export function logAccess(mermId) {
+  return dispatch => {
+    dispatch({ type: ActionTypes.REQUEST_INITIATED });
+
+    API.logMermAccess(mermId).then(
+      () => {
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      },
+      () => {
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+      }
+    );
+  };
+}

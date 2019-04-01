@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Icon } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../../actions/authenticationActions";
@@ -15,8 +16,9 @@ class Statistics extends React.Component {
 
   render() {
     return (
-      <div>
-        Statistics Section
+      <div style={{ marginTop: "60px" }}>
+        <Icon style={{ fontSize: "48px" }} type="tool" />
+        <h2>Under construction!</h2>
       </div>
     );
   }

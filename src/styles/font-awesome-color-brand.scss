@@ -138,7 +138,9 @@ $facb:
 'y-combinator' #F26522,
 'yahoo' #7B0099,
 'yelp' #af0606,
-'youtube' #cd201f;
+'youtube' #cd201f,
+'envelope-open' #be5446;
+
 
 @each $color in $facb {
     .#{nth($color, 1)} {

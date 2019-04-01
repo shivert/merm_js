@@ -7,21 +7,43 @@ import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
 
 class NewResourceModal extends React.Component {
+  state = {
+    form: Form.create()(NewResourceForm)
+  };
 
   componentDidMount() {
-    this.props.actions.getTags();
+    if (this.props.userObject.id !== 0) {
+      this.props.actions.getTags();
+    }
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.visible !== this.props.visible) {
+      this.setState({ form: Form.create()(NewResourceForm) });
+    }
+  }
+
+  getForm = () => {
+    const AddNewResourceForm = this.state.form;
+
+    return (
+      <AddNewResourceForm
+        onSubmitClick={this.props.handleOk}
+        categories={this.props.categories}
+        tags={this.props.tags}
+      />
+    );
+  };
 
   render() {
     const { visible, loading } = this.props;
-    const AddNewResourceForm = Form.create()(NewResourceForm);
     return (
       <Modal
         visible={visible}
         title="Add New Resource"
         onOk={this.props.handleOk}
         onCancel={this.props.handleCancel}
-        width={"65vw"}
+        width={"50vw"}
         footer={[
           <Button key="back" onClick={this.props.handleCancel}>
             Cancel
@@ -37,7 +59,7 @@ class NewResourceModal extends React.Component {
           </Button>
         ]}
       >
-        <AddNewResourceForm onSubmitClick={this.props.handleOk} categories={this.props.categories}  tags={this.props.tags} />
+        {this.getForm()}
       </Modal>
     );
   }
@@ -47,13 +69,18 @@ NewResourceModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   handleOk: PropTypes.func.isRequired,
-  handleCancel: PropTypes.func.isRequired
+  handleCancel: PropTypes.func.isRequired,
+  tags: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+  userObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     categories: state.categories,
-    tags: state.tags
+    tags: state.tags,
+    userObject: state.userObject
   };
 }
 

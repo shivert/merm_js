@@ -5,7 +5,8 @@ import {
   faComments,
   faHeart,
   faArrowAltCircleLeft,
-  faArrowAltCircleRight
+  faArrowAltCircleRight,
+  faEnvelopeOpen
 } from "@fortawesome/free-solid-svg-icons";
 
 import { fab } from "@fortawesome/free-brands-svg-icons";
@@ -21,6 +22,7 @@ function initLibrary() {
     faHeart,
     faArrowAltCircleLeft,
     faArrowAltCircleRight,
+    faEnvelopeOpen,
     fab
   );
 }

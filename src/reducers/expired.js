@@ -6,13 +6,14 @@ export function getInitialState() {
 
 const initialState = getInitialState();
 
-const mapResults = data => data.tags;
+const mapResults = data =>
+  data.results.map(searchResult => searchResult["_source"]);
 
-export default function tags(state = initialState, action) {
+export default function expired(state = initialState, action) {
   switch (action.type) {
-    case ActionTypes.UPDATE_TAG_LIST:
+    case ActionTypes.UPDATE_EXPIRED_MERMS_LIST:
       return mapResults(action.value);
-    case ActionTypes.CLEAR_TAG_LIST:
+    case ActionTypes.CLEAR_EXPIRED_MERMS_LIST:
       return getInitialState();
     default:
       break;

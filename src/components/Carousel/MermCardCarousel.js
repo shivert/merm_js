@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import AliceCarousel from "react-alice-carousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -18,7 +19,8 @@ export default class MermCardCarousel extends React.Component {
       799: { items: 2 },
       1023: { items: 3 },
       1279: { items: 3 },
-      1439: { items: 4 }
+      1439: { items: 4 },
+      1760: { items: 5 }
     }
   };
 
@@ -157,3 +159,7 @@ export default class MermCardCarousel extends React.Component {
     );
   }
 }
+
+MermCardCarousel.propTypes = {
+  items: PropTypes.array.isRequired
+};

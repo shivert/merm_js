@@ -2,9 +2,8 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { Route, Switch } from "react-router-dom";
 
 import { Layout, Menu, Icon, Avatar } from "antd";
 const SubMenu = Menu.SubMenu;
@@ -17,6 +16,8 @@ import Dashboard from "../Dashboard";
 import Favourites from "../Favourites";
 import Recent from "../Recent";
 import Shared from "../Shared";
+import Expired from "../Expired";
+import Analytics from "../Analytics";
 import { history } from "../../store/configureStore";
 
 class TopLevelContainer extends React.Component {
@@ -137,6 +138,13 @@ class TopLevelContainer extends React.Component {
                 </NavLink>
               </Menu.Item>
             </SubMenu>
+
+            <Menu.Item key="/expired">
+              <NavLink to="/expired">
+                <Icon type="issues-close" />
+                <span>Expired</span>
+              </NavLink>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
@@ -157,6 +165,9 @@ class TopLevelContainer extends React.Component {
                 <Route path="/shared" component={Shared} />
                 <Route path="/favourites" component={Favourites} />
                 <Route path="/search" component={SearchResults} />
+                <Route path="/merm-reports" component={Analytics} />
+                <Route path="/user-reports" component={Analytics} />
+                <Route path="/expired" component={Expired} />
               </Switch>
             </div>
           </Content>

@@ -19,7 +19,7 @@ const mapLogInResponse = value => ({
 });
 
 const mapCreateUserResponse = value => ({
-  id: 0,
+  id: value["signUp"]["id"],
   firstName: value["signUp"]["firstName"],
   lastName: value["signUp"]["lastName"],
   email: value["signUp"]["email"],
