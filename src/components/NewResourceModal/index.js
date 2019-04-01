@@ -7,15 +7,36 @@ import { bindActionCreators } from "redux";
 import * as actions from "../../actions/mermActions";
 
 class NewResourceModal extends React.Component {
+  state = {
+    form: Form.create()(NewResourceForm)
+  };
+
   componentDidMount() {
     if (this.props.userObject.id !== 0) {
       this.props.actions.getTags();
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.visible !== this.props.visible) {
+      this.setState({ form: Form.create()(NewResourceForm) });
+    }
+  }
+
+  getForm = () => {
+    const AddNewResourceForm = this.state.form;
+
+    return (
+      <AddNewResourceForm
+        onSubmitClick={this.props.handleOk}
+        categories={this.props.categories}
+        tags={this.props.tags}
+      />
+    );
+  };
+
   render() {
     const { visible, loading } = this.props;
-    const AddNewResourceForm = Form.create()(NewResourceForm);
     return (
       <Modal
         visible={visible}
@@ -38,11 +59,7 @@ class NewResourceModal extends React.Component {
           </Button>
         ]}
       >
-        <AddNewResourceForm
-          onSubmitClick={this.props.handleOk}
-          categories={this.props.categories}
-          tags={this.props.tags}
-        />
+        {this.getForm()}
       </Modal>
     );
   }

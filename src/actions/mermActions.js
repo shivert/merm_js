@@ -2,7 +2,7 @@ import * as ActionTypes from "../constants/ActionTypes";
 import * as API from "../middleware/api";
 import { history } from "../store/configureStore";
 
-export function createMerm(mermDetails, callback) {
+export function createMerm(mermDetails, successCallback, failureCallback) {
   return dispatch => {
     dispatch({ type: ActionTypes.REQUEST_INITIATED });
     API.createMerm(mermDetails).then(
@@ -17,18 +17,21 @@ export function createMerm(mermDetails, callback) {
         });
         dispatch({ type: ActionTypes.REQUEST_SUCCESS });
         dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
-        callback();
+        successCallback();
       },
       error => {
         dispatch({
-          type: ActionTypes.SHOW_NOTIFICATION ,
+          type: ActionTypes.SHOW_NOTIFICATION,
           value: {
             show: true,
             type: "Error",
-            message: "Unable to create Merms",
+            message: "Unable to Create Merm!",
             description: error["response"].errors[0].message
           }
         });
+        dispatch({ type: ActionTypes.REQUEST_SUCCESS });
+        dispatch({ type: ActionTypes.RESET_REQUEST_STATUS });
+        failureCallback();
       }
     );
   };

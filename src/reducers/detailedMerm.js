@@ -75,7 +75,7 @@ export default function detailedMerm(state = initialState, action) {
     case ActionTypes.UPDATE_DETAILED_MERM_SHARING:
       return mapSharingResponse(state, action.value);
     case ActionTypes.UPDATE_FAV_DETAILED_MERM:
-      return mapFavResponse(action.value);
+      return mapFavResponse(state, action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_COMMENTS:
       return mapCommentResponse(state, action.value);
     case ActionTypes.UPDATE_DETAILED_MERM_TAGS:

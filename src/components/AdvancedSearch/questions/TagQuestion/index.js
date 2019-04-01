@@ -11,7 +11,7 @@ class TagQuestion extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({ selectedItems: this.props.value })
+    this.setState({ selectedItems: this.props.value });
     this.props.mermActions.getTags();
   }
 

@@ -64,7 +64,9 @@ export function updateCategories(categories) {
     dispatch({ type: ActionTypes.UPDATE_CATEGORY_STARTED });
     API.updateCategories(categories).then(
       () => {
-        dispatch({ type: ActionTypes.UPDATE_CATEGORY_FINISHED });
+        setTimeout(() => {
+          dispatch({ type: ActionTypes.UPDATE_CATEGORY_FINISHED });
+        }, 500);
       },
       error => {
         dispatch({

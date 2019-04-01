@@ -99,7 +99,9 @@ class AccessDateQuestion extends React.Component {
 }
 
 AccessDateQuestion.propTypes = {
-  next: PropTypes.func.isRequired
+  next: PropTypes.func.isRequired,
+  startDate: PropTypes.string.isRequired,
+  endDate: PropTypes.string.isRequired
 };
 
 export default AccessDateQuestion;

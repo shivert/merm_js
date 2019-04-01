@@ -72,7 +72,7 @@ class SearchResults extends React.Component {
             header={
               <p>
                 Don&apos;t see what you&apos;re looking for? Try our{" "}
-                <a>Advanced Search</a>!
+                <a>Advanced Search</a>
                 <Button
                   className="close-advanced"
                   type="primary"

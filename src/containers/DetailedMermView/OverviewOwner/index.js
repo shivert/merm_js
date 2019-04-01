@@ -18,12 +18,14 @@ import {
   Form,
   Button,
   DatePicker,
-  Timeline,
+  Timeline
 } from "antd";
 var moment = require("moment");
 
 const Bold = ({ children }) => (
-  <p style={{ fontWeight: "bold", display: "inline-block", margin: 0 }}>{children}</p>
+  <p style={{ fontWeight: "bold", display: "inline-block", margin: 0 }}>
+    {children}
+  </p>
 );
 
 class OverviewOwner extends React.Component {
@@ -92,12 +94,17 @@ class OverviewOwner extends React.Component {
     this.props.updateTitle(e.target.value);
   };
 
+  logAccess = mermId => {
+    this.props.mermActions.logAccess(mermId);
+  };
+
   render() {
     const { inputVisible, inputValue } = this.state;
     const { TextArea } = Input;
     const Option = Select.Option;
     const { getFieldDecorator } = this.props.form;
     const {
+      id,
       name,
       source,
       category,
@@ -200,13 +207,15 @@ class OverviewOwner extends React.Component {
                 <div className="overview-edit-container">
                   <p className={editMode ? "edit-mode" : ""}>
                     <b>Resource URL:</b>{" "}
-                    <a
+                    <Button
+                      className="overview-button-link"
                       href={resourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => this.logAccess(id)}
                     >
                       {resourceUrl}
-                    </a>
+                    </Button>
                   </p>
                 </div>
                 <div className="overview-edit-container">
@@ -270,21 +279,6 @@ class OverviewOwner extends React.Component {
                     <Icon type="plus" /> New Tag
                   </Tag>
                 )}
-              </div>
-              <Divider orientation="left">History</Divider>
-              <div className="merm-overview-container">
-                <Timeline>
-                  {history.map(h => (
-                    <Timeline.Item>
-                      <Bold>{h.title}</Bold>{" "}
-                      <Moment format="lll">{h.visitTime}</Moment>
-                    </Timeline.Item>
-                  ))}
-                  <Timeline.Item>
-                    <Bold>{name}</Bold>{" "}
-                    <Moment format="lll">{createdAt}</Moment>
-                  </Timeline.Item>
-                </Timeline>
               </div>
             </Col>
             <Col span={9}>
@@ -365,9 +359,6 @@ class OverviewOwner extends React.Component {
                   <Moment format="lll">{lastAccessed}</Moment>
                 </p>
                 <p>
-                  <b>Created:</b> <Moment format="lll">{createdAt}</Moment>
-                </p>
-                <p>
                   <b>Updated:</b> <Moment format="lll">{updatedAt}</Moment>
                 </p>
                 <div
@@ -395,7 +386,8 @@ class OverviewOwner extends React.Component {
                             width: "100%",
                             display: "inline-block"
                           }}
-                          showToday={false}
+                          show
+                          Today={false}
                           defaultPickerValue={moment(expiryDate)}
                         />
                       )}
@@ -404,6 +396,29 @@ class OverviewOwner extends React.Component {
                     <Moment format="ll">{expiryDate}</Moment>
                   )}
                 </div>
+              </div>
+              <Divider orientation="left">Contextual History</Divider>
+              <div className="merm-overview-container">
+                <Timeline>
+                  {history.map((h, idx) => (
+                    <Timeline.Item key={idx}>
+                      <Bold>
+                        <a
+                          href={h.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {h.title}
+                        </a>
+                      </Bold>{" "}
+                      <Moment format="LT">{h.visitTime}</Moment>
+                    </Timeline.Item>
+                  ))}
+                  <Timeline.Item>
+                    <Bold>Merm Created!</Bold>{" "}
+                    <Moment format="lll">{createdAt}</Moment>
+                  </Timeline.Item>
+                </Timeline>
               </div>
               <Divider orientation="left">Related</Divider>
               <div className="merm-overview-container">
@@ -428,6 +443,10 @@ class OverviewOwner extends React.Component {
     );
   }
 }
+
+Bold.propTypes = {
+  children: PropTypes.string.isRequired
+};
 
 OverviewOwner.propTypes = {
   mermActions: PropTypes.object.isRequired,

@@ -51,7 +51,9 @@ const MermCard = ({
     <Link to={link}>
       <div className="cover-icon-container">
         <FontAwesomeIcon
-          icon={["fab", contentType]}
+          icon={
+            contentType === "envelope-open" ? contentType : ["fab", contentType]
+          }
           className={`cover-icon ${contentType}`}
           size="5x"
         />
@@ -61,10 +63,7 @@ const MermCard = ({
 
   return (
     <Card hoverable className="merm-card-outer" cover={cover}>
-      <Meta
-        title={<Link to={link}>{title}</Link>}
-        description={mermMetaData}
-      />
+      <Meta title={<Link to={link}>{title}</Link>} description={mermMetaData} />
       <Link to={link}>
         <Card className="merm-card-inner">
           {tags.map(tag => (

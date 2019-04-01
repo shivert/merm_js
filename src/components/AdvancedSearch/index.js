@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Steps, Button, message, Icon } from "antd";
+import { Steps, Button, Icon } from "antd";
 const Step = Steps.Step;
 import * as actions from "../../actions/searchActions";
 import { connect } from "react-redux";
@@ -11,8 +11,6 @@ import OwnerQuestion from "./questions/OwnerQuestion";
 import AccessDateQuestion from "./questions/AccessDateQuestion";
 import TagQuestion from "./questions/TagQuestion";
 import SourceQuestion from "./questions/SourceQuestion";
-
-/*eslint no-unused-vars: ["error", { "args": "none" }]*/
 
 class AdvancedSearch extends React.Component {
   state = {
@@ -30,6 +28,7 @@ class AdvancedSearch extends React.Component {
   };
 
   advancedSearch = () => {
+    // eslint-disable-next-line no-unused-vars
     const { current, ...searchTerms } = this.state;
     this.props.actions.advancedSearchMerms(searchTerms);
   };

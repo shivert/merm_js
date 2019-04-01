@@ -51,10 +51,20 @@ class CustomHeader extends React.Component {
 
   handleOk = fields => {
     this.setState({ loading: true });
-    this.props.mermActions.createMerm(fields, () => {
-      this.props.searchActions.getDashboardMerms();
-      this.setState({ loading: false, visible: false });
-    });
+    this.props.mermActions.createMerm(
+      fields,
+      this.handleSuccess,
+      this.handleFailure
+    );
+  };
+
+  handleSuccess = () => {
+    this.props.searchActions.getDashboardMerms();
+    this.setState({ loading: false, visible: false });
+  };
+
+  handleFailure = () => {
+    this.setState({ loading: false, visible: true });
   };
 
   handleCancel = () => {
@@ -134,7 +144,12 @@ class CustomHeader extends React.Component {
               <Popover
                 placement="bottomRight"
                 title={this.text}
-                content={<div>Insert Notifications Here</div>}
+                content={
+                  <div style={{ margin: "50px 0", textAlign: "center" }}>
+                    <Icon style={{ fontSize: "48px" }} type="tool" />
+                    <h2>Under construction!</h2>
+                  </div>
+                }
                 trigger="click"
               >
                 <Badge count={5}>
